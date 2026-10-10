@@ -865,3 +865,52 @@ body > main {
 footer {
     margin-top: auto;
 }
+
+/* QConnect homepage spacing and text adjustment */
+.hero {
+    height: 200px;
+}
+
+.hero-overlay h2 {
+    font-size: 22px;
+    line-height: 1.2;
+}
+
+.hero-overlay p {
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.advisory {
+    min-height: 140px;
+    padding: 16px 12px 20px;
+}
+
+.advisory h2 {
+    font-size: 22px;
+    margin: 4px 0 6px;
+}
+
+.advisory p {
+    font-size: 13px;
+    line-height: 1.35;
+    margin: 0 0 12px;
+}
+
+.advisory-buttons {
+    margin-top: 10px;
+    gap: 16px 40px;
+}
+
+/* Remove the unwanted large gray space */
+body {
+    min-height: 0;
+}
+
+main {
+    flex: 0 0 auto;
+}
+
+.site-footer {
+    margin-top: 0;
+}
