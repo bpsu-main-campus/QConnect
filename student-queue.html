@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Queue - QConnect</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .queue-page {
+
+            min-height: calc(100vh - 170px);
+
+            background:
+                linear-gradient(
+                    rgba(75, 25, 25, 0.45),
+                    rgba(75, 25, 25, 0.45)
+                ),
+                url("images/campus.png");
+
+            background-size: cover;
+
+            background-position: center;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            padding: 50px 20px;
+
+        }
+
+
+        .queue-message {
+
+            color: white;
+
+            font-family: Georgia, serif;
+
+            font-size: 20px;
+
+            text-align: center;
+
+            margin-bottom: 35px;
+
+        }
+
+
+        .queue-number-box {
+
+            width: 280px;
+
+            background: #fff8f0;
+
+            border: 4px solid #651515;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            text-align: center;
+
+        }
+
+
+        .queue-number-box h3 {
+
+            color: #651515;
+
+            font-family: Georgia, serif;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .queue-number {
+
+            font-size: 55px;
+
+            font-weight: bold;
+
+            color: #651515;
+
+        }
+
+
+        .queue-student {
+
+            color: #651515;
+
+            font-size: 12px;
+
+            margin-top: 10px;
+
+        }
+
+
+        .queue-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 80px;
+
+            margin-top: 35px;
+
+        }
+
+
+        .queue-buttons button {
+
+            background: #651515;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 18px;
+
+            padding: 9px 25px;
+
+            font-size: 11px;
+
+            cursor: pointer;
+
+        }
+
+
+        .queue-buttons button:hover {
+
+            background: #4d1010;
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .queue-buttons {
+
+                gap: 50px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- HEADER -->
+
+    <header class="top-header">
+
+        <div class="header-left">
+
+            <div class="logo-placeholder">
+
+                <img
+                    src="images/bpsu-logo.png"
+                    alt="BPSU Logo">
+
+            </div>
+
+
+            <div class="university-name">
+
+                <p class="republic">
+                    REPUBLIC OF THE PHILIPPINES
+                </p>
+
+                <h1>
+                    BATAAN PENINSULA STATE UNIVERSITY
+                </h1>
+
+                <span>
+                    CITY OF BALANGA, BATAAN 2100
+                </span>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- QUEUE -->
+
+    <main class="queue-page">
+
+        <h2 class="queue-message">
+            Thank you,<br>
+            Peninsulares!
+        </h2>
+
+
+        <div class="queue-number-box">
+
+    <h3>
+        Your Queue Number
+    </h3>
+
+
+    <div
+        class="queue-number"
+        id="queueNumber">
+
+        --
+
+    </div>
+
+
+    <p
+        class="queue-student"
+        id="queueStudent">
+
+    </p>
+
+
+    <p
+        id="queueDate"
+        class="queue-information">
+
+    </p>
+
+
+    <p
+        id="queueTime"
+        class="queue-information">
+
+    </p>
+
+
+    <p
+        id="queueStatus"
+        class="queue-information">
+
+    </p>
+
+
+    <!-- QR CODE -->
+
+    <div
+        id="qrcode"
+        style="
+            margin: 20px auto;
+            width: 128px;
+            min-height: 128px;
+        ">
+
+    </div>
+
+
+    <p
+        style="
+            font-size: 10px;
+            color: #651515;
+        ">
+
+        Scan this QR code at the Registrar.
+
+    </p>
+
+</div>
+
+    <!-- APPOINTMENT DATE -->
+
+    <p
+        class="queue-date"
+        id="queueDate">
+
+    </p>
+
+
+    <!-- APPOINTMENT TIME -->
+
+    <p
+        class="queue-time"
+        id="queueTime">
+
+    </p>
+
+
+    <!-- STATUS -->
+
+    <p
+        class="queue-status"
+        id="queueStatus">
+
+    </p>
+
+
+    <!-- QR CODE -->
+
+    <div
+    id="qrcode"
+    style="
+        margin: 20px auto;
+        width: 150px;
+        min-height: 150px;
+    ">
+</div>
+
+</div>
+
+
+        <div class="queue-buttons">
+
+            <button
+                id="backButton">
+
+                Back
+
+            </button>
+
+
+            <button
+                id="menuButton">
+
+                Menu
+
+            </button>
+
+        </div>
+
+    </main>
+
+
+
+        <!-- =========================
+         FOOTER
+    ========================== -->
+
+    
+
+<footer class="site-footer">
+
+    <div class="contact-section">
+        <div class="contact-box">
+
+            <!-- FACEBOOK -->
+            <a class="contact-icon"
+               href="https://www.facebook.com/share/1C3uCueqKy/"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="BPSU Facebook Page">
+                <span class="facebook-f">f</span>
+            </a>
+
+            <a class="contact-label"
+               href="https://www.facebook.com/share/1C3uCueqKy/"
+               target="_blank"
+               rel="noopener noreferrer">
+                FB Page
+            </a>
+
+            <!-- EMAIL -->
+            <a class="contact-icon"
+               href="mailto:pio_mc@bpsu.edu.ph"
+               aria-label="Email BPSU">
+                <span class="email-symbol">✉</span>
+            </a>
+
+            <a class="contact-label"
+               href="mailto:pio_mc@bpsu.edu.ph">
+                Email us
+            </a>
+
+        </div>
+
+
+        </div>
+
+
+        <div class="footer-logo">
+
+            <img
+                src="images/bpsu-logo.png"
+                alt="BPSU Logo">
+
+        </div>
+
+    </footer>
+
+
+    <script src="qrcode.min.js"></script>
+
+    <script src="student-queue.js"></script>
+
+</body>
+</html>

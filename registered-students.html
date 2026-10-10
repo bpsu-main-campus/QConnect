@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Registered Students - QConnect</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="top-header">
+
+        <div class="header-left">
+
+            <div class="logo-placeholder">
+
+                <img
+                    src="images/bpsu-logo.png"
+                    alt="BPSU Logo">
+
+            </div>
+
+
+            <div class="university-name">
+
+                <p class="republic">
+                    REPUBLIC OF THE PHILIPPINES
+                </p>
+
+                <h1>
+                    BATAAN PENINSULA STATE UNIVERSITY
+                </h1>
+
+                <span>
+                    CITY OF BALANGA, BATAAN 2100
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="login-button"
+            onclick="window.location.href='index.html'">
+
+            Log-in
+
+        </button>
+
+    </header>
+
+
+
+    <!-- =========================
+         PAGE TITLE
+    ========================== -->
+
+    <section class="page-title">
+
+        <h2>
+            View registered students
+        </h2>
+
+    </section>
+
+
+
+    <!-- =========================
+         STUDENT SEARCH + LIST
+    ========================== -->
+
+    <main class="registered-page">
+
+
+        <!-- SEARCH BAR -->
+
+        <div class="student-search">
+
+            <input
+                type="text"
+                id="studentSearch"
+                placeholder="Search student ID or name..."
+                autocomplete="off">
+
+            <button
+                id="clearSearch"
+                type="button">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+
+        <!-- STUDENT LIST BOX -->
+
+        <div class="student-list-box">
+
+
+            <div
+                class="student-list"
+                id="studentList">
+
+                <!-- Students will be created by JavaScript -->
+
+            </div>
+
+
+
+            <!-- UP / DOWN BUTTONS -->
+
+            <div class="student-scroll-buttons">
+
+                <button
+                    id="scrollUp"
+                    type="button"
+                    aria-label="Scroll up">
+
+                    ▲
+
+                </button>
+
+
+                <button
+                    id="scrollDown"
+                    type="button"
+                    aria-label="Scroll down">
+
+                    ▼
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+
+
+        <!-- =========================
+         FOOTER
+    ========================== -->
+
+    
+
+<footer class="site-footer">
+
+    <div class="contact-section">
+        <div class="contact-box">
+
+            <!-- FACEBOOK -->
+            <a class="contact-icon"
+               href="https://www.facebook.com/share/1C3uCueqKy/"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="BPSU Facebook Page">
+                <span class="facebook-f">f</span>
+            </a>
+
+            <a class="contact-label"
+               href="https://www.facebook.com/share/1C3uCueqKy/"
+               target="_blank"
+               rel="noopener noreferrer">
+                FB Page
+            </a>
+
+            <!-- EMAIL -->
+            <a class="contact-icon"
+               href="mailto:pio_mc@bpsu.edu.ph"
+               aria-label="Email BPSU">
+                <span class="email-symbol">✉</span>
+            </a>
+
+            <a class="contact-label"
+               href="mailto:pio_mc@bpsu.edu.ph">
+                Email us
+            </a>
+
+        </div>
+    </div>
+
+
+        <div class="footer-logo">
+
+            <img
+                src="images/bpsu-logo.png"
+                alt="BPSU Logo">
+
+        </div>
+
+    </footer>
+
+
+
+    <script src="registered-students.js"></script>
+
+</body>
+
+</html>

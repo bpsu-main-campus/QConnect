@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile - QConnect</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        /* =====================================================
+           PROFILE PAGE
+        ===================================================== */
+
+        .profile-page {
+
+            min-height: calc(100vh - 170px);
+
+            background: #fff8f0;
+
+            padding: 25px 15px 35px;
+
+        }
+
+
+        .profile-page-title {
+
+            font-family: Georgia, serif;
+
+            color: #651515;
+
+            font-size: 18px;
+
+            margin-bottom: 15px;
+
+            margin-left: 5px;
+
+        }
+
+
+        /* =====================================================
+           PROFILE BOX
+        ===================================================== */
+
+        .profile-box {
+
+            width: 100%;
+
+            max-width: 600px;
+
+            min-height: 350px;
+
+            margin: 0 auto;
+
+            background: #fff8f0;
+
+            border: 4px solid #651515;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+        }
+
+
+        /* =====================================================
+           PROFILE FIELDS
+        ===================================================== */
+
+        .profile-field {
+
+            margin-bottom: 12px;
+
+        }
+
+
+        .profile-field label {
+
+            display: block;
+
+            color: #651515;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            margin-bottom: 4px;
+
+        }
+
+
+        .profile-field input {
+
+            width: 100%;
+
+            height: 34px;
+
+            border: 2px solid #8a7777;
+
+            border-radius: 8px;
+
+            background: #e8d1d1;
+
+            color: #651515;
+
+            padding: 6px 9px;
+
+            font-size: 12px;
+
+            outline: none;
+
+        }
+
+
+        /* =====================================================
+           DISABLED / READ ONLY
+        ===================================================== */
+
+        .profile-field input:disabled {
+
+            background: #e8d1d1;
+
+            color: #651515;
+
+            cursor: not-allowed;
+
+        }
+
+
+        /* =====================================================
+           EDIT MODE
+        ===================================================== */
+
+        .profile-box.editing input {
+
+            background: white;
+
+            border-color: #651515;
+
+            cursor: text;
+
+        }
+
+
+        /* =====================================================
+           BUTTONS
+        ===================================================== */
+
+        .profile-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 25px;
+
+            margin-top: 20px;
+
+            flex-wrap: wrap;
+
+        }
+
+
+        .profile-buttons button {
+
+            min-width: 90px;
+
+            background: #651515;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 18px;
+
+            padding: 9px 16px;
+
+            font-size: 11px;
+
+            cursor: pointer;
+
+        }
+
+
+        .profile-buttons button:hover {
+
+            background: #4d1010;
+
+        }
+
+
+        /* SAVE DISABLED UNTIL EDIT */
+
+        #saveProfileButton {
+
+            opacity: 0.45;
+
+            cursor: not-allowed;
+
+        }
+
+
+        #saveProfileButton.enabled {
+
+            opacity: 1;
+
+            cursor: pointer;
+
+        }
+
+
+        /* =====================================================
+           POPUP
+        ===================================================== */
+
+        .save-popup {
+
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(50, 20, 20, 0.55);
+
+            align-items: center;
+
+            justify-content: center;
+
+            z-index: 9999;
+
+        }
+
+
+        .save-popup.active {
+
+            display: flex;
+
+        }
+
+
+        .save-popup-box {
+
+            width: 280px;
+
+            background: #fff8f0;
+
+            border: 4px solid #651515;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            text-align: center;
+
+        }
+
+
+        .save-popup-box h3 {
+
+            font-family: Georgia, serif;
+
+            color: #651515;
+
+            margin-bottom: 12px;
+
+        }
+
+
+        .save-popup-box p {
+
+            font-size: 12px;
+
+            color: #651515;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .save-popup-box button {
+
+            background: #651515;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 18px;
+
+            padding: 8px 20px;
+
+            cursor: pointer;
+
+        }
+
+
+        /* =====================================================
+           DESKTOP
+        ===================================================== */
+
+        @media (min-width: 601px) {
+
+            .profile-box {
+
+                max-width: 600px;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 600px) {
+
+            .profile-box {
+
+                width: 95%;
+
+                padding: 20px;
+
+            }
+
+
+            .profile-buttons {
+
+                gap: 15px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- HEADER -->
+
+    <header class="top-header">
+
+        <div class="header-left">
+
+            <div class="logo-placeholder">
+
+                <img
+                    src="images/bpsu-logo.png"
+                    alt="BPSU Logo">
+
+            </div>
+
+
+            <div class="university-name">
+
+                <p class="republic">
+                    REPUBLIC OF THE PHILIPPINES
+                </p>
+
+                <h1>
+                    BATAAN PENINSULA STATE UNIVERSITY
+                </h1>
+
+                <span>
+                    CITY OF BALANGA, BATAAN 2100
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="login-button"
+            onclick="window.location.href='index.html'">
+
+            Log-in
+
+        </button>
+
+    </header>
+
+
+
+    <!-- PROFILE -->
+
+    <main class="profile-page">
+
+        <h2 class="profile-page-title">
+            My Profile
+        </h2>
+
+
+        <div
+            class="profile-box"
+            id="profileBox">
+
+
+            <!-- NAME -->
+
+            <div class="profile-field">
+
+                <label>
+                    Name
+                </label>
+
+                <input
+                    type="text"
+                    id="profileName"
+                    disabled>
+
+            </div>
+
+
+            <!-- STUDENT ID -->
+
+            <div class="profile-field">
+
+                <label>
+                    Student ID
+                </label>
+
+                <input
+                    type="text"
+                    id="profileStudentID"
+                    disabled>
+
+            </div>
+
+
+            <!-- GENDER -->
+
+            <div class="profile-field">
+
+                <label>
+                    Gender
+                </label>
+
+                <input
+                    type="text"
+                    id="profileGender"
+                    disabled>
+
+            </div>
+
+
+            <!-- BIRTHDAY -->
+
+            <div class="profile-field">
+
+                <label>
+                    Birthday
+                </label>
+
+                <input
+                    type="text"
+                    id="profileBirthday"
+                    disabled>
+
+            </div>
+
+
+            <!-- AGE -->
+
+            <div class="profile-field">
+
+                <label>
+                    Age
+                </label>
+
+                <input
+                    type="text"
+                    id="profileAge"
+                    disabled>
+
+            </div>
+
+
+            <!-- CAMPUS -->
+
+            <div class="profile-field">
+
+                <label>
+                    Campus
+                </label>
+
+                <input
+                    type="text"
+                    id="profileCampus"
+                    disabled>
+
+            </div>
+
+
+            <!-- COURSE -->
+
+            <div class="profile-field">
+
+                <label>
+                    Course
+                </label>
+
+                <input
+                    type="text"
+                    id="profileCourse"
+                    disabled>
+
+            </div>
+
+
+            <!-- PROGRAM -->
+
+            <div class="profile-field">
+
+                <label>
+                    Program
+                </label>
+
+                <input
+                    type="text"
+                    id="profileProgram"
+                    disabled>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="profile-buttons">
+
+            <button
+                id="editProfileButton">
+
+                Edit
+
+            </button>
+
+
+            <button
+                id="saveProfileButton">
+
+                Save
+
+            </button>
+
+
+            <button
+                id="queueButton">
+
+                Get Queue Number
+
+            </button>
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- SAVE POPUP -->
+
+    <div
+        class="save-popup"
+        id="savePopup">
+
+        <div class="save-popup-box">
+
+            <h3>
+                Profile Saved!
+            </h3>
+
+            <p>
+                Your student information has been updated successfully.
+            </p>
+
+            <button id="closeSavePopup">
+                OK
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+        <!-- =========================
+         FOOTER
+    ========================== -->
+
+    
+
+<footer class="site-footer">
+
+    <div class="contact-section">
+        <div class="contact-box">
+
+            <!-- FACEBOOK -->
+            <a class="contact-icon"
+               href="https://www.facebook.com/share/1C3uCueqKy/"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="BPSU Facebook Page">
+                <span class="facebook-f">f</span>
+            </a>
+
+            <a class="contact-label"
+               href="https://www.facebook.com/share/1C3uCueqKy/"
+               target="_blank"
+               rel="noopener noreferrer">
+                FB Page
+            </a>
+
+            <!-- EMAIL -->
+            <a class="contact-icon"
+               href="mailto:pio_mc@bpsu.edu.ph"
+               aria-label="Email BPSU">
+                <span class="email-symbol">✉</span>
+            </a>
+
+            <a class="contact-label"
+               href="mailto:pio_mc@bpsu.edu.ph">
+                Email us
+            </a>
+
+        </div>
+    </div>
+
+
+        <div class="footer-logo">
+
+            <img
+                src="images/bpsu-logo.png"
+                alt="BPSU Logo">
+
+        </div>
+
+    </footer>
+
+
+    <script src="student-profile.js"></script>
+
+</body>
+
+</html>
