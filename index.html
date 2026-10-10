@@ -1,216 +1,242 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>QConnect - BPSU Main Campus</title>
-
     <link rel="stylesheet" href="style.css">
 
-</head>
+    <style>
+        /* Homepage layout adjustments */
+        html {
+            min-height: 100%;
+            margin: 0;
+        }
 
+        body {
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-header {
+            flex-shrink: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        main {
+            flex: 0 0 auto;
+            width: 100%;
+        }
+
+        .hero {
+            width: 100%;
+            height: clamp(180px, 23vh, 240px);
+            box-sizing: border-box;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-overlay {
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .advisory {
+            width: 100%;
+            min-height: 140px;
+            height: auto;
+            box-sizing: border-box;
+            padding: 18px 12px 24px;
+            text-align: center;
+        }
+
+        .advisory-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px 40px;
+            margin-top: 14px;
+        }
+
+        .site-footer {
+            flex-shrink: 0;
+            width: 100%;
+            min-height: 65px;
+            height: auto;
+            margin-top: 0;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .contact-section {
+            box-sizing: border-box;
+        }
+
+        /* Prevent the footer from being pushed down by the screen height */
+        @media (min-height: 700px) {
+            body {
+                min-height: 0;
+            }
+        }
+
+        /* Smaller screens */
+        @media (max-width: 600px) {
+            .top-header {
+                min-height: 90px;
+            }
+
+            .university-name h1 {
+                font-size: clamp(13px, 3.5vw, 20px);
+            }
+
+            .university-name .republic,
+            .university-name span {
+                font-size: 10px;
+            }
+
+            .hero {
+                height: clamp(170px, 25vh, 220px);
+            }
+
+            .advisory {
+                padding: 18px 10px 22px;
+            }
+
+            .advisory-buttons {
+                gap: 12px 20px;
+            }
+
+            .site-footer {
+                min-height: 65px;
+            }
+        }
+
+        /* Keep the role-selection modal centered */
+        .login-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-modal.active {
+            display: flex;
+        }
+
+        .login-modal-box {
+            max-width: calc(100vw - 32px);
+            box-sizing: border-box;
+        }
+    </style>
+</head>
 
 <body>
 
-
-    <!-- =========================
-         HEADER
-    ========================== -->
-
+    <!-- HEADER -->
     <header class="top-header">
-
         <div class="header-left">
-
             <div class="logo-placeholder">
-
                 <img src="images/bpsu-logo.png" alt="BPSU Logo">
-
             </div>
-
 
             <div class="university-name">
-
-                <p class="republic">
-                    REPUBLIC OF THE PHILIPPINES
-                </p>
-
-                <h1>
-                    BATAAN PENINSULA STATE UNIVERSITY
-                </h1>
-
-                <span>
-                    CITY OF BALANGA, BATAAN 2100
-                </span>
-
+                <p class="republic">REPUBLIC OF THE PHILIPPINES</p>
+                <h1>BATAAN PENINSULA STATE UNIVERSITY</h1>
+                <span>CITY OF BALANGA, BATAAN 2100</span>
             </div>
-
         </div>
 
-
-        <!-- HEADER LOGIN -->
-
-        <button class="login-button" id="headerLogin">
+        <button class="login-button" id="headerLogin" type="button">
             Log-in
         </button>
-
     </header>
 
-
-
-    <!-- =========================
-         MAIN CONTENT
-    ========================== -->
-
+    <!-- MAIN CONTENT -->
     <main>
-
-
         <!-- HERO -->
-
         <section class="hero">
-
             <div class="hero-overlay">
-
-                <h2>
-                    Welcome to BPSU -<br>
-                    Main Campus!
-                </h2>
-
-                <p>
-                    ANNOUNCEMENTS
-                </p>
-
+                <h2>Welcome to BPSU -<br>Main Campus!</h2>
+                <p>ANNOUNCEMENTS</p>
             </div>
-
         </section>
 
-
-
         <!-- ENROLLMENT ADVISORY -->
-
         <section class="advisory">
-
-            <h2>
-                Enrollment Advisory
-            </h2>
-
+            <h2>Enrollment Advisory</h2>
             <p>
                 Start your journey at BPSU – Main Campus.<br>
                 Enroll now and be one of us, Peninsulares!
             </p>
 
-
             <div class="advisory-buttons">
-
-                <button id="registerButton">
-                    Register now
-                </button>
-
-                <button id="loginButton">
-                    Log-in now
-                </button>
-
+                <button id="registerButton" type="button">Register now</button>
+                <button id="loginButton" type="button">Log-in now</button>
             </div>
-
         </section>
-
     </main>
 
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="contact-section">
+            <div class="contact-box">
+                <a class="contact-icon"
+                   href="https://www.facebook.com/share/1C3uCueqKy/"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="BPSU Facebook Page">
+                    <span class="facebook-f">f</span>
+                </a>
 
+                <a class="contact-label"
+                   href="https://www.facebook.com/share/1C3uCueqKy/"
+                   target="_blank"
+                   rel="noopener noreferrer">FB Page</a>
 
-    <!-- =========================
-         FOOTER
-    ========================== -->
+                <a class="contact-icon"
+                   href="mailto:pio_mc@bpsu.edu.ph"
+                   aria-label="Email BPSU">
+                    <span class="email-symbol">✉</span>
+                </a>
 
-    
-
-<footer class="site-footer">
-
-    <div class="contact-section">
-        <div class="contact-box">
-
-            <!-- FACEBOOK -->
-            <a class="contact-icon"
-               href="https://www.facebook.com/share/1C3uCueqKy/"
-               target="_blank"
-               rel="noopener noreferrer"
-               aria-label="BPSU Facebook Page">
-                <span class="facebook-f">f</span>
-            </a>
-
-            <a class="contact-label"
-               href="https://www.facebook.com/share/1C3uCueqKy/"
-               target="_blank"
-               rel="noopener noreferrer">
-                FB Page
-            </a>
-
-            <!-- EMAIL -->
-            <a class="contact-icon"
-               href="mailto:pio_mc@bpsu.edu.ph"
-               aria-label="Email BPSU">
-                <span class="email-symbol">✉</span>
-            </a>
-
-            <a class="contact-label"
-               href="mailto:pio_mc@bpsu.edu.ph">
-                Email us
-            </a>
-
+                <a class="contact-label"
+                   href="mailto:pio_mc@bpsu.edu.ph">Email us</a>
+            </div>
         </div>
-    </div>
 
-    <!-- FADED BPSU LOGO ON THE RIGHT -->
-    <div class="footer-logo">
-        <img src="images/bpsu-logo.png" alt="BPSU Logo">
-    </div>
+        <div class="footer-logo">
+            <img src="images/bpsu-logo.png" alt="BPSU Logo">
+        </div>
+    </footer>
 
-
-
-    <!-- =========================
-         LOGIN ROLE MODAL
-    ========================== -->
-
+    <!-- LOGIN ROLE MODAL -->
     <div class="login-modal" id="loginModal">
-
         <div class="login-modal-box">
-
-
-            <button
-                class="close-modal"
-                id="closeModal">
+            <button class="close-modal" id="closeModal" type="button">
                 &times;
             </button>
 
-
-            <h2>
-                Are you?
-            </h2>
-
+            <h2>Are you?</h2>
 
             <div class="role-buttons">
-
-                <button id="adminButton">
-                    Admin
-                </button>
-
-                <button id="studentButton">
-                    Student
-                </button>
-
+                <button id="adminButton" type="button">Admin</button>
+                <button id="studentButton" type="button">Student</button>
             </div>
-
         </div>
-
     </div>
 
-
-
     <script src="script.js"></script>
-
 </body>
-
 </html>
