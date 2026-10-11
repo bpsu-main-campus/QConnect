@@ -1,27 +1,67 @@
+function ensureNotificationElement() {
+    let notification = document.getElementById("notification");
 
-<!-- NOTIFICATION -->
-<div id="notification" class="notification" role="status" aria-live="polite">
-    <span id="notificationMessage"></span>
-    <button type="button" onclick="hideNotification()" aria-label="Close notification">
-        &times;
-    </button>
-</div>
+    if (notification) {
+        return notification;
+    }
 
-<!-- CONTACT US -->
-<section class="contact-section">
-    <h3>CONTACT US</h3>
-    <p>Have questions? Reach us through either option below.</p>
+    notification = document.createElement("div");
+    notification.id = "notification";
+    notification.className = "notification";
+    notification.setAttribute("role", "status");
+    notification.setAttribute("aria-live", "polite");
+    notification.innerHTML =
+        '<span id="notificationMessage"></span>' +
+        '<button type="button" id="closeNotification" aria-label="Close notification">×</button>';
 
-    <a class="contact-link" href="mailto:pio_mc@bpsu.edu.ph">
-        ✉️ Email Us
-        <span>pio_mc@bpsu.edu.ph</span>
-    </a>
+    const main = document.querySelector("main");
+    (main || document.body).prepend(notification);
 
-    <a class="contact-link"
-       href="https://www.facebook.com/share/1C3uCueqKy/"
-       target="_blank"
-       rel="noopener noreferrer">
-        📘 Facebook Page
-        <span>Visit BPSU Main Campus on Facebook</span>
-    </a>
-</section>
+    return notification;
+}
+
+function showNotification(message) {
+    const notification = ensureNotificationElement();
+    const messageElement = document.getElementById("notificationMessage");
+
+    if (!messageElement) {
+        return;
+    }
+
+    messageElement.textContent = message;
+    notification.classList.add("show");
+
+    if (notification.hideTimer) {
+        clearTimeout(notification.hideTimer);
+    }
+
+    notification.hideTimer = setTimeout(() => {
+        notification.classList.remove("show");
+    }, 5000);
+}
+
+function hideNotification() {
+    const notification = document.getElementById("notification");
+
+    if (!notification) {
+        return;
+    }
+
+    notification.classList.remove("show");
+
+    if (notification.hideTimer) {
+        clearTimeout(notification.hideTimer);
+    }
+}
+
+document.addEventListener("click", (event) => {
+    if (event.target.closest("#closeNotification")) {
+        hideNotification();
+    }
+
+    if (event.target.closest("#testNotification")) {
+        showNotification(
+            "Test successful! QConnect notifications are appearing on this page."
+        );
+    }
+});
