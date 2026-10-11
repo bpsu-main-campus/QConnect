@@ -1,62 +1,39 @@
-
-/* =========================================
-   QCONNECT - MAIN STYLESHEET
-   ========================================= */
-
-/* ---------- GENERAL ---------- */
-
+/* =========================================================*
+*   GENERAL*
+*========================================================= */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
-
-html {
-    width: 100%;
-    min-width: 320px;
-    min-height: 100%;
-}
-
+html,
 body {
     width: 100%;
     min-width: 320px;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+}
+body {
     font-family: Arial, Helvetica, sans-serif;
     background: #eeeeee;
     color: #5a1717;
 }
-
-main {
-    flex: 1 0 auto;
-    width: 100%;
-}
-
-button,
-input,
-select {
-    font: inherit;
-}
-
-/* ---------- HEADER ---------- */
-
+/* =========================================================*
+*   HEADER*
+*========================================================= */
 .top-header {
     width: 100%;
-    min-height: 105px;
+    height: 105px;
     background: #e8d1d1;
     display: flex;
     align-items: stretch;
     position: relative;
-    flex-shrink: 0;
 }
-
+/* LEFT SIDE */
 .header-left {
     display: flex;
     align-items: center;
     min-width: 0;
 }
-
+/* MAROON LOGO PANEL */
 .logo-placeholder {
     width: 70px;
     height: 105px;
@@ -67,48 +44,47 @@ select {
     overflow: hidden;
     flex-shrink: 0;
 }
-
+/* BPSU LOGO */
 .logo-placeholder img {
     width: 60px;
     height: 90px;
     object-fit: contain;
     display: block;
 }
-
+/* UNIVERSITY NAME */
 .university-name {
     color: #8a1f1f;
     margin-left: 5px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-width: 0;
+    flex-shrink: 0;
 }
-
+/* REPUBLIC */
 .university-name p {
     font-size: 10px;
     font-weight: bold;
 }
-
 .republic {
     border-bottom: 1px solid #8a1f1f;
     padding-bottom: 2px;
     margin-bottom: 3px;
 }
-
+/* UNIVERSITY TITLE */
 .university-name h1 {
     font-family: Georgia, serif;
     font-size: 20px;
     margin: 2px 0;
     white-space: nowrap;
 }
-
+/* CITY */
 .university-name span {
     font-size: 10px;
     font-weight: bold;
 }
-
-/* ---------- HEADER LOGIN BUTTON ---------- */
-
+/* =========================================================*
+*   HEADER LOGIN*
+*========================================================= */
 .login-button {
     position: absolute;
     top: 23px;
@@ -116,33 +92,31 @@ select {
     background: #651515;
     color: white;
     border: none;
-    border-radius: 18px;
+    border-radius: 15px;
     padding: 7px 20px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
 }
-
-.login-button:hover,
-.advisory-buttons button:hover {
+.login-button:hover {
     background: #4d1010;
 }
-
-/* ---------- HERO / CAMPUS BANNER ---------- */
-
+/* =========================================================*
+*   HERO*
+*========================================================= */
 .hero {
     width: 100%;
-    height: 200px;
     margin-top: 15px;
+    height: 200px;
     background:
         linear-gradient(
             rgba(75, 25, 25, 0.55),
             rgba(75, 25, 25, 0.55)
         ),
         url("images/campus.png");
-    background-size: cover;
+    background-size: 100% auto;
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: center center;
     border-top: 6px solid #7c6666;
     border-bottom: 6px solid #7c6666;
     display: flex;
@@ -150,56 +124,43 @@ select {
     justify-content: center;
     text-align: center;
 }
-
 .hero-overlay {
-    width: 100%;
-    padding: 10px;
     color: white;
 }
-
 .hero h2 {
     font-family: Georgia, serif;
-    font-size: 22px;
-    line-height: 1.2;
-    margin-bottom: 20px;
+    font-size: 19px;
+    margin-bottom: 35px;
     text-shadow: 1px 1px 4px #333;
 }
-
 .hero p {
-    font-size: 14px;
+    font-size: 12px;
 }
-
-/* ---------- ENROLLMENT ADVISORY ---------- */
-
+/* =========================================================*
+*   ENROLLMENT ADVISORY*
+*========================================================= */
 .advisory {
     width: 100%;
-    min-height: 154px;
     background: #fff8f0;
     text-align: center;
-    padding: 18px 12px 22px;
+    padding: 18px 10px 25px;
 }
-
 .advisory h2 {
     font-family: Georgia, serif;
-    font-size: 22px;
-    margin: 4px 0 6px;
+    font-size: 18px;
+    margin-bottom: 5px;
 }
-
 .advisory p {
-    font-size: 13px;
-    line-height: 1.35;
-    margin-bottom: 12px;
+    font-size: 11px;
+    line-height: 1.2;
+    margin-bottom: 15px;
 }
-
 .advisory-buttons {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 12px 40px;
-    margin-top: 10px;
+    gap: 70px;
 }
-
 .advisory-buttons button {
     background: #651515;
     color: white;
@@ -209,11 +170,13 @@ select {
     font-size: 11px;
     cursor: pointer;
 }
-
-/* ---------- FOOTER ---------- */
-
-footer,
-.site-footer {
+.advisory-buttons button:hover {
+    background: #4d1010;
+}
+/* =========================================================*
+*   FOOTER*
+*========================================================= */
+footer {
     width: 100%;
     min-height: 65px;
     background: #e8d1d1;
@@ -222,11 +185,9 @@ footer,
     align-items: center;
     margin: 0;
     padding: 0;
-    flex-shrink: 0;
 }
 
-/* ---------- FOOTER CONTACT AREA ---------- */
-
+/* CONTACT AREA */
 .contact-section {
     display: block;
     margin: 0;
@@ -245,11 +206,12 @@ footer,
     padding: 0;
 }
 
+/* MAROON ICON SQUARES */
 .contact-icon {
     width: 65px;
     height: 32px;
     background: #721919;
-    color: white;
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -259,20 +221,23 @@ footer,
     padding: 0;
 }
 
+/* FACEBOOK F */
 .facebook-f {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 23px;
     font-weight: bold;
     line-height: 1;
-    color: white;
+    color: #ffffff;
 }
 
+/* EMAIL ICON */
 .email-symbol {
-    color: white;
+    color: #ffffff;
     font-size: 16px;
     line-height: 1;
 }
 
+/* CONTACT TEXT */
 .contact-section a.contact-label {
     color: #5a1717;
     font-size: 10px;
@@ -287,8 +252,7 @@ footer,
     color: #8a1f1f;
 }
 
-/* ---------- FOOTER LOGO ---------- */
-
+/* FOOTER LOGO: KEEP IT ON THE RIGHT */
 .footer-logo {
     width: 55px;
     height: 55px;
@@ -309,25 +273,23 @@ footer,
     opacity: 0.45;
 }
 
-/* ---------- LOGIN MODAL ---------- */
-
 .login-modal {
     display: none;
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     background: rgba(50, 20, 20, 0.60);
     justify-content: center;
     align-items: center;
     z-index: 9999;
-    padding: 15px;
 }
-
+/* WHEN OPEN */
 .login-modal.active {
     display: flex;
 }
-
+/* MODAL BOX */
 .login-modal-box {
     width: 330px;
     height: 180px;
@@ -343,22 +305,21 @@ footer,
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
     flex-shrink: 0;
 }
-
+/* TITLE */
 .login-modal-box h2 {
     font-family: Georgia, serif;
     color: #651515;
     font-size: 20px;
     margin-bottom: 25px;
 }
-
+/* ROLE BUTTONS */
 .role-buttons {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 25px;
+    gap: 40px;
     flex-shrink: 0;
 }
-
 .role-buttons button {
     background: #651515;
     color: white;
@@ -371,11 +332,10 @@ footer,
     cursor: pointer;
     white-space: nowrap;
 }
-
 .role-buttons button:hover {
     background: #4d1010;
 }
-
+/* CLOSE */
 .close-modal {
     position: absolute;
     top: 5px;
@@ -386,9 +346,10 @@ footer,
     font-size: 24px;
     cursor: pointer;
 }
-
-/* ---------- LOGIN CHOICE POPUP ---------- */
-
+/* =========================================================*
+*   LOGIN CHOICE POPUP*
+*   USED BY THE CURRENT SCRIPT.JS*
+*========================================================= */
 .login-choice-overlay {
     position: fixed;
     inset: 0;
@@ -401,7 +362,7 @@ footer,
     z-index: 9999;
     padding: 15px;
 }
-
+/* CHOICE BOX */
 .login-choice-box {
     width: 330px;
     min-height: 180px;
@@ -418,15 +379,15 @@ footer,
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
     flex-shrink: 0;
 }
-
+/* TITLE */
 .login-choice-box h2 {
     font-family: Georgia, serif;
     color: #651515;
     font-size: 20px;
-    margin-bottom: 20px;
-    text-align: center;
+    margin-bottom: 25px;
+    white-space: nowrap;
 }
-
+/* ADMIN / STUDENT BUTTONS */
 .login-choice-box > button:not(.close-choice) {
     width: 170px;
     padding: 7px 18px;
@@ -438,12 +399,12 @@ footer,
     font-family: Georgia, serif;
     font-size: 16px;
     cursor: pointer;
+    white-space: nowrap;
 }
-
 .login-choice-box > button:not(.close-choice):hover {
     background: #4d1010;
 }
-
+/* CLOSE BUTTON */
 .close-choice {
     position: absolute;
     top: 5px;
@@ -456,16 +417,15 @@ footer,
     font-size: 24px;
     cursor: pointer;
 }
-
-/* ---------- PAGE TITLES ---------- */
-
+/* =========================================================*
+*   PAGE TITLE*
+*========================================================= */
 .page-title {
     width: 100%;
     background: #fff8f0;
     padding: 22px 15px;
     border-bottom: 5px solid #8a7777;
 }
-
 .page-title h2 {
     font-family: Georgia, serif;
     font-size: 17px;
@@ -473,9 +433,9 @@ footer,
     text-align: left;
     margin-left: 15px;
 }
-
-/* ---------- REGISTERED STUDENTS PAGE ---------- */
-
+/* =========================================================*
+*   REGISTERED STUDENTS PAGE*
+*========================================================= */
 .registered-page {
     width: 100%;
     min-height: 500px;
@@ -492,18 +452,16 @@ footer,
     flex-direction: column;
     align-items: center;
 }
-
-/* ---------- STUDENT SEARCH ---------- */
-
+/* =========================================================*
+*   SEARCH BAR*
+*========================================================= */
 .student-search {
-    width: 400px;
-    max-width: 90vw;
+    width: 265px;
     height: 38px;
     margin: 0 auto 15px;
     position: relative;
     flex-shrink: 0;
 }
-
 .student-search input {
     width: 100%;
     height: 38px;
@@ -515,15 +473,13 @@ footer,
     font-size: 12px;
     outline: none;
 }
-
 .student-search input::placeholder {
     color: #8a7777;
 }
-
 .student-search input:focus {
     border-color: #4d1010;
 }
-
+/* CLEAR SEARCH */
 #clearSearch {
     position: absolute;
     right: 10px;
@@ -538,13 +494,12 @@ footer,
     line-height: 20px;
     cursor: pointer;
 }
-
-/* ---------- STUDENT LIST ---------- */
-
+/* =========================================================*
+*   STUDENT LIST BOX*
+*========================================================= */
 .student-list-box {
-    width: 400px;
-    max-width: 90vw;
-    height: 300px;
+    width: 265px;
+    height: 245px;
     margin: 0 auto;
     background: #fff8f0;
     border: 4px solid #651515;
@@ -553,41 +508,40 @@ footer,
     overflow: hidden;
     flex-shrink: 0;
 }
-
+/* ACTUAL LIST */
 .student-list {
     height: 100%;
     overflow-y: auto;
-    padding: 20px 55px 20px 30px;
+    padding: 18px 45px 18px 25px;
     display: block;
 }
-
+/* HIDE SCROLLBAR */
 .student-list::-webkit-scrollbar {
     width: 0;
 }
-
+/* NUMBERED LIST */
 .student-list ol {
     margin: 0;
     padding-left: 20px;
 }
-
 .student-list li {
     color: #651515;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: normal;
-    line-height: 1.6;
+    line-height: 1.5;
     cursor: pointer;
     padding: 1px 3px;
     border-radius: 4px;
+    display: list-item;
     white-space: nowrap;
 }
-
 .student-list li:hover {
     background: #e8d1d1;
     text-decoration: underline;
 }
-
-/* ---------- STUDENT LIST SCROLL BUTTONS ---------- */
-
+/* =========================================================*
+*   UP / DOWN BUTTONS*
+*========================================================= */
 .student-scroll-buttons {
     position: absolute;
     right: 12px;
@@ -597,7 +551,6 @@ footer,
     flex-direction: column;
     gap: 5px;
 }
-
 .student-scroll-buttons button {
     width: 25px;
     height: 25px;
@@ -607,14 +560,13 @@ footer,
     font-size: 20px;
     cursor: pointer;
 }
-
 .student-scroll-buttons button:hover {
     color: #4d1010;
     transform: scale(1.15);
 }
-
-/* ---------- NO STUDENTS FOUND ---------- */
-
+/* =========================================================*
+*   NO SEARCH RESULTS*
+*========================================================= */
 .no-students {
     list-style: none;
     color: #651515;
@@ -622,9 +574,9 @@ footer,
     font-size: 12px;
     padding: 30px 5px;
 }
-
-/* ---------- STUDENT REGISTRATION PAGE ---------- */
-
+/* =========================================================*
+*   STUDENT REGISTRATION PAGE*
+*========================================================= */
 .registration-page {
     width: 100%;
     min-height: 500px;
@@ -641,10 +593,12 @@ footer,
     flex-direction: column;
     align-items: center;
 }
-
+/* =========================================================*
+*   REGISTRATION BOX*
+*========================================================= */
 .registration-box {
-    width: 450px;
-    max-width: 90vw;
+    width: 320px;
+    max-width: calc(100vw - 30px);
     margin: 0 auto;
     padding: 22px 25px 25px;
     background: #fff8f0;
@@ -652,7 +606,7 @@ footer,
     border-radius: 20px;
     flex-shrink: 0;
 }
-
+/* TITLE */
 .registration-box h2 {
     font-family: Georgia, serif;
     color: #651515;
@@ -660,7 +614,7 @@ footer,
     font-size: 18px;
     margin-bottom: 18px;
 }
-
+/* LABELS */
 .registration-box label {
     display: block;
     color: #651515;
@@ -669,7 +623,7 @@ footer,
     margin-top: 10px;
     margin-bottom: 4px;
 }
-
+/* INPUTS */
 .registration-box input,
 .registration-box select {
     width: 100%;
@@ -682,33 +636,36 @@ footer,
     font-size: 11px;
     outline: none;
 }
-
 .registration-box input:focus,
 .registration-box select:focus {
     border-color: #651515;
 }
-
+/* =========================================================*
+*   NAME INPUTS*
+*========================================================= */
+.name-inputs {
+    display: flex;
+    gap: 5px;
+    width: 100%;
+}
+.name-inputs input {
+    min-width: 0;
+    flex: 1;
+}
+/* =========================================================*
+*   SELECT*
+*========================================================= */
 .registration-box select {
     cursor: pointer;
 }
-
 .registration-box select:disabled {
     background: #e8d1d1;
     color: #8a7777;
     cursor: not-allowed;
 }
-
-.name-inputs {
-    display: flex;
-    gap: 8px;
-    width: 100%;
-}
-
-.name-inputs input {
-    flex: 1;
-    min-width: 0;
-}
-
+/* =========================================================*
+*   REGISTER BUTTON*
+*========================================================= */
 .register-submit {
     display: block;
     margin: 20px auto 0;
@@ -720,13 +677,12 @@ footer,
     font-size: 11px;
     cursor: pointer;
 }
-
 .register-submit:hover {
     background: #4d1010;
 }
-
-/* ---------- STUDENT PROFILE PAGE ---------- */
-
+/* =========================================================*
+*   PROFILE PAGE*
+*========================================================= */
 .profile-page {
     width: 100%;
     min-height: 500px;
@@ -734,173 +690,178 @@ footer,
     flex-direction: column;
     align-items: center;
 }
-
+/* Keep profile box centered */
 .profile-box {
     flex-shrink: 0;
     margin-left: auto;
     margin-right: auto;
 }
-
+/* Profile rows stay vertical */
 .profile-row {
     display: flex;
     flex-direction: column;
 }
+/* =========================================================*
+*   DESKTOP*
+*   KEEP SAME COMPACT DESIGN*
+*========================================================= */
+@media (min-width: 601px) {
+    .registered-page,
+    .registration-page,
+    .profile-page {
+        padding-top: 25px;
+        padding-bottom: 35px;
+    }
+}
+/* =========================================================*
+*   MOBILE*
+*   SAME GENERAL DESIGN, JUST FIT SCREEN*
+*========================================================= */
+@media (max-width: 600px) {
+    .top-header {
+        padding-right: 10px;
+    }
+    .university-name h1 {
+        font-size: 10px;
+    }
+    .university-name span {
+        font-size: 8px;
+    }
+    .university-name p {
+        font-size: 8px;
+    }
+    .login-button {
+        right: 10px;
+        padding: 6px 13px;
+        font-size: 12px;
+    }
+    .advisory-buttons {
+        gap: 30px;
+    }
+    /* LOGIN CHOICE */
+    .login-choice-box {
+        width: 280px;
+        min-height: 170px;
+        padding: 22px;
+    }
+    .login-choice-box h2 {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+    .login-choice-box > button:not(.close-choice) {
+        width: 150px;
+        font-size: 14px;
+        padding: 7px 15px;
+    }
+    .role-buttons {
+        gap: 25px;
+    }
+    .login-modal-box {
+        width: 280px;
+        height: 170px;
+    }
+    .student-search {
+        width: 85%;
+        max-width: 265px;
+    }
+    .student-list-box {
+        width: 85%;
+        max-width: 265px;
+    }
+    .registration-box {
+        width: 90%;
+        max-width: 320px;
+    }
+    .name-inputs {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
 
-/* ---------- NOTIFICATIONS ---------- */
+/* =========================================================*
+*   DESKTOP - WIDER CONTENT BOXES*
+*========================================================= */
+@media (min-width: 601px) {
+    /* =========================================*
+*       STUDENT REGISTRATION*
+*    ========================================= */
+    .registration-box {
+        width: 450px;
+        max-width: 90vw;
+    }
+    /* Make the name fields fit nicely */
+    .name-inputs {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+    }
+    .name-inputs input {
+        flex: 1;
+        min-width: 0;
+    }
+    /* =========================================*
+*       VIEW REGISTERED STUDENTS*
+*    ========================================= */
+    .student-search {
+        width: 400px;
+        max-width: 90vw;
+    }
+    .student-list-box {
+        width: 400px;
+        max-width: 90vw;
+        height: 300px;
+    }
+    .student-list {
+        padding: 20px 55px 20px 30px;
+    }
+    .student-list li {
+        font-size: 13px;
+        line-height: 1.6;
+    }
+}
 
+/* NOTIFICATION */
 .notification {
     display: none;
     align-items: center;
     justify-content: space-between;
     gap: 15px;
-    width: calc(100% - 30px);
-    max-width: 500px;
-    margin: 15px auto;
-    padding: 12px 16px;
     background: #fff8f0;
     color: #651515;
     border: 2px solid #721919;
     border-radius: 10px;
-    font-family: Arial, Helvetica, sans-serif;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    padding: 12px 16px;
+    margin: 15px auto;
+    max-width: 500px;
+    font-family: Arial, sans-serif;
 }
-
 .notification.show {
     display: flex;
 }
-
 .notification button {
-    flex-shrink: 0;
     background: transparent;
     color: #651515;
     border: none;
     font-size: 24px;
     cursor: pointer;
 }
+/* Fix homepage height and remove the empty gray gap */
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
 
-/* =========================================
-   RESPONSIVE LAYOUT
-   ========================================= */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
 
-@media (max-width: 600px) {
-    .top-header {
-        min-height: 90px;
-    }
+body > main {
+    flex: 1;
+}
 
-    .logo-placeholder {
-        width: 55px;
-        height: 90px;
-    }
-
-    .logo-placeholder img {
-        width: 48px;
-        height: 78px;
-    }
-
-    .university-name {
-        max-width: calc(100vw - 145px);
-    }
-
-    .university-name h1 {
-        font-size: clamp(9px, 2.5vw, 13px);
-        white-space: normal;
-    }
-
-    .university-name p {
-        font-size: 8px;
-    }
-
-    .university-name span {
-        font-size: 8px;
-    }
-
-    .login-button {
-        top: 15px;
-        right: 10px;
-        padding: 6px 13px;
-        font-size: 12px;
-    }
-
-    .hero {
-        height: 190px;
-        margin-top: 10px;
-    }
-
-    .hero h2 {
-        font-size: 20px;
-    }
-
-    .hero p {
-        font-size: 13px;
-    }
-
-    .advisory {
-        padding: 18px 10px 22px;
-    }
-
-    .advisory h2 {
-        font-size: 20px;
-    }
-
-    .advisory p {
-        font-size: 12px;
-    }
-
-    .advisory-buttons {
-        gap: 12px 20px;
-    }
-
-    .login-modal-box {
-        width: 280px;
-        height: 170px;
-    }
-
-    .login-choice-box {
-        width: 280px;
-        min-height: 170px;
-        padding: 22px;
-    }
-
-    .login-choice-box h2 {
-        font-size: 18px;
-    }
-
-    .login-choice-box > button:not(.close-choice) {
-        width: 150px;
-        font-size: 14px;
-        padding: 7px 15px;
-    }
-
-    .student-search,
-    .student-list-box {
-        width: 85%;
-        max-width: 400px;
-    }
-
-    .student-list-box {
-        height: 245px;
-    }
-
-    .student-list {
-        padding: 18px 45px 18px 25px;
-    }
-
-    .student-list li {
-        font-size: 12px;
-    }
-
-    .registration-box {
-        width: 90%;
-        max-width: 450px;
-    }
-
-    .name-inputs {
-        flex-direction: column;
-        gap: 5px;
-    }
-
-    .notification {
-        padding: 10px 12px;
-        font-size: 13px;
-    }
+footer {
+    margin-top: auto;
 }
