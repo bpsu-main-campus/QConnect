@@ -1,45 +1,39 @@
-function ensureNotificationElement() {
-    let notification = document.getElementById("notification");
 
-    if (notification) {
-        return notification;
-    }
+/* =========================================
+   QCONNECT NOTIFICATION SYSTEM
+   ========================================= */
 
-    notification = document.createElement("div");
-    notification.id = "notification";
-    notification.className = "notification";
-    notification.setAttribute("role", "status");
-    notification.setAttribute("aria-live", "polite");
-    notification.innerHTML =
-        '<span id="notificationMessage"></span>' +
-        '<button type="button" id="closeNotification" aria-label="Close notification">×</button>';
-
-    const main = document.querySelector("main");
-    (main || document.body).prepend(notification);
-
-    return notification;
-}
-
+/**
+ * Display an in-page notification.
+ * Example:
+ * showNotification("Your queue status has changed!");
+ */
 function showNotification(message) {
-    const notification = ensureNotificationElement();
-    const messageElement = document.getElementById("notificationMessage");
+    const notification = document.getElementById("notification");
+    const notificationMessage = document.getElementById(
+        "notificationMessage"
+    );
 
-    if (!messageElement) {
+    if (!notification || !notificationMessage) {
+        console.warn("QConnect notification elements were not found.");
         return;
     }
 
-    messageElement.textContent = message;
+    notificationMessage.textContent = message;
     notification.classList.add("show");
 
-    if (notification.hideTimer) {
-        clearTimeout(notification.hideTimer);
-    }
+    // Clear any previous timer.
+    clearTimeout(notification.hideTimer);
 
+    // Hide the message after five seconds.
     notification.hideTimer = setTimeout(() => {
-        notification.classList.remove("show");
+        hideNotification();
     }, 5000);
 }
 
+/**
+ * Hide the notification.
+ */
 function hideNotification() {
     const notification = document.getElementById("notification");
 
@@ -48,20 +42,28 @@ function hideNotification() {
     }
 
     notification.classList.remove("show");
-
-    if (notification.hideTimer) {
-        clearTimeout(notification.hideTimer);
-    }
+    clearTimeout(notification.hideTimer);
 }
 
-document.addEventListener("click", (event) => {
-    if (event.target.closest("#closeNotification")) {
-        hideNotification();
+/* =========================================
+   BUTTON EVENTS
+   ========================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+    const testButton = document.getElementById("testNotification");
+    const closeButton = document.getElementById("closeNotification");
+
+    // Test notification button.
+    if (testButton) {
+        testButton.addEventListener("click", () => {
+            showNotification(
+                "Test successful! QConnect notifications are working on this page."
+            );
+        });
     }
 
-    if (event.target.closest("#testNotification")) {
-        showNotification(
-            "Test successful! QConnect notifications are appearing on this page."
-        );
+    // Close notification button.
+    if (closeButton) {
+        closeButton.addEventListener("click", hideNotification);
     }
 });
