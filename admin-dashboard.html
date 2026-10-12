@@ -1,30 +1,40 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - QConnect</title>
-
     <link rel="stylesheet" href="style.css">
 
     <style>
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+        }
 
-        /* =========================
-           ADMIN DASHBOARD
-        ========================== */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #eeeeee;
+        }
+
+        .top-header {
+            flex-shrink: 0;
+        }
+
+        main {
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
 
         .admin-hero {
-
             margin-top: 15px;
-
-            height: 200px;
-
+            min-height: 200px;
+            box-sizing: border-box;
             background:
                 linear-gradient(
                     rgba(75, 25, 25, 0.55),
@@ -32,279 +42,173 @@
                 ),
                 url("images/campus.png");
 
-            background-size: 100% auto;
-
+            background-size: cover;
             background-repeat: no-repeat;
-
-            background-position: center center;
+            background-position: center;
 
             border-top: 6px solid #7c6666;
-
             border-bottom: 6px solid #7c6666;
 
             display: flex;
-
             flex-direction: column;
-
             justify-content: center;
-
-            padding-left: 25px;
-
+            align-items: center;
+            padding: 25px;
             color: white;
-
+            text-align: center;
         }
-
 
         .admin-hero h2 {
-
+            align-self: flex-start;
             font-family: Georgia, serif;
-
-            font-size: 18px;
-
-            margin-bottom: 18px;
-
+            font-size: 22px;
+            margin: 0 0 15px;
         }
-
 
         .admin-hero p {
-
             font-family: Georgia, serif;
-
-            font-size: 11px;
-
+            font-size: 14px;
             font-weight: bold;
-
-            text-align: center;
-
-            padding: 0 30px;
-
+            line-height: 1.5;
+            margin: 0;
+            overflow-wrap: anywhere;
         }
-
-
-        /* DASHBOARD BUTTONS */
 
         .admin-options {
-
-            min-height: 125px;
-
+            flex: 1;
+            min-height: 160px;
+            box-sizing: border-box;
             background: #fff8f0;
-
             display: flex;
-
             justify-content: center;
-
             align-items: center;
-
             gap: 40px;
-
+            padding: 30px 15px;
+            flex-wrap: wrap;
         }
-
 
         .admin-options button {
-
             width: 145px;
-
-            min-height: 42px;
-
+            min-height: 44px;
             background: #651515;
-
             color: white;
-
             border: none;
-
             border-radius: 22px;
-
             font-family: Georgia, serif;
-
             font-size: 12px;
-
             text-decoration: underline;
-
             cursor: pointer;
-
             padding: 8px 15px;
-
         }
-
 
         .admin-options button:hover {
-
             background: #4d1010;
-
         }
 
+        .site-footer {
+            flex-shrink: 0;
+            margin-top: 0;
+        }
 
         @media (max-width: 600px) {
+            .admin-hero {
+                min-height: 180px;
+                padding: 20px 15px;
+            }
+
+            .admin-hero h2 {
+                align-self: center;
+                font-size: 20px;
+            }
+
+            .admin-hero p {
+                font-size: 13px;
+            }
 
             .admin-options {
-
                 gap: 20px;
-
+                min-height: 140px;
             }
-
 
             .admin-options button {
-
                 width: 125px;
-
                 font-size: 11px;
-
             }
-
         }
-
     </style>
-
 </head>
-
 
 <body>
 
-
-    <!-- =========================
-         HEADER
-    ========================== -->
-
     <header class="top-header">
-
         <div class="header-left">
-
             <div class="logo-placeholder">
-
-                <img
-                    src="images/bpsu-logo.png"
-                    alt="BPSU Logo">
-
+                <img src="images/bpsu-logo.png" alt="BPSU Logo">
             </div>
-
 
             <div class="university-name">
-
-                <p class="republic">
-                    REPUBLIC OF THE PHILIPPINES
-                </p>
-
-                <h1>
-                    BATAAN PENINSULA STATE UNIVERSITY
-                </h1>
-
-                <span>
-                    CITY OF BALANGA, BATAAN 2100
-                </span>
-
+                <p class="republic">REPUBLIC OF THE PHILIPPINES</p>
+                <h1>BATAAN PENINSULA STATE UNIVERSITY</h1>
+                <span>CITY OF BALANGA, BATAAN 2100</span>
             </div>
-
         </div>
-
     </header>
 
-
-
-    <!-- =========================
-         ADMIN HERO
-    ========================== -->
-
     <main>
-
-
         <section class="admin-hero">
-
             <h2>Welcome Admin!</h2>
-
-<p id="adminWelcomeMessage">
-    Please check the queuing students for this day.
-</p>
+            <p id="adminWelcomeMessage">
+                Please check the queuing students for this day.
+            </p>
         </section>
-
-
-
-        <!-- =========================
-             ADMIN OPTIONS
-        ========================== -->
 
         <section class="admin-options">
-
-            <button id="registeredStudentsButton">
-
-                View registered
-                <br>
-                students
-
+            <button type="button" id="registeredStudentsButton">
+                View registered<br>students
             </button>
 
-
-            <button id="queuingStudentsButton">
-
-                View queuing
-                <br>
-                students
-
+            <button type="button" id="queuingStudentsButton">
+                View queuing<br>students
             </button>
-
         </section>
-
-
     </main>
 
+    <footer class="site-footer">
+        <div class="contact-section">
+            <div class="contact-box">
+                <a class="contact-icon"
+                   href="https://www.facebook.com/share/1C3uCueqKy/"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="BPSU Facebook Page">
+                    <span class="facebook-f">f</span>
+                </a>
 
+                <a class="contact-label"
+                   href="https://www.facebook.com/share/1C3uCueqKy/"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    FB Page
+                </a>
 
-        <!-- =========================
-         FOOTER
-    ========================== -->
+                <a class="contact-icon"
+                   href="mailto:pio_mc@bpsu.edu.ph"
+                   aria-label="Email BPSU">
+                    <span class="email-symbol">✉</span>
+                </a>
 
-    
-
-<footer class="site-footer">
-
-    <div class="contact-section">
-        <div class="contact-box">
-
-            <!-- FACEBOOK -->
-            <a class="contact-icon"
-               href="https://www.facebook.com/share/1C3uCueqKy/"
-               target="_blank"
-               rel="noopener noreferrer"
-               aria-label="BPSU Facebook Page">
-                <span class="facebook-f">f</span>
-            </a>
-
-            <a class="contact-label"
-               href="https://www.facebook.com/share/1C3uCueqKy/"
-               target="_blank"
-               rel="noopener noreferrer">
-                FB Page
-            </a>
-
-            <!-- EMAIL -->
-            <a class="contact-icon"
-               href="mailto:pio_mc@bpsu.edu.ph"
-               aria-label="Email BPSU">
-                <span class="email-symbol">✉</span>
-            </a>
-
-            <a class="contact-label"
-               href="mailto:pio_mc@bpsu.edu.ph">
-                Email us
-            </a>
-
+                <a class="contact-label"
+                   href="mailto:pio_mc@bpsu.edu.ph">
+                    Email us
+                </a>
+            </div>
         </div>
-    </div>
-
 
         <div class="footer-logo">
-
-            <img
-                src="images/bpsu-logo.png"
-                alt="BPSU Logo">
-
+            <img src="images/bpsu-logo.png" alt="BPSU Logo">
         </div>
-
     </footer>
 
-
-
     <script src="admin-dashboard.js"></script>
-
 </body>
-
 </html>
