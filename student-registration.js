@@ -10,6 +10,8 @@
 
 const programsByCourse = {
 
+    const programsByCourse = {
+
     "Bachelor of Science in Midwifery": [
         "Bachelor of Science in Midwifery"
     ],
@@ -75,8 +77,8 @@ const programsByCourse = {
     ],
 
     "Bachelor of Science in Entertainment and Multimedia Computing": [
-        "Digital Animation Technology",
-        "Game Development"
+        "Game Development",
+        "Digital Animation Technology"
     ],
 
     "Bachelor of Science in Information Technology": [
@@ -108,6 +110,10 @@ const programsByCourse = {
         "Hotel and Restaurant Services",
         "Mechanical Technology",
         "Welding and Fabrication Technology"
+    ],
+
+    "Bachelor of Science in Health Information Management": [
+        "Bachelor of Science in Health Information Management"
     ]
 };
 
