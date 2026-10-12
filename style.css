@@ -981,3 +981,17 @@ main {
         padding: 30px 15px;
     }
 }
+
+/* Student registration: prevent duplicate program labels */
+.registration-box .program-field > label {
+    display: block;
+}
+
+.registration-box .program-field > select {
+    display: block;
+}
+
+.registration-box .program-field label::before,
+.registration-box .program-field label::after {
+    content: none !important;
+}
