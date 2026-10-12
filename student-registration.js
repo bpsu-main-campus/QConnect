@@ -1,17 +1,11 @@
-/* =========================================================
-   BPSU MAIN CAMPUS
-   STUDENT REGISTRATION
-   ========================================================= */
-
 
 /* =========================================================
-   COURSE → PROGRAM OPTIONS
+   BPSU MAIN CAMPUS — STUDENT REGISTRATION
    ========================================================= */
+
+/* COURSE → PROGRAM / MAJOR OPTIONS */
 
 const programsByCourse = {
-
-    const programsByCourse = {
-
     "Bachelor of Science in Midwifery": [
         "Bachelor of Science in Midwifery"
     ],
@@ -29,7 +23,8 @@ const programsByCourse = {
     ],
 
     "Bachelor of Arts in Communication": [
-        "Bachelor of Arts in Communication"
+        "Creative and Performing Arts",
+        "New Media Track"
     ],
 
     "Bachelor of Science in Hospitality Management": [
@@ -110,16 +105,12 @@ const programsByCourse = {
         "Hotel and Restaurant Services",
         "Mechanical Technology",
         "Welding and Fabrication Technology"
-    ],
-
-    "Bachelor of Science in Health Information Management": [
-        "Bachelor of Science in Health Information Management"
     ]
 };
 
 
 /* =========================================================
-   GET ELEMENTS
+   GET FORM ELEMENTS
    ========================================================= */
 
 const course = document.getElementById("course");
@@ -128,63 +119,61 @@ const registrationForm = document.getElementById("registrationForm");
 
 
 /* =========================================================
-   COURSE CHANGE
+   UPDATE PROGRAM DROPDOWN
    ========================================================= */
 
-if (course && program) {
+function updateProgramOptions() {
+    if (!course || !program) return;
 
-    course.addEventListener("change", function () {
+    const selectedCourse = course.value;
+    const programs = programsByCourse[selectedCourse] || [];
 
-        const selectedCourse = course.value;
+    // Clear previous options
+    program.innerHTML = "";
 
-        program.innerHTML = "";
+    // Add the placeholder
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = selectedCourse
+        ? "Select Program / Major"
+        : "Select Course First";
+    placeholder.disabled = true;
+    placeholder.selected = true;
 
-        const defaultOption = document.createElement("option");
+    program.appendChild(placeholder);
 
-        defaultOption.value = "";
-        defaultOption.textContent = "Select Program";
-        defaultOption.disabled = true;
-        defaultOption.selected = true;
-
-        program.appendChild(defaultOption);
-
-        const programs = programsByCourse[selectedCourse] || [];
-
-        programs.forEach(function (programName) {
-
-            const option = document.createElement("option");
-
-            option.value = programName;
-            option.textContent = programName;
-
-            program.appendChild(option);
-        });
-
-        program.disabled = false;
+    // Add programs belonging to the selected course
+    programs.forEach(function (programName) {
+        const option = document.createElement("option");
+        option.value = programName;
+        option.textContent = programName;
+        program.appendChild(option);
     });
+
+    // Enable only when options are available
+    program.disabled = programs.length === 0;
+}
+
+if (course && program) {
+    course.addEventListener("change", updateProgramOptions);
+
+    // Set the correct state when the page loads
+    updateProgramOptions();
 }
 
 
 /* =========================================================
-   FORMAT PASSWORD
-   Birthday:
-   YYYY-MM-DD
-
-   Password:
-   MM-DD-YYYY
+   FORMAT BIRTHDAY AS PASSWORD
+   Birthday input: YYYY-MM-DD
+   Login password: MM-DD-YYYY
    ========================================================= */
 
 function formatBirthdayForLogin(birthday) {
-
-    if (!birthday) {
-        return "";
-    }
+    if (!birthday) return "";
 
     const parts = birthday.split("-");
 
-    if (parts.length !== 3) {
-        return "";
-    }
+    if (parts.length !== 3) return "";
 
     const year = parts[0];
     const month = parts[1];
@@ -199,17 +188,13 @@ function formatBirthdayForLogin(birthday) {
    ========================================================= */
 
 function calculateAge(birthday) {
-
     const birthDate = new Date(birthday + "T00:00:00");
     const today = new Date();
 
-    let age =
-        today.getFullYear() -
-        birthDate.getFullYear();
+    let age = today.getFullYear() - birthDate.getFullYear();
 
     const monthDifference =
-        today.getMonth() -
-        birthDate.getMonth();
+        today.getMonth() - birthDate.getMonth();
 
     if (
         monthDifference < 0 ||
@@ -226,58 +211,35 @@ function calculateAge(birthday) {
 
 
 /* =========================================================
-   REGISTRATION
+   STUDENT REGISTRATION
    ========================================================= */
 
 if (registrationForm) {
-
     registrationForm.addEventListener("submit", function (event) {
-
         event.preventDefault();
 
-        /* -----------------------------------------
-           GET FORM VALUES
-        ----------------------------------------- */
-
         const studentID =
-            document.getElementById("studentID")
-                .value
-                .trim();
+            document.getElementById("studentID").value.trim();
 
         const lastName =
-            document.getElementById("lastName")
-                .value
-                .trim();
+            document.getElementById("lastName").value.trim();
 
         const firstName =
-            document.getElementById("firstName")
-                .value
-                .trim();
+            document.getElementById("firstName").value.trim();
 
         const middleName =
-            document.getElementById("middleName")
-                .value
-                .trim();
+            document.getElementById("middleName").value.trim();
 
         const gender =
-            document.getElementById("gender")
-                .value;
+            document.getElementById("gender").value;
 
         const birthday =
-            document.getElementById("birthday")
-                .value;
+            document.getElementById("birthday").value;
 
-        const selectedCourse =
-            course.value;
+        const selectedCourse = course.value;
+        const selectedProgram = program.value;
 
-        const selectedProgram =
-            program.value;
-
-
-        /* -----------------------------------------
-           VALIDATE REQUIRED FIELDS
-        ----------------------------------------- */
-
+        // Validate required fields
         if (
             !studentID ||
             !lastName ||
@@ -287,134 +249,77 @@ if (registrationForm) {
             !selectedCourse ||
             !selectedProgram
         ) {
-
             alert("Please complete all required information.");
-
             return;
         }
 
-
-        /* -----------------------------------------
-           VALIDATE STUDENT ID FORMAT
-        ----------------------------------------- */
-
+        // Validate Student ID: 00-00000
         const studentIDPattern = /^[0-9]{2}-[0-9]{5}$/;
 
         if (!studentIDPattern.test(studentID)) {
-
-            alert(
-                "Student ID must follow the format 00-00000."
-            );
-
+            alert("Student ID must follow the format 00-00000.");
             return;
         }
 
-
-        /* -----------------------------------------
-           GET EXISTING STUDENTS
-        ----------------------------------------- */
-
+        // Read existing registrations
         let students = [];
 
         try {
-
             students =
                 JSON.parse(
                     localStorage.getItem("registeredStudents")
                 ) || [];
 
+            if (!Array.isArray(students)) {
+                students = [];
+            }
         } catch (error) {
-
             students = [];
         }
 
+        // Prevent duplicate Student IDs
+        const normalizedID = studentID.toLowerCase();
 
-        /* -----------------------------------------
-           CHECK DUPLICATE STUDENT ID
-        ----------------------------------------- */
-
-        const normalizedID =
-            studentID.toLowerCase();
-
-        const alreadyRegistered =
-            students.some(function (student) {
-
-                return String(student.studentID)
-                    .trim()
-                    .toLowerCase() === normalizedID;
-            });
-
+        const alreadyRegistered = students.some(function (student) {
+            return String(student.studentID || "")
+                .trim()
+                .toLowerCase() === normalizedID;
+        });
 
         if (alreadyRegistered) {
-
-            alert(
-                "This Student ID is already registered."
-            );
-
+            alert("This Student ID is already registered.");
             return;
         }
 
-
-        /* -----------------------------------------
-           CREATE FULL NAME
-        ----------------------------------------- */
-
-        let fullName =
-            `${lastName}, ${firstName}`;
+        // Create the student's full name
+        let fullName = `${lastName}, ${firstName}`;
 
         if (middleName) {
             fullName += `, ${middleName}`;
         }
 
-
-        /* -----------------------------------------
-           CREATE PASSWORD
-        ----------------------------------------- */
-
-        const password =
-            formatBirthdayForLogin(birthday);
-
+        // Generate password from birthday
+        const password = formatBirthdayForLogin(birthday);
 
         if (!password) {
-
-            alert(
-                "There was a problem processing the birthday."
-            );
-
+            alert("There was a problem processing the birthday.");
             return;
         }
 
-
-        /* -----------------------------------------
-           CREATE STUDENT OBJECT
-        ----------------------------------------- */
-
+        // Create student record
         const newStudent = {
-
             studentID: studentID,
-
             name: fullName,
-
             gender: gender,
-
             birthday: birthday,
-
             age: calculateAge(birthday),
-
             campus: "Main Campus",
-
             course: selectedCourse,
-
             program: selectedProgram,
-
             password: password
         };
 
-
-        /* -----------------------------------------
-           SAVE STUDENT
-        ----------------------------------------- */
-
+        // Save registration
         students.push(newStudent);
 
         localStorage.setItem(
@@ -422,19 +327,10 @@ if (registrationForm) {
             JSON.stringify(students)
         );
 
-
-        /* -----------------------------------------
-           REMOVE OLD LOGIN DATA
-        ----------------------------------------- */
-
+        // Clear old student login selections
         localStorage.removeItem("loggedInStudent");
         localStorage.removeItem("loggedInStudentID");
         localStorage.removeItem("selectedStudentID");
-
-
-        /* -----------------------------------------
-           SUCCESS
-        ----------------------------------------- */
 
         alert(
             "Registration successful!\n\n" +
@@ -443,12 +339,7 @@ if (registrationForm) {
             "Password: " + password
         );
 
-
-        /* -----------------------------------------
-           GO TO LOGIN
-        ----------------------------------------- */
-
-        window.location.href =
-            "student-login.html";
+        // Redirect to student login
+        window.location.href = "student-login.html";
     });
 }
