@@ -1259,3 +1259,33 @@ body > main {
         gap: 10px;
     }
 }
+
+/* FIX: Remove the gray gap below the QConnect footer */
+html {
+    min-height: 100%;
+    margin: 0;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Let the main content fill the available page height */
+body > main {
+    flex: 1 0 auto;
+}
+
+/* Keep the footer at the bottom of the page */
+.site-footer {
+    margin-top: auto;
+    flex-shrink: 0;
+    width: 100%;
+}
+
+/* Keep the page background consistent */
+body {
+    background-color: #eeeeee;
+}
