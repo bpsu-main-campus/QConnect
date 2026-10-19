@@ -1431,3 +1431,146 @@ body > footer.site-footer {
         height: 45px !important;
     }
 }
+
+/* =========================================
+   FINAL SHARED FOOTER SIZE FIX
+   Applies to pages using .site-footer
+========================================= */
+
+body > footer.site-footer,
+footer.site-footer {
+    display: flex !important;
+    width: 100% !important;
+    min-height: 90px !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 0 !important;
+    background: #e8d1d1 !important;
+    flex-shrink: 0 !important;
+}
+
+/* Contact section */
+.site-footer .contact-section {
+    display: flex !important;
+    align-items: center !important;
+    align-self: stretch !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.site-footer .contact-box {
+    display: grid !important;
+    grid-template-columns: 65px 125px !important;
+    grid-template-rows: 44px 44px !important;
+    gap: 0 !important;
+    align-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Maroon icon backgrounds */
+.site-footer .contact-icon {
+    display: flex !important;
+    width: 65px !important;
+    height: 44px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    background: #721919 !important;
+    color: #fff !important;
+    text-decoration: none !important;
+    box-sizing: border-box !important;
+}
+
+.site-footer .facebook-f {
+    font-size: 29px !important;
+    font-weight: bold !important;
+    line-height: 1 !important;
+}
+
+.site-footer .email-symbol {
+    font-size: 21px !important;
+    line-height: 1 !important;
+    color: #fff !important;
+}
+
+/* Footer text */
+.site-footer a.contact-label {
+    display: flex !important;
+    align-items: center !important;
+    min-height: 44px !important;
+    padding: 0 0 0 8px !important;
+    margin: 0 !important;
+    color: #5a1717 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 13px !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+}
+
+/* BPSU logo on the right */
+.site-footer .footer-logo {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 72px !important;
+    height: 72px !important;
+    margin: 0 20px 0 10px !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+    overflow: visible !important;
+    background: transparent !important;
+}
+
+.site-footer .footer-logo img {
+    display: block !important;
+    width: 72px !important;
+    height: 72px !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: contain !important;
+}
+
+/* Mobile screens */
+@media (max-width: 600px) {
+    body > footer.site-footer,
+    footer.site-footer {
+        min-height: 76px !important;
+    }
+
+    .site-footer .contact-box {
+        grid-template-columns: 48px 100px !important;
+        grid-template-rows: 38px 38px !important;
+    }
+
+    .site-footer .contact-icon {
+        width: 48px !important;
+        height: 38px !important;
+    }
+
+    .site-footer .facebook-f {
+        font-size: 25px !important;
+    }
+
+    .site-footer .email-symbol {
+        font-size: 18px !important;
+    }
+
+    .site-footer a.contact-label {
+        min-height: 38px !important;
+        font-size: 11px !important;
+        padding-left: 6px !important;
+    }
+
+    .site-footer .footer-logo {
+        width: 50px !important;
+        height: 50px !important;
+        margin-right: 10px !important;
+    }
+
+    .site-footer .footer-logo img {
+        width: 50px !important;
+        height: 50px !important;
+    }
+}
