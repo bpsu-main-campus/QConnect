@@ -214,9 +214,7 @@ function updateProgramOptions(selectedProgram = "") {
 
     const placeholder = document.createElement("option");
     placeholder.value = "";
-    placeholder.textContent = programs.length
-        ? "Select Program / Major"
-        : "Select Course First";
+    placeholder.textContent = "Select Program / Major";
     programInput.appendChild(placeholder);
 
     programs.forEach(program => {
@@ -226,18 +224,28 @@ function updateProgramOptions(selectedProgram = "") {
         programInput.appendChild(option);
     });
 
-    if (programs.includes(selectedProgram)) {
-        programInput.value = selectedProgram;
-    } else if (programs.length === 1) {
-        programInput.value = programs[0];
+    // Restore the program saved during registration.
+    const savedProgram = String(selectedProgram || "").trim();
+
+    if (savedProgram) {
+        let matchingOption = Array.from(programInput.options).find(
+            option => option.value.trim() === savedProgram
+        );
+
+        // Preserve a saved program even if it isn't in the current choices.
+        if (!matchingOption) {
+            matchingOption = document.createElement("option");
+            matchingOption.value = savedProgram;
+            matchingOption.textContent = savedProgram;
+            programInput.appendChild(matchingOption);
+        }
+
+        programInput.value = savedProgram;
     }
 
-    programInput.disabled = courseInput.disabled || programs.length === 0;
+    programInput.disabled = courseInput.disabled;
 }
 
-courseInput.addEventListener("change", () => {
-    updateProgramOptions();
-});
 
 /* =========================================
    LOAD STUDENT PROFILE
