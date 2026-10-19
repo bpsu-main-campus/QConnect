@@ -35,48 +35,110 @@ const closeSavePopup = document.getElementById("closeSavePopup");
    Keep these choices consistent with registration.
 ========================================= */
 
+
 const programsByCourse = {
-    "Midwifery": ["Midwifery"],
-    "Nursing": ["Nursing"],
-    "Public Health": ["Population Health"],
-    "Radiologic Technology": ["Radiologic Technology"],
-    "BA Communication": [
+    "Bachelor of Science in Midwifery": [
+        "Bachelor of Science in Midwifery"
+    ],
+
+    "Bachelor of Science in Nursing": [
+        "Bachelor of Science in Nursing"
+    ],
+
+    "Bachelor of Science in Public Health": [
+        "Population Health"
+    ],
+
+    "Bachelor of Science in Radiologic Technology": [
+        "Bachelor of Science in Radiologic Technology"
+    ],
+
+    "Bachelor of Arts in Communication": [
         "Creative and Performing Arts",
         "New Media Track"
     ],
-    "Hospitality Management": ["Hospitality Management"],
-    "Tourism Management": ["Tourism Management"],
-    "Architecture": ["Architecture"],
-    "Civil Engineering": ["Civil Engineering"],
-    "Computer Engineering": ["Computer Engineering"],
-    "Electrical Engineering": ["Electrical Engineering"],
-    "Electronics Engineering": ["Electronics Engineering"],
-    "Industrial Engineering": ["Industrial Engineering"],
-    "Mechanical Engineering": ["Mechanical Engineering"],
-    "Computer Science": ["Computer Science"],
-    "Data Science": ["Data Science"],
-    "Entertainment and Multimedia Computing": [
+
+    "Bachelor of Science in Hospitality Management": [
+        "Bachelor of Science in Hospitality Management"
+    ],
+
+    "Bachelor of Science in Tourism Management": [
+        "Bachelor of Science in Tourism Management"
+    ],
+
+    "Bachelor of Science in Architecture": [
+        "Bachelor of Science in Architecture"
+    ],
+
+    "Bachelor of Science in Civil Engineering": [
+        "Bachelor of Science in Civil Engineering"
+    ],
+
+    "Bachelor of Science in Computer Engineering": [
+        "Bachelor of Science in Computer Engineering"
+    ],
+
+    "Bachelor of Science in Electrical Engineering": [
+        "Bachelor of Science in Electrical Engineering"
+    ],
+
+    "Bachelor of Science in Electronics Engineering": [
+        "Bachelor of Science in Electronics Engineering"
+    ],
+
+    "Bachelor of Science in Industrial Engineering": [
+        "Bachelor of Science in Industrial Engineering"
+    ],
+
+    "Bachelor of Science in Mechanical Engineering": [
+        "Bachelor of Science in Mechanical Engineering"
+    ],
+
+    "Bachelor of Science in Computer Science": [
+        "Bachelor of Science in Computer Science"
+    ],
+
+    "Bachelor of Science in Data Science": [
+        "Bachelor of Science in Data Science"
+    ],
+
+    "Bachelor of Science in Entertainment and Multimedia Computing": [
         "Game Development",
         "Digital Animation Technology"
     ],
-    "Information Technology": ["Information Technology"],
-    "Industrial Technology": [
+
+    "Bachelor of Science in Information Technology": [
+        "Bachelor of Science in Information Technology"
+    ],
+
+    "Bachelor of Science in Industrial Technology": [
+        "Apparel and Fashion Technology",
+        "Architectural Drafting Technology",
         "Automotive Technology",
+        "Culinary Technology",
         "Electrical Technology",
         "Electronics Technology",
-        "Food Technology",
-        "Garments Technology",
-        "Mechanical Technology"
+        "Food and Service Technology",
+        "Heating, Ventilating and Air Conditioning Technology",
+        "Mechanical Technology",
+        "Welding and Fabrication Technology"
     ],
+
     "Bachelor of Technical-Vocational Teacher Education": [
-        "Automotive Technology",
+        "Animation",
+        "Civil and Construction Technology",
+        "Drafting Technology",
         "Electrical Technology",
         "Electronics Technology",
         "Food and Service Management",
         "Garments, Fashion and Design",
-        "Mechanical Technology"
+        "Heating, Ventilating and Air Conditioning Technology",
+        "Hotel and Restaurant Services",
+        "Mechanical Technology",
+        "Welding and Fabrication Technology"
     ]
 };
+
 
 /* =========================================
    SAFE STORAGE HELPERS
