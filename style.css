@@ -1574,3 +1574,50 @@ footer.site-footer {
         height: 50px !important;
     }
 }
+
+/* FIX MAROON FOOTER ICONS TO FIT THE ROWS */
+
+.site-footer .contact-box {
+    grid-template-columns: 58px 125px !important;
+    grid-template-rows: 44px 44px !important;
+}
+
+.site-footer .contact-icon {
+    width: 58px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    align-self: stretch !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+}
+
+/* Keep the text aligned with each maroon square */
+.site-footer a.contact-label {
+    min-height: 44px !important;
+    height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Phone screens */
+@media (max-width: 600px) {
+    .site-footer .contact-box {
+        grid-template-columns: 48px 100px !important;
+        grid-template-rows: 38px 38px !important;
+    }
+
+    .site-footer .contact-icon {
+        width: 48px !important;
+        height: 38px !important;
+        min-height: 38px !important;
+    }
+
+    .site-footer a.contact-label {
+        min-height: 38px !important;
+        height: 38px !important;
+    }
+}
