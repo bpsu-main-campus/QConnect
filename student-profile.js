@@ -1,119 +1,162 @@
 
 /* =========================================
-   STUDENT PROFILE
+   QCONNECT STUDENT PROFILE
 ========================================= */
 
 const profileMode = localStorage.getItem("profileMode") || "student";
 
+const studentID = profileMode === "admin"
+    ? localStorage.getItem("selectedStudentID")
+    : localStorage.getItem("loggedInStudentID");
+
+const profileForm = document.getElementById("profileForm");
+
+const lastNameInput = document.getElementById("profileLastName");
+const firstNameInput = document.getElementById("profileFirstName");
+const middleNameInput = document.getElementById("profileMiddleName");
+const studentIDInput = document.getElementById("profileStudentID");
+const genderInput = document.getElementById("profileGender");
+const birthdayInput = document.getElementById("profileBirthday");
+const ageInput = document.getElementById("profileAge");
+const campusInput = document.getElementById("profileCampus");
+const courseInput = document.getElementById("profileCourse");
+const programInput = document.getElementById("profileProgram");
+
+const editButton = document.getElementById("editProfileButton");
+const saveButton = document.getElementById("saveProfileButton");
+const queueButton = document.getElementById("queueButton");
+const buttonsContainer = document.getElementById("profileButtons");
+const pageTitle = document.getElementById("profilePageTitle");
+const savePopup = document.getElementById("savePopup");
+const closeSavePopup = document.getElementById("closeSavePopup");
+
 /* =========================================
-   GET STUDENT ID
+   COURSE AND PROGRAM CHOICES
+   Keep these choices consistent with registration.
 ========================================= */
 
-let studentID = null;
+const programsByCourse = {
+    "Midwifery": ["Midwifery"],
+    "Nursing": ["Nursing"],
+    "Public Health": ["Population Health"],
+    "Radiologic Technology": ["Radiologic Technology"],
+    "BA Communication": [
+        "Creative and Performing Arts",
+        "New Media Track"
+    ],
+    "Hospitality Management": ["Hospitality Management"],
+    "Tourism Management": ["Tourism Management"],
+    "Architecture": ["Architecture"],
+    "Civil Engineering": ["Civil Engineering"],
+    "Computer Engineering": ["Computer Engineering"],
+    "Electrical Engineering": ["Electrical Engineering"],
+    "Electronics Engineering": ["Electronics Engineering"],
+    "Industrial Engineering": ["Industrial Engineering"],
+    "Mechanical Engineering": ["Mechanical Engineering"],
+    "Computer Science": ["Computer Science"],
+    "Data Science": ["Data Science"],
+    "Entertainment and Multimedia Computing": [
+        "Game Development",
+        "Digital Animation Technology"
+    ],
+    "Information Technology": ["Information Technology"],
+    "Industrial Technology": [
+        "Automotive Technology",
+        "Electrical Technology",
+        "Electronics Technology",
+        "Food Technology",
+        "Garments Technology",
+        "Mechanical Technology"
+    ],
+    "Bachelor of Technical-Vocational Teacher Education": [
+        "Automotive Technology",
+        "Electrical Technology",
+        "Electronics Technology",
+        "Food and Service Management",
+        "Garments, Fashion and Design",
+        "Mechanical Technology"
+    ]
+};
 
-if (profileMode === "student") {
-    studentID = localStorage.getItem("loggedInStudentID");
+/* =========================================
+   SAFE STORAGE HELPERS
+========================================= */
+
+function getRegisteredStudents() {
+    try {
+        const students = JSON.parse(
+            localStorage.getItem("registeredStudents") || "[]"
+        );
+        return Array.isArray(students) ? students : [];
+    } catch (error) {
+        console.error("Unable to read registered students:", error);
+        return [];
+    }
 }
 
-if (profileMode === "admin") {
-    studentID = localStorage.getItem("selectedStudentID");
+function saveRegisteredStudents(students) {
+    localStorage.setItem("registeredStudents", JSON.stringify(students));
+}
+
+function sameStudentID(a, b) {
+    return String(a || "").trim().toLowerCase() ===
+           String(b || "").trim().toLowerCase();
 }
 
 /* =========================================
-   GET REGISTERED STUDENTS
+   NAME HELPERS
+
+   Registration saves names as:
+   Last, First, Middle
 ========================================= */
 
-const students = JSON.parse(
-    localStorage.getItem("registeredStudents") || "[]"
-);
+function splitStoredName(name) {
+    const parts = String(name || "").split(",").map(part => part.trim());
 
-/* =========================================
-   FIND STUDENT
-========================================= */
+    return {
+        last: parts[0] || "",
+        first: parts[1] || "",
+        middle: parts.slice(2).join(", ").trim()
+    };
+}
 
-const student = students.find(function (item) {
-    return String(item.studentID || "").trim().toLowerCase() ===
-        String(studentID || "").trim().toLowerCase();
-});
+function joinNameParts(last, first, middle) {
+    const cleanLast = String(last || "").trim();
+    const cleanFirst = String(first || "").trim();
+    const cleanMiddle = String(middle || "").trim();
 
-/* =========================================
-   FORMAT NAME FOR MY PROFILE
-
-   Registration format:
-   Last, First Middle
-
-   Profile display:
-   Last, First M.
-========================================= */
-
-function formatProfileName(name) {
-    if (!name) return "";
-
-    const parts = String(name).split(",");
-    const lastName = (parts[0] || "").trim();
-
-    if (parts.length < 2) {
-        return String(name).trim();
+    if (cleanMiddle) {
+        return `${cleanLast}, ${cleanFirst}, ${cleanMiddle}`;
     }
 
-    const firstAndMiddle = parts
-        .slice(1)
-        .join(",")
-        .trim()
-        .split(/\s+/)
-        .filter(Boolean);
-
-    if (firstAndMiddle.length === 0) {
-        return lastName;
-    }
-
-    const firstName = firstAndMiddle[0];
-    const middleName = firstAndMiddle.slice(1).join(" ");
-
-    if (!middleName) {
-        return `${lastName}, ${firstName}`;
-    }
-
-    // Use the first letter of the middle name.
-    const middleInitial = middleName
-        .replace(/\./g, "")
-        .charAt(0)
-        .toUpperCase();
-
-    return `${lastName}, ${firstName} ${middleInitial}.`;
+    return `${cleanLast}, ${cleanFirst}`;
 }
 
 /* =========================================
-   PARSE BIRTHDAY
+   DATE HELPERS
 
-   Supports YYYY-MM-DD and MM-DD-YYYY.
+   Stored format: YYYY-MM-DD
+   Display format: MM/DD/YYYY
 ========================================= */
 
-function parseBirthday(birthday) {
-    if (!birthday) return null;
+function parseBirthday(value) {
+    if (!value) return null;
 
-    const value = String(birthday).trim();
+    const text = String(value).trim();
     let year;
     let month;
     let day;
 
-    if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-        const parts = value.split("-");
-        year = Number(parts[0]);
-        month = Number(parts[1]);
-        day = Number(parts[2]);
-    } else if (/^\d{2}-\d{2}-\d{4}$/.test(value)) {
-        const parts = value.split("-");
-        month = Number(parts[0]);
-        day = Number(parts[1]);
-        year = Number(parts[2]);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(text)) {
+        [year, month, day] = text.split("-").map(Number);
+    } else if (/^\d{2}[/-]\d{2}[/-]\d{4}$/.test(text)) {
+        [month, day, year] = text.split(/[/-]/).map(Number);
     } else {
         return null;
     }
 
     const date = new Date(year, month - 1, day);
 
-    // Reject invalid dates.
     if (
         date.getFullYear() !== year ||
         date.getMonth() !== month - 1 ||
@@ -122,423 +165,368 @@ function parseBirthday(birthday) {
         return null;
     }
 
-    return date;
+    return { year, month, day };
 }
 
-/* =========================================
-   FORMAT BIRTHDAY FOR DISPLAY
-========================================= */
+function formatBirthdayForDisplay(value) {
+    const date = parseBirthday(value);
+    if (!date) return String(value || "");
 
-function formatBirthday(birthday) {
-    const date = parseBirthday(birthday);
+    const month = String(date.month).padStart(2, "0");
+    const day = String(date.day).padStart(2, "0");
+    const year = String(date.year);
 
-    if (!date) return birthday || "";
-
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const year = date.getFullYear();
-
-    return `${month}-${day}-${year}`;
+    return `${month}/${day}/${year}`;
 }
 
-/* =========================================
-   CALCULATE AGE FROM BIRTHDAY
-========================================= */
+function formatBirthdayForStorage(value) {
+    const date = parseBirthday(value);
+    if (!date) return String(value || "");
 
-function calculateAge(birthday) {
-    const birthDate = parseBirthday(birthday);
+    return `${date.year}-${String(date.month).padStart(2, "0")}-${String(date.day).padStart(2, "0")}`;
+}
 
-    if (!birthDate) return "";
+function calculateAge(value) {
+    const date = parseBirthday(value);
+    if (!date) return "";
 
     const today = new Date();
+    let age = today.getFullYear() - date.year;
 
-    let age = today.getFullYear() - birthDate.getFullYear();
+    const birthdayHasNotPassed =
+        today.getMonth() + 1 < date.month ||
+        (today.getMonth() + 1 === date.month && today.getDate() < date.day);
 
-    const birthdayNotReached =
-        today.getMonth() < birthDate.getMonth() ||
-        (
-            today.getMonth() === birthDate.getMonth() &&
-            today.getDate() < birthDate.getDate()
-        );
-
-    if (birthdayNotReached) {
-        age--;
-    }
+    if (birthdayHasNotPassed) age--;
 
     return age >= 0 ? age : "";
 }
 
 /* =========================================
-   PROFILE FIELD ELEMENTS
+   PROGRAM DROPDOWN
 ========================================= */
 
-const profileName = document.getElementById("profileName");
-const profileStudentID = document.getElementById("profileStudentID");
-const profileGender = document.getElementById("profileGender");
-const profileBirthday = document.getElementById("profileBirthday");
-const profileAge = document.getElementById("profileAge");
-const profileCampus = document.getElementById("profileCampus");
-const profileCourse = document.getElementById("profileCourse");
-const profileProgram = document.getElementById("profileProgram");
+function updateProgramOptions(selectedProgram = "") {
+    const course = courseInput.value;
+    const programs = programsByCourse[course] || [];
 
-const profileBox = document.getElementById("profileBox");
-const editButton = document.getElementById("editProfileButton");
-const saveButton = document.getElementById("saveProfileButton");
-const queueButton = document.getElementById("queueButton");
+    programInput.innerHTML = "";
+
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = programs.length
+        ? "Select Program / Major"
+        : "Select Course First";
+    programInput.appendChild(placeholder);
+
+    programs.forEach(program => {
+        const option = document.createElement("option");
+        option.value = program;
+        option.textContent = program;
+        programInput.appendChild(option);
+    });
+
+    if (programs.includes(selectedProgram)) {
+        programInput.value = selectedProgram;
+    } else if (programs.length === 1) {
+        programInput.value = programs[0];
+    }
+
+    programInput.disabled = courseInput.disabled || programs.length === 0;
+}
+
+courseInput.addEventListener("change", () => {
+    updateProgramOptions();
+});
 
 /* =========================================
-   IF STUDENT CANNOT BE FOUND
+   LOAD STUDENT PROFILE
 ========================================= */
 
-if (!student) {
-    alert("Student information could not be found.");
-} else {
+let currentStudent = null;
 
-    /* =====================================
-       DISPLAY PROFILE INFORMATION
-    ===================================== */
+function loadProfile() {
+    const students = getRegisteredStudents();
 
-    profileName.value = formatProfileName(student.name);
-    profileStudentID.value = student.studentID || "";
-    profileGender.value = student.gender || "";
-    profileBirthday.value = formatBirthday(student.birthday);
-    profileAge.value = calculateAge(student.birthday);
-    profileCampus.value = student.campus || "";
-    profileCourse.value = student.course || "";
-    profileProgram.value = student.program || "";
+    currentStudent = students.find(student =>
+        sameStudentID(student.studentID, studentID)
+    );
 
-    /* =====================================
-       ADMIN MODE
-    ===================================== */
+    if (!currentStudent) {
+        alert(
+            profileMode === "admin"
+                ? "Student profile not found."
+                : "Your profile could not be found. Please log in again."
+        );
 
-    if (profileMode === "admin") {
-        const title = document.querySelector(".profile-page-title");
-        const buttons = document.querySelector(".profile-buttons");
+        if (profileMode !== "admin") {
+            window.location.href = "student-login.html";
+        } else {
+            window.location.href = "Registered-students.html";
+        }
 
-        if (title) title.style.display = "none";
-        if (buttons) buttons.style.display = "none";
+        return;
     }
 
-    /* =====================================
-       STUDENT MODE
-    ===================================== */
-
-    if (profileMode === "student") {
-
-        /*
-         * These fields must NEVER become editable:
-         * Student ID, Gender, Birthday, and Age.
-         *
-         * Age is calculated from the saved birthday.
-         */
-
-        const lockedFieldIDs = [
-            "profileStudentID",
-            "profileGender",
-            "profileBirthday",
-            "profileAge"
-        ];
-
-        function lockProtectedFields() {
-            lockedFieldIDs.forEach(function (id) {
-                const field = document.getElementById(id);
-
-                if (field) {
-                    field.disabled = true;
-                    field.readOnly = true;
-                }
-            });
-        }
-
-        lockProtectedFields();
-
-        /* =================================
-           EDIT PROFILE
-        ================================= */
-
-        if (editButton) {
-            editButton.addEventListener("click", function () {
-
-                const inputs = document.querySelectorAll(
-                    ".profile-field input"
-                );
-
-                inputs.forEach(function (input) {
-                    if (!lockedFieldIDs.includes(input.id)) {
-                        input.disabled = false;
-                    }
-                });
-
-                lockProtectedFields();
-
-                if (profileBox) {
-                    profileBox.classList.add("editing");
-                }
-
-                if (saveButton) {
-                    saveButton.classList.add("enabled");
-                }
-            });
-        }
-
-        /* =================================
-           SAVE PROFILE
-        ================================= */
-
-        if (saveButton) {
-            saveButton.addEventListener("click", function () {
-
-                if (!saveButton.classList.contains("enabled")) {
-                    return;
-                }
-
-                /*
-                 * Do not change the saved full name just because
-                 * the profile displays a middle initial.
-                 *
-                 * Only save the name if the user actually changed
-                 * the displayed name.
-                 */
-
-                const originalDisplayName =
-                    formatProfileName(student.name);
-
-                const editedDisplayName =
-                    profileName.value.trim();
-
-                if (editedDisplayName !== originalDisplayName) {
-                    student.name = editedDisplayName;
-                }
-
-                // Save only fields that can be edited.
-                student.campus = profileCampus.value.trim();
-                student.course = profileCourse.value.trim();
-                student.program = profileProgram.value.trim();
-
-                // Do not save changes to gender, birthday, age, or ID.
-                const index = students.findIndex(function (item) {
-                    return String(item.studentID).trim().toLowerCase() ===
-                        String(student.studentID).trim().toLowerCase();
-                });
-
-                if (index !== -1) {
-                    students[index] = student;
-
-                    localStorage.setItem(
-                        "registeredStudents",
-                        JSON.stringify(students)
-                    );
-
-                    localStorage.setItem(
-                        "loggedInStudent",
-                        JSON.stringify(student)
-                    );
-                }
-
-                // Refresh the displayed values.
-                profileName.value = formatProfileName(student.name);
-                profileStudentID.value = student.studentID || "";
-                profileGender.value = student.gender || "";
-                profileBirthday.value = formatBirthday(student.birthday);
-                profileAge.value = calculateAge(student.birthday);
-                profileCampus.value = student.campus || "";
-                profileCourse.value = student.course || "";
-                profileProgram.value = student.program || "";
-
-                // Lock all fields again.
-                document.querySelectorAll(".profile-field input").forEach(
-                    function (input) {
-                        input.disabled = true;
-                    }
-                );
-
-                lockProtectedFields();
-
-                if (profileBox) {
-                    profileBox.classList.remove("editing");
-                }
-
-                saveButton.classList.remove("enabled");
-
-                const popup = document.getElementById("savePopup");
-
-                if (popup) {
-                    popup.classList.add("active");
-                }
-            });
-        }
-
-        /* =================================
-           CLOSE SAVE POPUP
-        ================================= */
-
-        const closePopup = document.getElementById("closeSavePopup");
-
-        if (closePopup) {
-            closePopup.addEventListener("click", function () {
-                const popup = document.getElementById("savePopup");
-
-                if (popup) {
-                    popup.classList.remove("active");
-                }
-            });
-        }
-
-        /* =================================
-           GET QUEUE NUMBER
-           KEEP EXISTING QUEUE BEHAVIOR
-        ================================= */
-
-        if (queueButton) {
-            queueButton.addEventListener("click", function () {
-
-                let queues = JSON.parse(
-                    localStorage.getItem("queueList") || "[]"
-                );
-
-                // If this student already has a queue, reuse it.
-                const existingQueue = queues.find(function (q) {
-                    return String(q.studentID) ===
-                        String(student.studentID);
-                });
-
-                if (existingQueue) {
-                    localStorage.setItem(
-                        "currentQueue",
-                        JSON.stringify(existingQueue)
-                    );
-
-                    window.location.href = "student-queue.html";
-                    return;
-                }
-
-                const today = new Date();
-                let appointmentDate = new Date(today);
-
-                // Start with tomorrow.
-                appointmentDate.setDate(
-                    appointmentDate.getDate() + 1
-                );
-
-                // Skip weekends.
-                while (
-                    appointmentDate.getDay() === 0 ||
-                    appointmentDate.getDay() === 6
-                ) {
-                    appointmentDate.setDate(
-                        appointmentDate.getDate() + 1
-                    );
-                }
-
-                let assigned = false;
-                let queueData = null;
-
-                while (!assigned) {
-
-                    const year = appointmentDate.getFullYear();
-
-                    const month = String(
-                        appointmentDate.getMonth() + 1
-                    ).padStart(2, "0");
-
-                    const day = String(
-                        appointmentDate.getDate()
-                    ).padStart(2, "0");
-
-                    const appointmentDateISO =
-                        `${year}-${month}-${day}`;
-
-                    const dateQueues = queues.filter(function (q) {
-                        return q.appointmentDate === appointmentDateISO;
-                    });
-
-                    const maxStudentsPerDay = 16;
-
-                    if (dateQueues.length < maxStudentsPerDay) {
-
-                        const slotNumber = dateQueues.length;
-                        const totalMinutes = (8 * 60) + (slotNumber * 30);
-
-                        const hour = Math.floor(totalMinutes / 60);
-                        const minute = totalMinutes % 60;
-
-                        let displayHour = hour;
-                        let ampm = "AM";
-
-                        if (displayHour >= 12) {
-                            ampm = "PM";
-                        }
-
-                        if (displayHour > 12) {
-                            displayHour -= 12;
-                        }
-
-                        if (displayHour === 0) {
-                            displayHour = 12;
-                        }
-
-                        const formattedTime =
-                            displayHour + ":" +
-                            String(minute).padStart(2, "0") +
-                            " " + ampm;
-
-                        const formattedDate =
-                            appointmentDate.toLocaleDateString(
-                                "en-US",
-                                {
-                                    month: "long",
-                                    day: "numeric",
-                                    year: "numeric"
-                                }
-                            );
-
-                        const queueNumber =
-                            "Q" + String(slotNumber + 1).padStart(3, "0");
-
-                        queueData = {
-                            queueNumber: queueNumber,
-                            name: student.name,
-                            studentID: student.studentID,
-                            appointmentDate: appointmentDateISO,
-                            formattedDate: formattedDate,
-                            appointmentTime: formattedTime,
-                            status: "Waiting"
-                        };
-
-                        queues.push(queueData);
-
-                        localStorage.setItem(
-                            "queueList",
-                            JSON.stringify(queues)
-                        );
-
-                        localStorage.setItem(
-                            "currentQueue",
-                            JSON.stringify(queueData)
-                        );
-
-                        assigned = true;
-
-                    } else {
-
-                        // Move to the next working day.
-                        appointmentDate.setDate(
-                            appointmentDate.getDate() + 1
-                        );
-
-                        while (
-                            appointmentDate.getDay() === 0 ||
-                            appointmentDate.getDay() === 6
-                        ) {
-                            appointmentDate.setDate(
-                                appointmentDate.getDate() + 1
-                            );
-                        }
-                    }
-                }
-
-                window.location.href = "student-queue.html";
-            });
-        }
+    const nameParts = splitStoredName(currentStudent.name);
+
+    lastNameInput.value = nameParts.last;
+    firstNameInput.value = nameParts.first;
+    middleNameInput.value = nameParts.middle;
+
+    studentIDInput.value = currentStudent.studentID || "";
+    genderInput.value = currentStudent.gender || "";
+
+    birthdayInput.value = formatBirthdayForDisplay(currentStudent.birthday);
+    ageInput.value = currentStudent.age ?? calculateAge(currentStudent.birthday);
+    campusInput.value = currentStudent.campus || "Main Campus";
+
+    courseInput.value = currentStudent.course || "";
+    updateProgramOptions(currentStudent.program || "");
+
+    /* Admin can view, but not edit, student information. */
+    if (profileMode === "admin") {
+        pageTitle.textContent = "Student Profile";
+        buttonsContainer.hidden = true;
+        setEditing(false);
+    } else {
+        pageTitle.textContent = "My Profile";
+        buttonsContainer.hidden = false;
+        queueButton.hidden = false;
+        setEditing(false);
     }
 }
+
+/* =========================================
+   EDIT MODE
+========================================= */
+
+function setEditing(editing) {
+    lastNameInput.disabled = !editing;
+    firstNameInput.disabled = !editing;
+    middleNameInput.disabled = !editing;
+
+    /* These fields remain locked. */
+    studentIDInput.disabled = true;
+    genderInput.disabled = true;
+    birthdayInput.disabled = true;
+    ageInput.disabled = true;
+    campusInput.disabled = true;
+
+    courseInput.disabled = !editing;
+    programInput.disabled = !editing;
+
+    if (editing) {
+        updateProgramOptions(currentStudent?.program || "");
+    }
+
+    editButton.hidden = editing;
+    saveButton.hidden = !editing;
+}
+
+editButton.addEventListener("click", () => {
+    if (profileMode !== "admin") {
+        setEditing(true);
+    }
+});
+
+/* =========================================
+   SAVE PROFILE
+========================================= */
+
+profileForm.addEventListener("submit", event => {
+    event.preventDefault();
+
+    if (profileMode === "admin" || !currentStudent) return;
+
+    const last = lastNameInput.value.trim();
+    const first = firstNameInput.value.trim();
+    const middle = middleNameInput.value.trim();
+
+    if (!last || !first) {
+        alert("Please enter your last name and first name.");
+        return;
+    }
+
+    const course = courseInput.value;
+    const program = programInput.value;
+
+    if (!course || !program) {
+        alert("Please select both your course and program/major.");
+        return;
+    }
+
+    const students = getRegisteredStudents();
+    const index = students.findIndex(student =>
+        sameStudentID(student.studentID, studentID)
+    );
+
+    if (index === -1) {
+        alert("Student record not found. Your changes were not saved.");
+        return;
+    }
+
+    const updatedStudent = {
+        ...students[index],
+        name: joinNameParts(last, first, middle),
+        course,
+        program
+    };
+
+    students[index] = updatedStudent;
+    saveRegisteredStudents(students);
+
+    currentStudent = updatedStudent;
+    localStorage.setItem("loggedInStudent", JSON.stringify(updatedStudent));
+
+    loadProfile();
+    setEditing(false);
+
+    if (savePopup) savePopup.classList.add("show");
+});
+
+if (closeSavePopup) {
+    closeSavePopup.addEventListener("click", () => {
+        savePopup.classList.remove("show");
+    });
+}
+
+/* =========================================
+   QUEUE APPOINTMENT
+
+   Reuse an existing future queue for this student.
+   Otherwise create a new appointment for the next
+   available weekday, with 30-minute time slots.
+========================================= */
+
+function getLocalISODate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+function formatQueueDate(dateISO) {
+    const date = new Date(`${dateISO}T00:00:00`);
+    if (Number.isNaN(date.getTime())) return dateISO;
+
+    return date.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+    });
+}
+
+function getQueueList() {
+    try {
+        const queues = JSON.parse(localStorage.getItem("queueList") || "[]");
+        return Array.isArray(queues) ? queues : [];
+    } catch {
+        return [];
+    }
+}
+
+function getNextWeekday(date) {
+    const next = new Date(date);
+    next.setDate(next.getDate() + 1);
+
+    while (next.getDay() === 0 || next.getDay() === 6) {
+        next.setDate(next.getDate() + 1);
+    }
+
+    return next;
+}
+
+function createAppointment() {
+    const queues = getQueueList();
+    const todayISO = getLocalISODate(new Date());
+
+    /* Reuse this student's existing appointment if it has not passed. */
+    const existing = queues.find(queue =>
+        sameStudentID(queue.studentID, currentStudent.studentID) &&
+        queue.appointmentDate &&
+        queue.appointmentDate >= todayISO
+    );
+
+    if (existing) {
+        localStorage.setItem("currentQueue", JSON.stringify(existing));
+        window.location.href = "student-queue.html";
+        return;
+    }
+
+    let appointmentDay = getNextWeekday(new Date());
+    let appointmentDate = getLocalISODate(appointmentDay);
+
+    /* Find a date with fewer than 16 appointments. */
+    let attempts = 0;
+
+    while (attempts < 365) {
+        const countForDay = queues.filter(queue =>
+            queue.appointmentDate === appointmentDate
+        ).length;
+
+        if (countForDay < 16) break;
+
+        appointmentDay = getNextWeekday(appointmentDay);
+        appointmentDate = getLocalISODate(appointmentDay);
+        attempts++;
+    }
+
+    if (attempts >= 365) {
+        alert("No appointment dates are currently available. Please try again later.");
+        return;
+    }
+
+    const dayQueues = queues.filter(queue =>
+        queue.appointmentDate === appointmentDate
+    );
+
+    const queueNumber = `Q${String(dayQueues.length + 1).padStart(3, "0")}`;
+
+    /* Appointments begin at 8:00 AM, with 30-minute slots. */
+    const totalMinutes = 8 * 60 + dayQueues.length * 30;
+    const hour24 = Math.floor(totalMinutes / 60);
+    const minute = totalMinutes % 60;
+    const period = hour24 >= 12 ? "PM" : "AM";
+    const hour12 = hour24 % 12 || 12;
+    const appointmentTime =
+        `${hour12}:${String(minute).padStart(2, "0")} ${period}`;
+
+    const queue = {
+        queueNumber,
+        studentID: currentStudent.studentID,
+        name: currentStudent.name,
+        appointmentDate,
+        formattedDate: formatQueueDate(appointmentDate),
+        appointmentTime,
+        status: "Waiting"
+    };
+
+    queues.push(queue);
+
+    localStorage.setItem("queueList", JSON.stringify(queues));
+    localStorage.setItem("currentQueue", JSON.stringify(queue));
+
+    window.location.href = "student-queue.html";
+}
+
+if (queueButton) {
+    queueButton.addEventListener("click", () => {
+        if (profileMode !== "admin" && currentStudent) {
+            createAppointment();
+        }
+    });
+}
+
+/* =========================================
+   INITIALIZE
+========================================= */
+
+if (profileMode === "admin") {
+    queueButton.hidden = true;
+    editButton.hidden = true;
+    saveButton.hidden = true;
+}
+
+loadProfile();
