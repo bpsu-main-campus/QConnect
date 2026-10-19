@@ -995,3 +995,267 @@ main {
 .registration-box .program-field label::after {
     content: none !important;
 }
+
+/* =========================================
+   QCONNECT HOMEPAGE — FINAL BALANCED LAYOUT
+   Paste at the VERY BOTTOM of style.css
+   ========================================= */
+
+/* Page height and footer */
+html,
+body {
+    width: 100%;
+    min-width: 320px;
+    margin: 0;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+body > main {
+    flex: 0 0 auto;
+}
+
+.site-footer {
+    margin-top: auto;
+    flex-shrink: 0;
+    min-height: 72px;
+}
+
+/* University header: slightly clearer, not oversized */
+.top-header {
+    min-height: 105px;
+    height: auto;
+}
+
+.university-name {
+    min-width: 0;
+    max-width: calc(100vw - 150px);
+}
+
+.university-name p {
+    font-size: 11px;
+}
+
+.university-name h1 {
+    font-size: clamp(13px, 1.5vw, 20px);
+    line-height: 1.2;
+    white-space: normal;
+}
+
+.university-name span {
+    font-size: 10px;
+}
+
+/* Homepage hero */
+.hero {
+    height: clamp(200px, 23vh, 245px);
+    margin-top: 12px;
+    background-size: cover;
+    background-position: center;
+}
+
+.hero h2,
+.hero-overlay h2 {
+    font-size: clamp(21px, 2vw, 25px);
+    line-height: 1.25;
+    margin-bottom: 22px;
+}
+
+.hero p,
+.hero-overlay p {
+    font-size: clamp(13px, 1.2vw, 15px);
+    line-height: 1.5;
+}
+
+/* Enrollment advisory */
+.advisory {
+    padding: 22px 15px 25px;
+    min-height: 155px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.advisory h2 {
+    font-size: clamp(20px, 1.8vw, 24px);
+    line-height: 1.25;
+    margin: 0 0 8px;
+}
+
+.advisory p {
+    font-size: clamp(12px, 1.1vw, 14px);
+    line-height: 1.5;
+    margin: 0 0 14px;
+}
+
+.advisory-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px 30px;
+    margin-top: 0;
+}
+
+.advisory-buttons button {
+    font-size: 12px;
+    padding: 9px 18px;
+}
+
+/* Footer contact labels: easier to read */
+.contact-box {
+    grid-template-columns: 55px minmax(85px, 110px);
+    grid-template-rows: 32px 32px;
+}
+
+.contact-icon {
+    width: 55px;
+    height: 32px;
+}
+
+.contact-section a.contact-label {
+    font-size: 11px;
+    padding-left: 5px;
+}
+
+.footer-logo {
+    width: 55px;
+    height: 55px;
+    margin-right: 15px;
+}
+
+/* Tablet and phone layout */
+@media (max-width: 600px) {
+    .top-header {
+        min-height: 90px;
+    }
+
+    .logo-placeholder {
+        width: 55px;
+        height: 90px;
+    }
+
+    .logo-placeholder img {
+        width: 48px;
+        height: 75px;
+    }
+
+    .university-name {
+        margin-left: 5px;
+        max-width: calc(100vw - 135px);
+    }
+
+    .university-name p {
+        font-size: 8px;
+    }
+
+    .university-name h1 {
+        font-size: clamp(10px, 2.8vw, 14px);
+    }
+
+    .university-name span {
+        font-size: 8px;
+    }
+
+    .login-button {
+        top: 12px;
+        right: 8px;
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    .hero {
+        height: 190px;
+        margin-top: 10px;
+        background-size: cover;
+    }
+
+    .hero h2,
+    .hero-overlay h2 {
+        font-size: 21px;
+        margin-bottom: 20px;
+    }
+
+    .hero p,
+    .hero-overlay p {
+        font-size: 12px;
+        padding: 0 10px;
+    }
+
+    .advisory {
+        min-height: 155px;
+        padding: 20px 12px;
+    }
+
+    .advisory h2 {
+        font-size: 20px;
+    }
+
+    .advisory p {
+        font-size: 12px;
+    }
+
+    .advisory-buttons {
+        gap: 12px 18px;
+    }
+
+    .advisory-buttons button {
+        font-size: 11px;
+        padding: 8px 13px;
+    }
+
+    .site-footer {
+        min-height: 65px;
+    }
+
+    .contact-box {
+        grid-template-columns: 42px 80px;
+        grid-template-rows: 30px 30px;
+    }
+
+    .contact-icon {
+        width: 42px;
+        height: 30px;
+    }
+
+    .contact-section a.contact-label {
+        font-size: 10px;
+    }
+
+    .footer-logo {
+        width: 42px;
+        height: 42px;
+        margin-right: 8px;
+    }
+
+    .footer-logo img {
+        width: 42px;
+        height: 42px;
+    }
+}
+
+/* Very narrow phones */
+@media (max-width: 360px) {
+    .university-name h1 {
+        font-size: 10px;
+    }
+
+    .login-button {
+        font-size: 10px;
+        padding: 5px 8px;
+    }
+
+    .hero h2,
+    .hero-overlay h2 {
+        font-size: 19px;
+    }
+
+    .advisory-buttons {
+        gap: 10px;
+    }
+}
