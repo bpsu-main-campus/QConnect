@@ -1288,3 +1288,146 @@ body > main {
 body {
     background-color: #eeeeee;
 }
+
+/* =========================================
+   QCONNECT FOOTER FIX — ALL HTML PAGES
+   Paste at the VERY BOTTOM of style.css
+========================================= */
+
+body > footer.site-footer {
+    width: 100% !important;
+    min-height: 82px !important;
+    height: auto !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+    background: #e8d1d1 !important;
+    flex-shrink: 0 !important;
+    margin-top: auto;
+}
+
+/* Contact area */
+.site-footer .contact-section {
+    display: flex !important;
+    align-items: center !important;
+    align-self: stretch !important;
+    flex-shrink: 0 !important;
+}
+
+.site-footer .contact-box {
+    display: grid !important;
+    grid-template-columns: 58px 115px !important;
+    grid-template-rows: 40px 40px !important;
+    align-content: center !important;
+    align-items: center !important;
+    gap: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Facebook and email icon backgrounds */
+.site-footer .contact-icon {
+    width: 58px !important;
+    height: 40px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    background: #721919 !important;
+    color: white !important;
+    box-sizing: border-box !important;
+    text-decoration: none !important;
+}
+
+/* Facebook icon */
+.site-footer .facebook-f {
+    font-size: 27px !important;
+    font-weight: bold !important;
+    line-height: 1 !important;
+}
+
+/* Email icon */
+.site-footer .email-symbol {
+    font-size: 19px !important;
+    line-height: 1 !important;
+    color: white !important;
+}
+
+/* Facebook Page and Email us text */
+.site-footer a.contact-label {
+    display: flex !important;
+    align-items: center !important;
+    min-height: 40px !important;
+    padding: 0 0 0 7px !important;
+    font-size: 12px !important;
+    color: #5a1717 !important;
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+}
+
+/* Footer BPSU logo */
+.site-footer .footer-logo {
+    width: 68px !important;
+    height: 68px !important;
+    margin: 0 20px 0 10px !important;
+    padding: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-shrink: 0 !important;
+    background: transparent !important;
+}
+
+.site-footer .footer-logo img {
+    display: block !important;
+    width: 68px !important;
+    height: 68px !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: contain !important;
+}
+
+/* =========================================
+   MOBILE FOOTER
+========================================= */
+@media (max-width: 600px) {
+    body > footer.site-footer {
+        min-height: 65px !important;
+    }
+
+    .site-footer .contact-box {
+        grid-template-columns: 45px 85px !important;
+        grid-template-rows: 32px 32px !important;
+    }
+
+    .site-footer .contact-icon {
+        width: 45px !important;
+        height: 32px !important;
+    }
+
+    .site-footer .facebook-f {
+        font-size: 23px !important;
+    }
+
+    .site-footer .email-symbol {
+        font-size: 16px !important;
+    }
+
+    .site-footer a.contact-label {
+        min-height: 32px !important;
+        font-size: 10px !important;
+        padding-left: 5px !important;
+    }
+
+    .site-footer .footer-logo {
+        width: 45px !important;
+        height: 45px !important;
+        margin-right: 8px !important;
+    }
+
+    .site-footer .footer-logo img {
+        width: 45px !important;
+        height: 45px !important;
+    }
+}
