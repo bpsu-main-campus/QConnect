@@ -8,33 +8,54 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
-        /* Homepage layout adjustments */
+        /* =====================================
+           PAGE LAYOUT AND BOTTOM GAP FIX
+        ===================================== */
         html {
+            width: 100%;
             min-height: 100%;
             margin: 0;
         }
 
         body {
+            width: 100%;
+            min-width: 320px;
             min-height: 100vh;
             margin: 0;
             display: flex;
             flex-direction: column;
+            background: #eeeeee;
         }
 
         .top-header {
-            flex-shrink: 0;
+            flex: 0 0 auto;
             width: 100%;
             box-sizing: border-box;
         }
 
-        main {
-            flex: 0 0 auto;
+        body > main {
+            flex: 1 0 auto;
             width: 100%;
+            min-width: 0;
         }
 
+        body > footer.site-footer {
+            flex: 0 0 auto;
+            width: 100%;
+            min-height: 65px;
+            height: auto;
+            margin-top: 0;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* =====================================
+           HERO SECTION
+        ===================================== */
         .hero {
             width: 100%;
             height: clamp(180px, 23vh, 240px);
+            margin-top: 12px;
             box-sizing: border-box;
             background-size: cover;
             background-position: center;
@@ -49,15 +70,46 @@
             align-items: center;
             justify-content: center;
             text-align: center;
+            color: white;
         }
 
+        .hero-overlay h2 {
+            font-size: clamp(21px, 2vw, 25px);
+            line-height: 1.25;
+            margin-bottom: 22px;
+        }
+
+        .hero-overlay p {
+            font-size: clamp(13px, 1.2vw, 15px);
+            line-height: 1.5;
+        }
+
+        /* =====================================
+           ENROLLMENT ADVISORY
+        ===================================== */
         .advisory {
             width: 100%;
-            min-height: 140px;
+            min-height: 155px;
             height: auto;
+            padding: 22px 15px 25px;
             box-sizing: border-box;
-            padding: 18px 12px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
+        }
+
+        .advisory h2 {
+            font-size: clamp(20px, 1.8vw, 24px);
+            line-height: 1.25;
+            margin: 0 0 8px;
+        }
+
+        .advisory p {
+            font-size: clamp(12px, 1.1vw, 14px);
+            line-height: 1.5;
+            margin: 0 0 14px;
         }
 
         .advisory-buttons {
@@ -65,64 +117,51 @@
             justify-content: center;
             align-items: center;
             flex-wrap: wrap;
-            gap: 16px 40px;
-            margin-top: 14px;
-        }
-
-        .site-footer {
-            flex-shrink: 0;
-            width: 100%;
-            min-height: 65px;
-            height: auto;
+            gap: 14px 30px;
             margin-top: 0;
-            box-sizing: border-box;
-            position: relative;
         }
 
+        .advisory-buttons button {
+            font-size: 12px;
+            padding: 9px 18px;
+        }
+
+        /* =====================================
+           FOOTER
+        ===================================== */
         .contact-section {
             box-sizing: border-box;
         }
 
-        /* Prevent the footer from being pushed down by the screen height */
-        @media (min-height: 700px) {
-            body {
-                min-height: 0;
-            }
+        .contact-box {
+            grid-template-columns: 55px minmax(85px, 110px);
+            grid-template-rows: 32px 32px;
         }
 
-        /* Smaller screens */
-        @media (max-width: 600px) {
-            .top-header {
-                min-height: 90px;
-            }
-
-            .university-name h1 {
-                font-size: clamp(13px, 3.5vw, 20px);
-            }
-
-            .university-name .republic,
-            .university-name span {
-                font-size: 10px;
-            }
-
-            .hero {
-                height: clamp(170px, 25vh, 220px);
-            }
-
-            .advisory {
-                padding: 18px 10px 22px;
-            }
-
-            .advisory-buttons {
-                gap: 12px 20px;
-            }
-
-            .site-footer {
-                min-height: 65px;
-            }
+        .contact-icon {
+            width: 55px;
+            height: 32px;
         }
 
-        /* Keep the role-selection modal centered */
+        .contact-section a.contact-label {
+            font-size: 11px;
+            padding-left: 5px;
+        }
+
+        .footer-logo {
+            width: 55px;
+            height: 55px;
+            margin-right: 15px;
+        }
+
+        .footer-logo img {
+            width: 55px;
+            height: 55px;
+        }
+
+        /* =====================================
+           LOGIN MODAL
+        ===================================== */
         .login-modal {
             position: fixed;
             inset: 0;
@@ -138,6 +177,141 @@
         .login-modal-box {
             max-width: calc(100vw - 32px);
             box-sizing: border-box;
+        }
+
+        /* =====================================
+           TABLETS AND MOBILE PHONES
+        ===================================== */
+        @media (max-width: 600px) {
+            .top-header {
+                min-height: 90px;
+                height: auto;
+            }
+
+            .logo-placeholder {
+                width: 55px;
+                height: 90px;
+            }
+
+            .logo-placeholder img {
+                width: 48px;
+                height: 75px;
+            }
+
+            .university-name {
+                min-width: 0;
+                max-width: calc(100vw - 135px);
+                margin-left: 5px;
+            }
+
+            .university-name p,
+            .university-name span {
+                font-size: 8px;
+            }
+
+            .university-name h1 {
+                font-size: clamp(10px, 2.8vw, 14px);
+                line-height: 1.2;
+                white-space: normal;
+            }
+
+            .login-button {
+                top: 12px;
+                right: 8px;
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+
+            .hero {
+                height: 190px;
+                margin-top: 10px;
+                background-size: cover;
+            }
+
+            .hero-overlay h2 {
+                font-size: 21px;
+                margin-bottom: 20px;
+            }
+
+            .hero-overlay p {
+                font-size: 12px;
+                padding: 0 10px;
+            }
+
+            .advisory {
+                min-height: 155px;
+                padding: 20px 12px;
+            }
+
+            .advisory h2 {
+                font-size: 20px;
+            }
+
+            .advisory p {
+                font-size: 12px;
+            }
+
+            .advisory-buttons {
+                gap: 12px 18px;
+            }
+
+            .advisory-buttons button {
+                font-size: 11px;
+                padding: 8px 13px;
+            }
+
+            .contact-box {
+                grid-template-columns: 42px 80px;
+                grid-template-rows: 30px 30px;
+            }
+
+            .contact-icon {
+                width: 42px;
+                height: 30px;
+            }
+
+            .contact-section a.contact-label {
+                font-size: 10px;
+            }
+
+            .footer-logo {
+                width: 42px;
+                height: 42px;
+                margin-right: 8px;
+            }
+
+            .footer-logo img {
+                width: 42px;
+                height: 42px;
+            }
+
+            .login-modal-box {
+                width: 280px;
+                height: 170px;
+            }
+
+            .role-buttons {
+                gap: 25px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .university-name h1 {
+                font-size: 10px;
+            }
+
+            .login-button {
+                font-size: 10px;
+                padding: 5px 8px;
+            }
+
+            .hero-overlay h2 {
+                font-size: 19px;
+            }
+
+            .advisory-buttons {
+                gap: 10px;
+            }
         }
     </style>
 </head>
@@ -165,7 +339,6 @@
 
     <!-- MAIN CONTENT -->
     <main>
-        <!-- HERO -->
         <section class="hero">
             <div class="hero-overlay">
                 <h2>Welcome to BPSU -<br>Main Campus!</h2>
@@ -173,17 +346,22 @@
             </div>
         </section>
 
-        <!-- ENROLLMENT ADVISORY -->
         <section class="advisory">
             <h2>Enrollment Advisory</h2>
+
             <p>
                 Start your journey at BPSU – Main Campus.<br>
                 Enroll now and be one of us, Peninsulares!
             </p>
 
             <div class="advisory-buttons">
-                <button id="registerButton" type="button">Register now</button>
-                <button id="loginButton" type="button">Log-in now</button>
+                <button id="registerButton" type="button">
+                    Register now
+                </button>
+
+                <button id="loginButton" type="button">
+                    Log-in now
+                </button>
             </div>
         </section>
     </main>
