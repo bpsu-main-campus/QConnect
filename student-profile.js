@@ -589,21 +589,6 @@ if (queueButton) {
     });
 }
 
-/* =========================================
-   INITIALIZE
-========================================= */
 
-if (profileMode === "admin") {
-    queueButton.hidden = true;
-    editButton.hidden = true;
-    saveButton.hidden = true;
-}
 
 loadProfile();
-
-/* Hide Edit Profile when an admin is viewing a student profile */
-const editProfileButton = document.getElementById("editProfileButton");
-
-if (editProfileButton && localStorage.getItem("loggedInAdmin") === "true") {
-    editProfileButton.remove();
-}
