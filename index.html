@@ -48,6 +48,160 @@
             box-sizing: border-box;
             position: relative;
         }
+        
+/* =========================================
+   LARGER HEADER AND FOOTER
+========================================= */
+
+/* Taller university header */
+.top-header {
+    min-height: 115px;
+    height: 115px;
+}
+
+.logo-placeholder {
+    width: 82px;
+    height: 115px;
+}
+
+.logo-placeholder img {
+    width: 70px;
+    height: 100px;
+}
+
+/* Make university name easier to read */
+.university-name {
+    margin-left: 8px;
+}
+
+.university-name p {
+    font-size: 12px;
+}
+
+.university-name h1 {
+    font-size: clamp(16px, 1.8vw, 23px);
+    line-height: 1.25;
+}
+
+.university-name span {
+    font-size: 11px;
+}
+
+/* Slightly larger login button */
+.login-button {
+    padding: 9px 23px;
+    font-size: 17px;
+}
+
+/* Larger footer */
+body > footer.site-footer {
+    min-height: 82px;
+}
+
+/* Bigger contact icons and labels */
+.contact-box {
+    grid-template-columns: 65px 115px;
+    grid-template-rows: 40px 40px;
+}
+
+.contact-icon {
+    width: 65px;
+    height: 40px;
+}
+
+.facebook-f {
+    font-size: 27px;
+}
+
+.email-symbol {
+    font-size: 19px;
+}
+
+.contact-section a.contact-label {
+    font-size: 12px;
+    padding-left: 7px;
+}
+
+/* Bigger BPSU logo in footer */
+.footer-logo {
+    width: 68px;
+    height: 68px;
+    margin-right: 20px;
+}
+
+.footer-logo img {
+    width: 68px;
+    height: 68px;
+}
+
+/* Keep the layout comfortable on phones */
+@media (max-width: 600px) {
+    .top-header {
+        min-height: 95px;
+        height: auto;
+    }
+
+    .logo-placeholder {
+        width: 58px;
+        height: 95px;
+    }
+
+    .logo-placeholder img {
+        width: 50px;
+        height: 80px;
+    }
+
+    .university-name {
+        margin-left: 5px;
+        max-width: calc(100vw - 135px);
+    }
+
+    .university-name p,
+    .university-name span {
+        font-size: 8px;
+    }
+
+    .university-name h1 {
+        font-size: clamp(10px, 2.8vw, 14px);
+    }
+
+    .login-button {
+        top: 12px;
+        right: 8px;
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    body > footer.site-footer {
+        min-height: 65px;
+    }
+
+    .contact-box {
+        grid-template-columns: 45px 85px;
+        grid-template-rows: 32px 32px;
+    }
+
+    .contact-icon {
+        width: 45px;
+        height: 32px;
+    }
+
+    .contact-section a.contact-label {
+        font-size: 10px;
+        padding-left: 5px;
+    }
+
+    .footer-logo {
+        width: 45px;
+        height: 45px;
+        margin-right: 8px;
+    }
+
+    .footer-logo img {
+        width: 45px;
+        height: 45px;
+    }
+}
 
         /* =====================================
            HERO SECTION
