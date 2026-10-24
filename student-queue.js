@@ -1,212 +1,162 @@
-/* =====================================================
-   STUDENT QUEUE PAGE
-===================================================== */
-
 
 /* =====================================================
-   GET QUEUE DATA
+   QCONNECT - STUDENT QUEUE PAGE
 ===================================================== */
 
-const queueData =
-    JSON.parse(
-        localStorage.getItem(
-            "currentQueue"
-        )
-    );
+function getSavedQueue() {
+    try {
+        return JSON.parse(
+            localStorage.getItem("currentQueue")
+        );
+    } catch (error) {
+        console.error("Unable to read current queue:", error);
+        return null;
+    }
+}
 
+const queueData = getSavedQueue();
 
 /* =====================================================
    GET ELEMENTS
 ===================================================== */
 
-const queueNumber =
-    document.getElementById(
-        "queueNumber"
-    );
+const queueNumberElement =
+    document.getElementById("queueNumber");
 
-const queueStudent =
-    document.getElementById(
-        "queueStudent"
-    );
+const queueStudentElement =
+    document.getElementById("queueStudent");
 
-const queueDate =
-    document.getElementById(
-        "queueDate"
-    );
+const queueDateElement =
+    document.getElementById("queueDate");
 
-const queueTime =
-    document.getElementById(
-        "queueTime"
-    );
+const queueTimeElement =
+    document.getElementById("queueTime");
 
-const queueStatus =
-    document.getElementById(
-        "queueStatus"
-    );
+const queueStatusElement =
+    document.getElementById("queueStatus");
 
-const qrCode =
-    document.getElementById(
-        "qrcode"
-    );
+const qrCodeElement =
+    document.getElementById("qrcode");
+
+const qrErrorElement =
+    document.getElementById("qrError");
 
 const backButton =
-    document.getElementById(
-        "backButton"
-    );
+    document.getElementById("backButton");
 
 const menuButton =
-    document.getElementById(
-        "menuButton"
-    );
-
+    document.getElementById("menuButton");
 
 /* =====================================================
-   DISPLAY QUEUE
+   DISPLAY QUEUE INFORMATION
 ===================================================== */
 
 if (queueData) {
 
+    queueNumberElement.textContent =
+        queueData.queueNumber || "--";
 
-    /* QUEUE NUMBER */
+    queueStudentElement.textContent =
+        `${queueData.name || "Student"} • ${queueData.studentID || ""}`;
 
-    if (queueNumber) {
-
-        queueNumber.textContent =
-            queueData.queueNumber;
-
-    }
-
-
-    /* STUDENT */
-
-    if (queueStudent) {
-
-        queueStudent.textContent =
-            queueData.name +
-            " • " +
-            queueData.studentID;
-
-    }
-
-
-    /* DATE */
-
-    if (queueDate) {
-
-        queueDate.textContent =
-            "Appointment Date: " +
-            queueData.formattedDate;
-
-    }
-
-
-    /* TIME */
-
-    if (queueTime) {
-
-        queueTime.textContent =
-            "Appointment Time: " +
-            queueData.appointmentTime;
-
-    }
-
-
-    /* STATUS */
-
-    if (queueStatus) {
-
-        queueStatus.textContent =
-            "Status: " +
-            queueData.status;
-
-    }
-
-
-    /* =================================================
-       QR CODE
-    ================================================= */
-
-    if (
-        qrCode &&
-        typeof QRCode !== "undefined"
-    ) {
-
-        qrCode.innerHTML = "";
-
-
-        const qrInformation =
-            "QCONNECT|" +
-            queueData.queueNumber +
-            "|" +
-            queueData.studentID +
-            "|" +
-            queueData.appointmentDate +
-            "|" +
-            queueData.appointmentTime;
-
-
-        new QRCode(
-            qrCode,
-            {
-
-                text:
-                    qrInformation,
-
-                width:
-                    150,
-
-                height:
-                    150,
-
-                correctLevel:
-                    QRCode.CorrectLevel.M
-
-            }
+    queueDateElement.textContent =
+        "Appointment Date: " +
+        (
+            queueData.formattedDate ||
+            queueData.appointmentDate ||
+            "--"
         );
 
+    queueTimeElement.textContent =
+        "Appointment Time: " +
+        (queueData.appointmentTime || "--");
+
+    queueStatusElement.textContent =
+        "Status: " + (queueData.status || "Waiting");
+
+    /* =================================================
+       GENERATE QR CODE
+    ================================================= */
+
+    if (qrCodeElement) {
+
+        qrCodeElement.innerHTML = "";
+
+        if (
+            typeof QRCode !== "undefined" &&
+            queueData.queueNumber &&
+            queueData.studentID &&
+            queueData.appointmentDate &&
+            queueData.appointmentTime
+        ) {
+
+            const qrInformation = JSON.stringify({
+                system: "QCONNECT",
+                queueNumber: queueData.queueNumber,
+                studentID: queueData.studentID,
+                appointmentDate: queueData.appointmentDate,
+                appointmentTime: queueData.appointmentTime
+            });
+
+            new QRCode(qrCodeElement, {
+                text: qrInformation,
+                width: 128,
+                height: 128,
+                correctLevel: QRCode.CorrectLevel.M
+            });
+
+        } else if (qrErrorElement) {
+
+            qrErrorElement.hidden = false;
+
+            if (typeof QRCode === "undefined") {
+                qrErrorElement.textContent =
+                    "QR library not loaded. Check qrcode.min.js.";
+            } else {
+                qrErrorElement.textContent =
+                    "This ticket has incomplete information. Generate a new queue ticket.";
+            }
+        }
     }
 
-}
+} else {
 
+    queueNumberElement.textContent = "--";
+
+    queueStudentElement.textContent =
+        "No queue ticket found. Please request a queue number again.";
+
+    queueDateElement.textContent =
+        "Appointment Date: --";
+
+    queueTimeElement.textContent =
+        "Appointment Time: --";
+
+    queueStatusElement.textContent =
+        "Status: --";
+
+    if (qrCodeElement) {
+        qrCodeElement.innerHTML = "";
+    }
+}
 
 /* =====================================================
    BACK BUTTON
 ===================================================== */
 
 if (backButton) {
-
-    backButton.addEventListener(
-        "click",
-        function () {
-
-            localStorage.setItem(
-                "profileMode",
-                "student"
-            );
-
-            window.location.href =
-                "student-profile.html";
-
-        }
-    );
-
+    backButton.addEventListener("click", function () {
+        localStorage.setItem("profileMode", "student");
+        window.location.href = "student-profile.html";
+    });
 }
-
 
 /* =====================================================
    MENU BUTTON
 ===================================================== */
 
 if (menuButton) {
-
-    menuButton.addEventListener(
-        "click",
-        function () {
-
-            window.location.href =
-                "index.html";
-
-        }
-    );
-
+    menuButton.addEventListener("click", function () {
+        window.location.href = "index.html";
+    });
 }
