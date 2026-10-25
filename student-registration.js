@@ -1,4 +1,4 @@
-
+```javascript
 /* =========================================================
    BPSU MAIN CAMPUS — STUDENT REGISTRATION
    ========================================================= */
@@ -128,36 +128,34 @@ function updateProgramOptions() {
     const selectedCourse = course.value;
     const programs = programsByCourse[selectedCourse] || [];
 
-    // Clear previous options
     program.innerHTML = "";
 
-    // Add the placeholder
     const placeholder = document.createElement("option");
+
     placeholder.value = "";
     placeholder.textContent = selectedCourse
         ? "Select Program / Major"
         : "Select Course First";
+
     placeholder.disabled = true;
     placeholder.selected = true;
 
     program.appendChild(placeholder);
 
-    // Add programs belonging to the selected course
     programs.forEach(function (programName) {
         const option = document.createElement("option");
+
         option.value = programName;
         option.textContent = programName;
+
         program.appendChild(option);
     });
 
-    // Enable only when options are available
     program.disabled = programs.length === 0;
 }
 
 if (course && program) {
     course.addEventListener("change", updateProgramOptions);
-
-    // Set the correct state when the page loads
     updateProgramOptions();
 }
 
@@ -239,7 +237,13 @@ if (registrationForm) {
         const selectedCourse = course.value;
         const selectedProgram = program.value;
 
-        // Validate required fields
+        // NEW: Get representative selection
+        const representative =
+            document.getElementById("representative").value;
+
+
+        /* VALIDATE REQUIRED FIELDS */
+
         if (
             !studentID ||
             !lastName ||
@@ -247,13 +251,16 @@ if (registrationForm) {
             !gender ||
             !birthday ||
             !selectedCourse ||
-            !selectedProgram
+            !selectedProgram ||
+            !representative
         ) {
             alert("Please complete all required information.");
             return;
         }
 
-        // Validate Student ID: 00-00000
+
+        /* VALIDATE STUDENT ID */
+
         const studentIDPattern = /^[0-9]{2}-[0-9]{5}$/;
 
         if (!studentIDPattern.test(studentID)) {
@@ -261,7 +268,22 @@ if (registrationForm) {
             return;
         }
 
-        // Read existing registrations
+
+        /* VALIDATE BIRTHDAY */
+
+        const birthDate = new Date(birthday + "T00:00:00");
+
+        if (
+            Number.isNaN(birthDate.getTime()) ||
+            birthDate > new Date()
+        ) {
+            alert("Please enter a valid birthday.");
+            return;
+        }
+
+
+        /* READ EXISTING REGISTRATIONS */
+
         let students = [];
 
         try {
@@ -277,7 +299,9 @@ if (registrationForm) {
             students = [];
         }
 
-        // Prevent duplicate Student IDs
+
+        /* PREVENT DUPLICATE STUDENT IDs */
+
         const normalizedID = studentID.toLowerCase();
 
         const alreadyRegistered = students.some(function (student) {
@@ -291,14 +315,18 @@ if (registrationForm) {
             return;
         }
 
-        // Create the student's full name
+
+        /* CREATE FULL NAME */
+
         let fullName = `${lastName}, ${firstName}`;
 
         if (middleName) {
             fullName += `, ${middleName}`;
         }
 
-        // Generate password from birthday
+
+        /* GENERATE PASSWORD FROM BIRTHDAY */
+
         const password = formatBirthdayForLogin(birthday);
 
         if (!password) {
@@ -306,7 +334,9 @@ if (registrationForm) {
             return;
         }
 
-        // Create student record
+
+        /* CREATE STUDENT RECORD */
+
         const newStudent = {
             studentID: studentID,
             name: fullName,
@@ -316,21 +346,40 @@ if (registrationForm) {
             campus: "Main Campus",
             course: selectedCourse,
             program: selectedProgram,
+
+            // NEW: Save representative selection
+            representative: representative,
+
             password: password
         };
 
-        // Save registration
+
+        /* SAVE REGISTRATION */
+
         students.push(newStudent);
 
-        localStorage.setItem(
-            "registeredStudents",
-            JSON.stringify(students)
-        );
+        try {
+            localStorage.setItem(
+                "registeredStudents",
+                JSON.stringify(students)
+            );
+        } catch (error) {
+            alert(
+                "Unable to save the registration. " +
+                "Please check your browser storage."
+            );
+            return;
+        }
 
-        // Clear old student login selections
+
+        /* CLEAR OLD STUDENT LOGIN SELECTIONS */
+
         localStorage.removeItem("loggedInStudent");
         localStorage.removeItem("loggedInStudentID");
         localStorage.removeItem("selectedStudentID");
+
+
+        /* SUCCESS MESSAGE */
 
         alert(
             "Registration successful!\n\n" +
@@ -339,7 +388,10 @@ if (registrationForm) {
             "Password: " + password
         );
 
-        // Redirect to student login
+
+        /* REDIRECT TO STUDENT LOGIN */
+
         window.location.href = "student-login.html";
     });
 }
+```
