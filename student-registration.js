@@ -1,7 +1,9 @@
 ```javascript
 /* =========================================================
-   BPSU MAIN CAMPUS — STUDENT REGISTRATION
+   BPSU QCONNECT — STUDENT REGISTRATION
    ========================================================= */
+
+"use strict";
 
 /* COURSE → PROGRAM / MAJOR OPTIONS */
 
@@ -9,77 +11,59 @@ const programsByCourse = {
     "Bachelor of Science in Midwifery": [
         "Bachelor of Science in Midwifery"
     ],
-
     "Bachelor of Science in Nursing": [
         "Bachelor of Science in Nursing"
     ],
-
     "Bachelor of Science in Public Health": [
         "Population Health"
     ],
-
     "Bachelor of Science in Radiologic Technology": [
         "Bachelor of Science in Radiologic Technology"
     ],
-
     "Bachelor of Arts in Communication": [
         "Creative and Performing Arts",
         "New Media Track"
     ],
-
     "Bachelor of Science in Hospitality Management": [
         "Bachelor of Science in Hospitality Management"
     ],
-
     "Bachelor of Science in Tourism Management": [
         "Bachelor of Science in Tourism Management"
     ],
-
     "Bachelor of Science in Architecture": [
         "Bachelor of Science in Architecture"
     ],
-
     "Bachelor of Science in Civil Engineering": [
         "Bachelor of Science in Civil Engineering"
     ],
-
     "Bachelor of Science in Computer Engineering": [
         "Bachelor of Science in Computer Engineering"
     ],
-
     "Bachelor of Science in Electrical Engineering": [
         "Bachelor of Science in Electrical Engineering"
     ],
-
     "Bachelor of Science in Electronics Engineering": [
         "Bachelor of Science in Electronics Engineering"
     ],
-
     "Bachelor of Science in Industrial Engineering": [
         "Bachelor of Science in Industrial Engineering"
     ],
-
     "Bachelor of Science in Mechanical Engineering": [
         "Bachelor of Science in Mechanical Engineering"
     ],
-
     "Bachelor of Science in Computer Science": [
         "Bachelor of Science in Computer Science"
     ],
-
     "Bachelor of Science in Data Science": [
         "Bachelor of Science in Data Science"
     ],
-
     "Bachelor of Science in Entertainment and Multimedia Computing": [
         "Game Development",
         "Digital Animation Technology"
     ],
-
     "Bachelor of Science in Information Technology": [
         "Bachelor of Science in Information Technology"
     ],
-
     "Bachelor of Science in Industrial Technology": [
         "Apparel and Fashion Technology",
         "Architectural Drafting Technology",
@@ -92,7 +76,6 @@ const programsByCourse = {
         "Mechanical Technology",
         "Welding and Fabrication Technology"
     ],
-
     "Bachelor of Technical-Vocational Teacher Education": [
         "Animation",
         "Civil and Construction Technology",
@@ -110,110 +93,145 @@ const programsByCourse = {
 
 
 /* =========================================================
-   GET FORM ELEMENTS
+   INITIALIZE AFTER HTML HAS LOADED
    ========================================================= */
 
-const course = document.getElementById("course");
-const program = document.getElementById("program");
-const registrationForm = document.getElementById("registrationForm");
+document.addEventListener("DOMContentLoaded", function () {
 
+    const form = document.getElementById("registrationForm");
+    const courseSelect = document.getElementById("course");
+    const programSelect = document.getElementById("program");
+    const representativeSelect =
+        document.getElementById("representative");
 
-/* =========================================================
-   UPDATE PROGRAM DROPDOWN
-   ========================================================= */
+    if (!form || !courseSelect || !programSelect) {
+        console.error(
+            "Registration form, course dropdown, or program dropdown is missing."
+        );
 
-function updateProgramOptions() {
-    if (!course || !program) return;
+        alert(
+            "The registration page could not load correctly. " +
+            "Please refresh the page or contact the website administrator."
+        );
 
-    const selectedCourse = course.value;
-    const programs = programsByCourse[selectedCourse] || [];
-
-    program.innerHTML = "";
-
-    const placeholder = document.createElement("option");
-
-    placeholder.value = "";
-    placeholder.textContent = selectedCourse
-        ? "Select Program / Major"
-        : "Select Course First";
-
-    placeholder.disabled = true;
-    placeholder.selected = true;
-
-    program.appendChild(placeholder);
-
-    programs.forEach(function (programName) {
-        const option = document.createElement("option");
-
-        option.value = programName;
-        option.textContent = programName;
-
-        program.appendChild(option);
-    });
-
-    program.disabled = programs.length === 0;
-}
-
-if (course && program) {
-    course.addEventListener("change", updateProgramOptions);
-    updateProgramOptions();
-}
-
-
-/* =========================================================
-   FORMAT BIRTHDAY AS PASSWORD
-   Birthday input: YYYY-MM-DD
-   Login password: MM-DD-YYYY
-   ========================================================= */
-
-function formatBirthdayForLogin(birthday) {
-    if (!birthday) return "";
-
-    const parts = birthday.split("-");
-
-    if (parts.length !== 3) return "";
-
-    const year = parts[0];
-    const month = parts[1];
-    const day = parts[2];
-
-    return `${month}-${day}-${year}`;
-}
-
-
-/* =========================================================
-   CALCULATE AGE
-   ========================================================= */
-
-function calculateAge(birthday) {
-    const birthDate = new Date(birthday + "T00:00:00");
-    const today = new Date();
-
-    let age = today.getFullYear() - birthDate.getFullYear();
-
-    const monthDifference =
-        today.getMonth() - birthDate.getMonth();
-
-    if (
-        monthDifference < 0 ||
-        (
-            monthDifference === 0 &&
-            today.getDate() < birthDate.getDate()
-        )
-    ) {
-        age--;
+        return;
     }
 
-    return age;
-}
+
+    /* =====================================================
+       UPDATE PROGRAM / MAJOR DROPDOWN
+       ===================================================== */
+
+    function updateProgramOptions() {
+        const selectedCourse = courseSelect.value;
+        const programs = programsByCourse[selectedCourse] || [];
+
+        // Clear previous program options
+        programSelect.replaceChildren();
+
+        // Add placeholder
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.textContent = selectedCourse
+            ? "Select Program / Major"
+            : "Select Course First";
+        placeholder.disabled = true;
+        placeholder.selected = true;
+
+        programSelect.appendChild(placeholder);
+
+        // Add programs for the selected course
+        programs.forEach(function (programName) {
+            const option = document.createElement("option");
+
+            option.value = programName;
+            option.textContent = programName;
+
+            programSelect.appendChild(option);
+        });
+
+        // Enable only if programs exist
+        programSelect.disabled = programs.length === 0;
+
+        console.log(
+            "Selected course:",
+            selectedCourse,
+            "| Available programs:",
+            programs
+        );
+    }
+
+    courseSelect.addEventListener("change", updateProgramOptions);
+
+    // Initialize dropdown based on current selection
+    updateProgramOptions();
 
 
-/* =========================================================
-   STUDENT REGISTRATION
-   ========================================================= */
+    /* =====================================================
+       HELPER FUNCTIONS
+       ===================================================== */
 
-if (registrationForm) {
-    registrationForm.addEventListener("submit", function (event) {
+    function formatBirthdayForLogin(birthday) {
+        if (!birthday) return "";
+
+        const parts = birthday.split("-");
+
+        if (parts.length !== 3) return "";
+
+        const year = parts[0];
+        const month = parts[1];
+        const day = parts[2];
+
+        return `${month}-${day}-${year}`;
+    }
+
+    function calculateAge(birthday) {
+        const birthDate = new Date(birthday + "T00:00:00");
+        const today = new Date();
+
+        let age = today.getFullYear() - birthDate.getFullYear();
+
+        const monthDifference =
+            today.getMonth() - birthDate.getMonth();
+
+        if (
+            monthDifference < 0 ||
+            (
+                monthDifference === 0 &&
+                today.getDate() < birthDate.getDate()
+            )
+        ) {
+            age--;
+        }
+
+        return age;
+    }
+
+    function getRegisteredStudents() {
+        try {
+            const saved = localStorage.getItem("registeredStudents");
+
+            if (!saved) return [];
+
+            const parsed = JSON.parse(saved);
+
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (error) {
+            console.error("Could not read registered students:", error);
+
+            throw new Error(
+                "Existing registration data could not be read. " +
+                "No data was changed."
+            );
+        }
+    }
+
+
+    /* =====================================================
+       HANDLE REGISTRATION
+       ===================================================== */
+
+    form.addEventListener("submit", function (event) {
         event.preventDefault();
 
         const studentID =
@@ -234,15 +252,14 @@ if (registrationForm) {
         const birthday =
             document.getElementById("birthday").value;
 
-        const selectedCourse = course.value;
-        const selectedProgram = program.value;
+        const selectedCourse = courseSelect.value;
+        const selectedProgram = programSelect.value;
 
-        // NEW: Get representative selection
-        const representative =
-            document.getElementById("representative").value;
+        const representative = representativeSelect
+            ? representativeSelect.value
+            : "";
 
-
-        /* VALIDATE REQUIRED FIELDS */
+        /* Validate required fields */
 
         if (
             !studentID ||
@@ -254,53 +271,44 @@ if (registrationForm) {
             !selectedProgram ||
             !representative
         ) {
-            alert("Please complete all required information.");
+            alert(
+                "Please complete all required fields, " +
+                "including Program / Major."
+            );
             return;
         }
 
+        /* Validate student ID */
 
-        /* VALIDATE STUDENT ID */
-
-        const studentIDPattern = /^[0-9]{2}-[0-9]{5}$/;
-
-        if (!studentIDPattern.test(studentID)) {
+        if (!/^[0-9]{2}-[0-9]{5}$/.test(studentID)) {
             alert("Student ID must follow the format 00-00000.");
             return;
         }
 
-
-        /* VALIDATE BIRTHDAY */
+        /* Validate birthday */
 
         const birthDate = new Date(birthday + "T00:00:00");
 
         if (
             Number.isNaN(birthDate.getTime()) ||
-            birthDate > new Date()
+            birthDate.getTime() > Date.now()
         ) {
             alert("Please enter a valid birthday.");
             return;
         }
 
+        /* Read saved registrations safely */
 
-        /* READ EXISTING REGISTRATIONS */
-
-        let students = [];
+        let students;
 
         try {
-            students =
-                JSON.parse(
-                    localStorage.getItem("registeredStudents")
-                ) || [];
-
-            if (!Array.isArray(students)) {
-                students = [];
-            }
+            students = getRegisteredStudents();
         } catch (error) {
-            students = [];
+            alert(error.message);
+            return;
         }
 
-
-        /* PREVENT DUPLICATE STUDENT IDs */
+        /* Prevent duplicate student IDs */
 
         const normalizedID = studentID.toLowerCase();
 
@@ -311,12 +319,14 @@ if (registrationForm) {
         });
 
         if (alreadyRegistered) {
-            alert("This Student ID is already registered.");
+            alert(
+                "This Student ID is already registered. " +
+                "Please log in instead."
+            );
             return;
         }
 
-
-        /* CREATE FULL NAME */
+        /* Build full name */
 
         let fullName = `${lastName}, ${firstName}`;
 
@@ -324,18 +334,16 @@ if (registrationForm) {
             fullName += `, ${middleName}`;
         }
 
-
-        /* GENERATE PASSWORD FROM BIRTHDAY */
+        /* Generate password using the existing format */
 
         const password = formatBirthdayForLogin(birthday);
 
         if (!password) {
-            alert("There was a problem processing the birthday.");
+            alert("Unable to process the birthday.");
             return;
         }
 
-
-        /* CREATE STUDENT RECORD */
+        /* Create student record */
 
         const newStudent = {
             studentID: studentID,
@@ -346,15 +354,11 @@ if (registrationForm) {
             campus: "Main Campus",
             course: selectedCourse,
             program: selectedProgram,
-
-            // NEW: Save representative selection
             representative: representative,
-
             password: password
         };
 
-
-        /* SAVE REGISTRATION */
+        /* Save before redirecting */
 
         students.push(newStudent);
 
@@ -363,35 +367,45 @@ if (registrationForm) {
                 "registeredStudents",
                 JSON.stringify(students)
             );
-        } catch (error) {
-            alert(
-                "Unable to save the registration. " +
-                "Please check your browser storage."
+
+            // Verify that the new record was saved
+            const savedStudents = JSON.parse(
+                localStorage.getItem("registeredStudents")
             );
+
+            const wasSaved = Array.isArray(savedStudents) &&
+                savedStudents.some(function (student) {
+                    return String(student.studentID).trim() === studentID;
+                });
+
+            if (!wasSaved) {
+                throw new Error("Registration could not be verified.");
+            }
+
+        } catch (error) {
+            console.error("Registration save error:", error);
+
+            alert(
+                "Registration could not be saved. " +
+                "Please try again. Your form has not been redirected."
+            );
+
             return;
         }
 
-
-        /* CLEAR OLD STUDENT LOGIN SELECTIONS */
-
-        localStorage.removeItem("loggedInStudent");
-        localStorage.removeItem("loggedInStudentID");
-        localStorage.removeItem("selectedStudentID");
-
-
-        /* SUCCESS MESSAGE */
+        /* Success message */
 
         alert(
             "Registration successful!\n\n" +
-            "You can now log in using:\n" +
             "Student ID: " + studentID + "\n" +
-            "Password: " + password
+            "Password: " + password + "\n\n" +
+            "You can now log in."
         );
 
-
-        /* REDIRECT TO STUDENT LOGIN */
+        /* Redirect only after a successful save */
 
         window.location.href = "student-login.html";
     });
-}
+
+});
 ```
