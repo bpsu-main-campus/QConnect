@@ -1,4 +1,3 @@
-```javascript
 /* =========================================================
    BPSU QCONNECT — STUDENT REGISTRATION
    ========================================================= */
@@ -408,4 +407,3 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
-```
