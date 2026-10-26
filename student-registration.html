@@ -7,23 +7,20 @@
     <title>Student Registration - BPSU</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
     <header class="top-header">
         <div class="header-left">
             <div class="logo-placeholder">
                 <img src="images/bpsu-logo.png" alt="BPSU Logo">
             </div>
-
             <div class="university-name">
                 <p class="republic">REPUBLIC OF THE PHILIPPINES</p>
                 <h1>BATAAN PENINSULA STATE UNIVERSITY</h1>
                 <span>CITY OF BALANGA, BATAAN 2100</span>
             </div>
         </div>
-
         <button class="login-button" type="button"
-            onclick="window.location.href='index.html'">
+                onclick="window.location.href='index.html'">
             Log-in
         </button>
     </header>
@@ -37,43 +34,19 @@
             <h2>Register Student</h2>
 
             <label for="studentID">Student ID</label>
-            <input
-                type="text"
-                id="studentID"
-                name="studentID"
-                placeholder="00-00000"
-                pattern="[0-9]{2}-[0-9]{5}"
-                title="Use the format 00-00000"
-                required
-            >
+            <input type="text" id="studentID" name="studentID"
+                   placeholder="00-00000"
+                   pattern="[0-9]{2}-[0-9]{5}"
+                   title="Use the format 00-00000" required>
 
             <label>Name</label>
             <div class="name-inputs">
-                <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    placeholder="Last Name"
-                    autocomplete="family-name"
-                    required
-                >
-
-                <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    placeholder="First Name"
-                    autocomplete="given-name"
-                    required
-                >
-
-                <input
-                    type="text"
-                    id="middleName"
-                    name="middleName"
-                    placeholder="Middle Name"
-                    autocomplete="additional-name"
-                >
+                <input type="text" id="lastName" name="lastName"
+                       placeholder="Last Name" autocomplete="family-name" required>
+                <input type="text" id="firstName" name="firstName"
+                       placeholder="First Name" autocomplete="given-name" required>
+                <input type="text" id="middleName" name="middleName"
+                       placeholder="Middle Name" autocomplete="additional-name">
             </div>
 
             <label for="gender">Gender</label>
@@ -84,22 +57,22 @@
             </select>
 
             <label for="birthday">Birthday</label>
-            <input
-                type="date"
-                id="birthday"
-                name="birthday"
-                required
-            >
+            <input type="date" id="birthday" name="birthday" required>
+
+            <label for="campus">Campus</label>
+            <select id="campus" name="campus" required>
+                <option value="Main Campus" selected>Main Campus</option>
+            </select>
 
             <label for="college">College</label>
             <select id="college" name="college" required>
                 <option value="" disabled selected>Select College</option>
-                <option value="CCST">College of Computer Studies and Technology (CCST)</option>
-                <option value="CEA">College of Engineering and Architecture (CEA)</option>
-                <option value="CBA">College of Business and Accountancy (CBA)</option>
-                <option value="COAS">College of Arts and Sciences (COAS)</option>
-                <option value="CAHS">College of Allied Health Sciences (CAHS)</option>
-                <option value="CTECH">College of Technology (CTECH)</option>
+                <option value="CCST">CCST</option>
+                <option value="CEA">CEA</option>
+                <option value="CBA">CBA</option>
+                <option value="COAS">COAS</option>
+                <option value="CAHS">CAHS</option>
+                <option value="CTECH">CTECH</option>
             </select>
 
             <label for="course">Course</label>
@@ -107,12 +80,10 @@
                 <option value="">Select College First</option>
             </select>
 
-            <div class="program-field">
-                <label for="program">Program / Major</label>
-                <select id="program" name="program" required disabled>
-                    <option value="">Select Course First</option>
-                </select>
-            </div>
+            <label for="program">Major</label>
+            <select id="program" name="program" required disabled>
+                <option value="">Select Course First</option>
+            </select>
 
             <label for="representative">Are you a representative?</label>
             <select id="representative" name="representative" required>
@@ -121,9 +92,7 @@
                 <option value="Representative (PWD)">Representative (PWD)</option>
             </select>
 
-            <button type="submit" class="register-submit">
-                Register Now
-            </button>
+            <button type="submit" class="register-submit">Register Now</button>
         </form>
     </main>
 
@@ -131,38 +100,31 @@
         <div class="contact-section">
             <div class="contact-box">
                 <a class="contact-icon"
-                    href="https://www.facebook.com/share/1C3uCueqKy/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="BPSU Facebook Page">
+                   href="https://www.facebook.com/share/1C3uCueqKy/"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="BPSU Facebook Page">
                     <span class="facebook-f">f</span>
                 </a>
-
                 <a class="contact-label"
-                    href="https://www.facebook.com/share/1C3uCueqKy/"
-                    target="_blank"
-                    rel="noopener noreferrer">FB Page</a>
+                   href="https://www.facebook.com/share/1C3uCueqKy/"
+                   target="_blank" rel="noopener noreferrer">FB Page</a>
 
                 <a class="contact-icon email-link"
-                    href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=mcregistrarhelpdesk%40bpsu.edu.ph"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Email the Registrar">
+                   href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=mcregistrarhelpdesk%40bpsu.edu.ph"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="Email the Registrar">
                     <span class="email-symbol">✉</span>
                 </a>
-
                 <a class="contact-label email-link"
-                    href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=mcregistrarhelpdesk%40bpsu.edu.ph"
-                    target="_blank"
-                    rel="noopener noreferrer">Email us</a>
+                   href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=mcregistrarhelpdesk%40bpsu.edu.ph"
+                   target="_blank" rel="noopener noreferrer">Email us</a>
             </div>
         </div>
-
         <div class="footer-logo">
             <img src="images/bpsu-logo.png" alt="BPSU Logo">
         </div>
     </footer>
 
-    <script src="student-registration.js?v=4"></script>
+    <script src="student-registration.js?v=5"></script>
 </body>
 </html>
