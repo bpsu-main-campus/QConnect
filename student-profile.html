@@ -10,8 +10,9 @@
     <style>
         .profile-page {
             min-height: calc(100vh - 170px);
-            background: linear-gradient(rgba(75,25,25,.45), rgba(75,25,25,.45)),
-                        url("images/campus.png") center/cover;
+            background:
+                linear-gradient(rgba(75,25,25,.45), rgba(75,25,25,.45)),
+                url("images/campus.png") center/cover;
             padding: 35px 15px;
             box-sizing: border-box;
         }
@@ -37,7 +38,8 @@
             margin-bottom: 15px;
         }
 
-        .profile-field label {
+        .profile-field > label,
+        .name-fields label {
             display: block;
             color: #651515;
             font-weight: bold;
@@ -156,7 +158,8 @@
             </div>
         </div>
 
-        <button class="login-button" onclick="window.location.href='index.html'">
+        <button class="login-button" type="button"
+                onclick="window.location.href='index.html'">
             Menu
         </button>
     </header>
@@ -167,18 +170,24 @@
         <form class="profile-box" id="profileForm">
             <div class="profile-field">
                 <label>Name</label>
+
                 <div class="name-fields">
                     <div>
                         <label for="profileLastName">Last Name</label>
-                        <input id="profileLastName" type="text" autocomplete="family-name" disabled required>
+                        <input id="profileLastName" type="text"
+                               autocomplete="family-name" disabled required>
                     </div>
+
                     <div>
                         <label for="profileFirstName">First Name</label>
-                        <input id="profileFirstName" type="text" autocomplete="given-name" disabled required>
+                        <input id="profileFirstName" type="text"
+                               autocomplete="given-name" disabled required>
                     </div>
+
                     <div>
                         <label for="profileMiddleName">Middle Name</label>
-                        <input id="profileMiddleName" type="text" autocomplete="additional-name" disabled>
+                        <input id="profileMiddleName" type="text"
+                               autocomplete="additional-name" disabled>
                     </div>
                 </div>
             </div>
@@ -195,7 +204,8 @@
 
             <div class="profile-field">
                 <label for="profileBirthday">Birthday (MM/DD/YYYY)</label>
-                <input id="profileBirthday" type="text" placeholder="MM/DD/YYYY" disabled>
+                <input id="profileBirthday" type="text"
+                       placeholder="MM/DD/YYYY" disabled>
             </div>
 
             <div class="profile-field">
@@ -209,48 +219,37 @@
             </div>
 
             <div class="profile-field">
-                <label for="profileCourse">Course</label>
-                
-<select id="profileCourse" disabled required>
-    <option value="">Select Course</option>
-    <option value="Bachelor of Science in Midwifery">Bachelor of Science in Midwifery</option>
-    <option value="Bachelor of Science in Nursing">Bachelor of Science in Nursing</option>
-    <option value="Bachelor of Science in Public Health">Bachelor of Science in Public Health</option>
-    <option value="Bachelor of Science in Radiologic Technology">Bachelor of Science in Radiologic Technology</option>
-    <option value="Bachelor of Arts in Communication">Bachelor of Arts in Communication</option>
-    <option value="Bachelor of Science in Hospitality Management">Bachelor of Science in Hospitality Management</option>
-    <option value="Bachelor of Science in Tourism Management">Bachelor of Science in Tourism Management</option>
-    <option value="Bachelor of Science in Architecture">Bachelor of Science in Architecture</option>
-    <option value="Bachelor of Science in Civil Engineering">Bachelor of Science in Civil Engineering</option>
-    <option value="Bachelor of Science in Computer Engineering">Bachelor of Science in Computer Engineering</option>
-    <option value="Bachelor of Science in Electrical Engineering">Bachelor of Science in Electrical Engineering</option>
-    <option value="Bachelor of Science in Electronics Engineering">Bachelor of Science in Electronics Engineering</option>
-    <option value="Bachelor of Science in Industrial Engineering">Bachelor of Science in Industrial Engineering</option>
-    <option value="Bachelor of Science in Mechanical Engineering">Bachelor of Science in Mechanical Engineering</option>
-    <option value="Bachelor of Science in Computer Science">Bachelor of Science in Computer Science</option>
-    <option value="Bachelor of Science in Data Science">Bachelor of Science in Data Science</option>
-    <option value="Bachelor of Science in Entertainment and Multimedia Computing">Bachelor of Science in Entertainment and Multimedia Computing</option>
-    <option value="Bachelor of Science in Information Technology">Bachelor of Science in Information Technology</option>
-    <option value="Bachelor of Science in Industrial Technology">Bachelor of Science in Industrial Technology</option>
-    <option value="Bachelor of Technical-Vocational Teacher Education">Bachelor of Technical-Vocational Teacher Education</option>
-</select>
+                <label for="profileCollege">College</label>
+                <select id="profileCollege" disabled required>
+                    <option value="">Select College</option>
+                    <option value="CCST">College of Computer Studies and Technology (CCST)</option>
+                    <option value="CEA">College of Engineering and Architecture (CEA)</option>
+                    <option value="CBA">College of Business and Accountancy (CBA)</option>
+                    <option value="COAS">College of Arts and Sciences (COAS)</option>
+                    <option value="CAHS">College of Allied Health Sciences (CAHS)</option>
+                    <option value="CTECH">College of Technology (CTECH)</option>
+                </select>
+            </div>
 
+            <div class="profile-field">
+                <label for="profileCourse">Course</label>
+                <select id="profileCourse" disabled required>
+                    <option value="">Select Course</option>
+                </select>
             </div>
 
             <div class="profile-field">
                 <label for="profileProgram">Program / Major</label>
                 <select id="profileProgram" disabled required>
-                    <option value="">Select Course First</option>
+                    <option value="">Select Program / Major</option>
                 </select>
             </div>
 
-            
-<div class="profile-buttons" id="profileButtons">
-    <button type="button" id="editProfileButton">Edit Profile</button>
-    <button type="submit" id="saveProfileButton" hidden>Save Changes</button>
-    <button type="button" id="queueButton">Get Queue</button>
-</div>
-
+            <div class="profile-buttons" id="profileButtons">
+                <button type="button" id="editProfileButton">Edit Profile</button>
+                <button type="submit" id="saveProfileButton" hidden>Save Changes</button>
+                <button type="button" id="queueButton">Get Queue</button>
+            </div>
         </form>
     </main>
 
@@ -263,24 +262,21 @@
                    aria-label="BPSU Facebook Page">
                     <span class="facebook-f">f</span>
                 </a>
+
                 <a class="contact-label"
                    href="https://www.facebook.com/share/1C3uCueqKy/"
                    target="_blank" rel="noopener noreferrer">FB Page</a>
 
-                
-<!-- EMAIL ICON -->
-<a class="contact-icon email-link"
-   href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=mcregistrarhelpdesk%40bpsu.edu.ph"
-   aria-label="Email the Registrar">
-    <span class="email-symbol">✉</span>
-</a>
+                <a class="contact-icon email-link"
+                   href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=mcregistrarhelpdesk%40bpsu.edu.ph"
+                   aria-label="Email the Registrar">
+                    <span class="email-symbol">✉</span>
+                </a>
 
-<!-- EMAIL LABEL -->
-<a class="contact-label email-link"
-   href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=mcregistrarhelpdesk%40bpsu.edu.ph">
-    Email us
-</a>
-
+                <a class="contact-label email-link"
+                   href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=mcregistrarhelpdesk%40bpsu.edu.ph">
+                    Email us
+                </a>
             </div>
         </div>
 
@@ -289,7 +285,8 @@
         </div>
     </footer>
 
-    <div id="savePopup" role="dialog" aria-modal="true" aria-labelledby="savePopupTitle">
+    <div id="savePopup" role="dialog" aria-modal="true"
+         aria-labelledby="savePopupTitle">
         <div class="save-popup-box">
             <h3 id="savePopupTitle">Profile Saved!</h3>
             <p>Your profile has been updated successfully.</p>
@@ -297,6 +294,6 @@
         </div>
     </div>
 
-    <script src="student-profile.js"></script>
+    <script src="student-profile.js?v=5"></script>
 </body>
 </html>
