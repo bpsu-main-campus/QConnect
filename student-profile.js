@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function () {
     "use strict";
 
@@ -29,6 +28,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeSavePopup = document.getElementById("closeSavePopup");
     const pageTitle = document.getElementById("profilePageTitle");
 
+    // Make sure the save popup contains only one button: OK.
+    if (savePopup) {
+        const popupBox = savePopup.querySelector(".save-popup-box");
+
+        if (popupBox) {
+            popupBox.querySelectorAll("button").forEach(function (button) {
+                if (button.id !== "closeSavePopup") {
+                    button.remove();
+                }
+            });
+        }
+    }
+
+    if (closeSavePopup) {
+        closeSavePopup.textContent = "OK";
+        closeSavePopup.type = "button";
+    }
+
     if (
         !form ||
         !lastNameInput ||
@@ -44,17 +61,17 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    // Prevent the form from refreshing the page when buttons are clicked.
     form.addEventListener("submit", function (event) {
         event.preventDefault();
     });
 
-    // Prevent profile buttons from acting as submit buttons.
-    [editButton, saveButton, queueButton, closeSavePopup].forEach(function (button) {
-        if (button) {
-            button.type = "button";
+    [editButton, saveButton, queueButton, closeSavePopup].forEach(
+        function (button) {
+            if (button) {
+                button.type = "button";
+            }
         }
-    });
+    );
 
     const profileMode = localStorage.getItem("profileMode") || "student";
     const isAdmin = profileMode === "admin";
@@ -190,7 +207,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function saveStudents(students) {
-        localStorage.setItem("registeredStudents", JSON.stringify(students));
+        localStorage.setItem(
+            "registeredStudents",
+            JSON.stringify(students)
+        );
     }
 
     function sameStudentID(a, b) {
@@ -290,7 +310,7 @@ document.addEventListener("DOMContentLoaded", function () {
             courseInput.appendChild(option);
         });
 
-        // Keep a saved course even if it is not in the list above.
+        // Preserve a saved course if it is not in the current list.
         if (
             selectedCourse &&
             !courses.some(course => course.name === selectedCourse)
@@ -320,6 +340,7 @@ document.addEventListener("DOMContentLoaded", function () {
             option.value = "N/A";
             option.textContent = "N/A";
             programInput.appendChild(option);
+
             programInput.value = "N/A";
             programInput.required = false;
             programInput.disabled = true;
@@ -408,6 +429,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!isAdmin) {
                 window.location.href = "student-login.html";
             }
+
             return;
         }
 
@@ -429,10 +451,22 @@ document.addEventListener("DOMContentLoaded", function () {
         middleNameInput.value = names.middle;
 
         studentIDInput.value = getStudentID(currentStudent);
-        if (genderInput) genderInput.value = currentStudent.gender || "";
-        if (birthdayInput) birthdayInput.value = currentStudent.birthday || "";
-        if (ageInput) ageInput.value = currentStudent.age ?? "";
-        if (campusInput) campusInput.value = currentStudent.campus || "";
+
+        if (genderInput) {
+            genderInput.value = currentStudent.gender || "";
+        }
+
+        if (birthdayInput) {
+            birthdayInput.value = currentStudent.birthday || "";
+        }
+
+        if (ageInput) {
+            ageInput.value = currentStudent.age ?? "";
+        }
+
+        if (campusInput) {
+            campusInput.value = currentStudent.campus || "";
+        }
 
         let college = normalizeCollege(currentStudent.college);
 
@@ -454,7 +488,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (pageTitle) {
-            pageTitle.textContent = isAdmin ? "Student Profile" : "My Profile";
+            pageTitle.textContent = isAdmin
+                ? "Student Profile"
+                : "My Profile";
         }
 
         if (editButton) editButton.hidden = isAdmin;
@@ -510,7 +546,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const last = lastNameInput.value.trim();
             const first = firstNameInput.value.trim();
-            const middle = middleNameInput ? middleNameInput.value.trim() : "";
+            const middle = middleNameInput
+                ? middleNameInput.value.trim()
+                : "";
 
             const college = collegeInput.value;
             const courseName = courseInput.value;
@@ -549,7 +587,9 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
             if (index === -1) {
-                alert("Student record not found. Your changes were not saved.");
+                alert(
+                    "Student record not found. Your changes were not saved."
+                );
                 return;
             }
 
@@ -566,14 +606,25 @@ document.addEventListener("DOMContentLoaded", function () {
             };
 
             students[index] = updatedStudent;
-            saveStudents(students);
 
-            currentStudent = updatedStudent;
+            try {
+                saveStudents(students);
 
-            localStorage.setItem(
-                "loggedInStudent",
-                JSON.stringify(updatedStudent)
-            );
+                currentStudent = updatedStudent;
+
+                localStorage.setItem(
+                    "loggedInStudent",
+                    JSON.stringify(updatedStudent)
+                );
+            } catch (error) {
+                console.error("Unable to save profile:", error);
+
+                alert(
+                    "Unable to save your profile. Please try again."
+                );
+
+                return;
+            }
 
             loadProfile();
 
@@ -586,7 +637,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* =========================================
-       SAVE POPUP
+       SAVE POPUP — OK BUTTON ONLY
     ========================================= */
 
     if (closeSavePopup && savePopup) {
@@ -683,7 +734,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (attempts >= 365) {
-            alert("No appointment dates are currently available. Please try again later.");
+            alert(
+                "No appointment dates are currently available. " +
+                "Please try again later."
+            );
             return;
         }
 
