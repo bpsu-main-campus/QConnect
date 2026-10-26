@@ -1,55 +1,16 @@
 
-/* =========================================
-   QCONNECT STUDENT PROFILE
-   Fixed course and major dropdown handling
-========================================= */
-
 document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("profileForm");
+    const college = document.getElementById("profileCollege");
+    const course = document.getElementById("profileCourse");
+    const program = document.getElementById("profileProgram");
+
     const profileMode = localStorage.getItem("profileMode") || "student";
+    const isAdmin = profileMode === "admin";
 
-    const studentID =
-        profileMode === "admin"
-            ? localStorage.getItem("selectedStudentID")
-            : localStorage.getItem("loggedInStudentID");
-
-    const profileForm = document.getElementById("profileForm");
-
-    const lastNameInput = document.getElementById("profileLastName");
-    const firstNameInput = document.getElementById("profileFirstName");
-    const middleNameInput = document.getElementById("profileMiddleName");
-
-    const studentIDInput = document.getElementById("profileStudentID");
-    const genderInput = document.getElementById("profileGender");
-    const birthdayInput = document.getElementById("profileBirthday");
-    const ageInput = document.getElementById("profileAge");
-    const campusInput = document.getElementById("profileCampus");
-
-    const collegeInput = document.getElementById("profileCollege");
-    const courseInput = document.getElementById("profileCourse");
-    const programInput = document.getElementById("profileProgram");
-
-    const editButton = document.getElementById("editProfileButton");
-    const saveButton = document.getElementById("saveProfileButton");
-    const queueButton = document.getElementById("queueButton");
-    const buttonsContainer = document.getElementById("profileButtons");
-
-    const pageTitle = document.getElementById("profilePageTitle");
-    const savePopup = document.getElementById("savePopup");
-    const closeSavePopup = document.getElementById("closeSavePopup");
-
-    if (
-        !profileForm ||
-        !collegeInput ||
-        !courseInput ||
-        !programInput
-    ) {
-        console.error("QConnect profile: one or more required HTML elements are missing.");
-        return;
-    }
-
-    /* =========================================
-       COURSE AND MAJOR DATA
-    ========================================= */
+    const studentID = isAdmin
+        ? localStorage.getItem("selectedStudentID")
+        : localStorage.getItem("loggedInStudentID");
 
     const colleges = {
         CCST: "College of Computer Studies and Technology",
@@ -62,861 +23,416 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const coursesByCollege = {
         CCST: [
-            {
-                code: "BSCS",
-                name: "Bachelor of Science in Computer Science"
-            },
-            {
-                code: "BSDS",
-                name: "Bachelor of Science in Data Science"
-            },
-            {
-                code: "BSIT",
-                name: "Bachelor of Science in Information Technology"
-            },
-            {
-                code: "BSEMC",
-                name: "Bachelor of Science in Entertainment and Multimedia Computing"
-            }
+            { code: "BSCS", name: "Bachelor of Science in Computer Science", majors: [] },
+            { code: "BSDS", name: "Bachelor of Science in Data Science", majors: [] },
+            { code: "BSIT", name: "Bachelor of Science in Information Technology", majors: ["DAT - Digital Animation Technology"] },
+            { code: "BSEMC", name: "Bachelor of Science in Entertainment and Multimedia Computing", majors: ["GD - Game Development", "DAT - Digital Animation Technology"] }
         ],
-
         CEA: [
-            {
-                code: "BS ARCH",
-                name: "Bachelor of Science in Architecture"
-            },
-            {
-                code: "BSCE",
-                name: "Bachelor of Science in Civil Engineering"
-            },
-            {
-                code: "BSCpE",
-                name: "Bachelor of Science in Computer Engineering"
-            },
-            {
-                code: "BSEE",
-                name: "Bachelor of Science in Electrical Engineering"
-            },
-            {
-                code: "BSECE",
-                name: "Bachelor of Science in Electronics Engineering"
-            },
-            {
-                code: "BSIE",
-                name: "Bachelor of Science in Industrial Engineering"
-            },
-            {
-                code: "BSME",
-                name: "Bachelor of Science in Mechanical Engineering"
-            }
+            { code: "BS Architecture", name: "Bachelor of Science in Architecture", majors: [] },
+            { code: "BSCE", name: "Bachelor of Science in Civil Engineering", majors: [] },
+            { code: "BSCpE", name: "Bachelor of Science in Computer Engineering", majors: [] },
+            { code: "BSEE", name: "Bachelor of Science in Electrical Engineering", majors: [] },
+            { code: "BSECE", name: "Bachelor of Science in Electronics Engineering", majors: [] },
+            { code: "BSIE", name: "Bachelor of Science in Industrial Engineering", majors: [] },
+            { code: "BSME", name: "Bachelor of Science in Mechanical Engineering", majors: [] }
         ],
-
         CBA: [
-            {
-                code: "BSHM",
-                name: "Bachelor of Science in Hospitality Management"
-            },
-            {
-                code: "BSTM",
-                name: "Bachelor of Science in Tourism Management"
-            }
+            { code: "BSHM", name: "Bachelor of Science in Hospitality Management", majors: [] },
+            { code: "BSTM", name: "Bachelor of Science in Tourism Management", majors: [] }
         ],
-
         COAS: [
-            {
-                code: "BACOMM",
-                name: "Bachelor of Arts in Communication"
-            }
+            { code: "BA Communication", name: "Bachelor of Arts in Communication", majors: ["CPA - Creative and Performing Arts", "NMT - New Media Track"] }
         ],
-
         CAHS: [
-            {
-                code: "BSM",
-                name: "Bachelor of Science in Midwifery"
-            },
-            {
-                code: "BSN",
-                name: "Bachelor of Science in Nursing"
-            },
-            {
-                code: "BSPH",
-                name: "Bachelor of Science in Public Health"
-            },
-            {
-                code: "BSRT",
-                name: "Bachelor of Science in Radiologic Technology"
-            }
+            { code: "BS Midwifery", name: "Bachelor of Science in Midwifery", majors: [] },
+            { code: "BSN", name: "Bachelor of Science in Nursing", majors: [] },
+            { code: "BSPH", name: "Bachelor of Science in Public Health", majors: ["PH - Population Health"] },
+            { code: "BSRT", name: "Bachelor of Science in Radiologic Technology", majors: [] }
         ],
-
         CTECH: [
             {
-                code: "BSIT-IND",
-                name: "Bachelor of Science in Industrial Technology"
+                code: "BSITech",
+                name: "Bachelor of Science in Industrial Technology",
+                majors: [
+                    "AFT - Apparel and Fashion Technology",
+                    "ADT - Architectural Drafting Technology",
+                    "AT - Automotive Technology",
+                    "CT - Culinary Technology",
+                    "ET - Electrical Technology",
+                    "Electronics Technology",
+                    "FST - Food and Service Technology",
+                    "HVAC - Heating, Ventilating and Air Conditioning Technology",
+                    "MT - Mechanical Technology",
+                    "WFT - Welding and Fabrication Technology"
+                ]
             },
             {
-                code: "BTTE",
-                name: "Bachelor of Technical-Vocational Teacher Education"
+                code: "BTVTEd",
+                name: "Bachelor of Technical-Vocational Teacher Education",
+                majors: [
+                    "Animation",
+                    "Civil and Construction Technology",
+                    "Drafting Technology",
+                    "Electrical Technology",
+                    "Electronics Technology",
+                    "Food and Service Management",
+                    "Garments, Fashion and Design",
+                    "HVAC - Heating, Ventilating and Air Conditioning Technology",
+                    "Hotel and Restaurant Services",
+                    "Mechanical Technology",
+                    "Welding and Fabrication Technology"
+                ]
             }
         ]
     };
 
-    const majorsByCourse = {
-        "Bachelor of Science in Computer Science": [
-            { code: "BSCS", name: "Bachelor of Science in Computer Science" }
-        ],
+    let currentStudent = null;
+    let selectedCourse = null;
 
-        "Bachelor of Science in Data Science": [
-            { code: "BSDS", name: "Bachelor of Science in Data Science" }
-        ],
+    function cleanValue(value) {
+        const text = String(value || "").trim();
 
-        "Bachelor of Science in Information Technology": [
-            { code: "BSIT", name: "Bachelor of Science in Information Technology" }
-        ],
-
-        "Bachelor of Science in Entertainment and Multimedia Computing": [
-            { code: "GD", name: "Game Development" },
-            { code: "DAT", name: "Digital Animation Technology" }
-        ],
-
-        "Bachelor of Science in Architecture": [
-            { code: "BS ARCH", name: "Bachelor of Science in Architecture" }
-        ],
-
-        "Bachelor of Science in Civil Engineering": [
-            { code: "BSCE", name: "Bachelor of Science in Civil Engineering" }
-        ],
-
-        "Bachelor of Science in Computer Engineering": [
-            { code: "BSCpE", name: "Bachelor of Science in Computer Engineering" }
-        ],
-
-        "Bachelor of Science in Electrical Engineering": [
-            { code: "BSEE", name: "Bachelor of Science in Electrical Engineering" }
-        ],
-
-        "Bachelor of Science in Electronics Engineering": [
-            { code: "BSECE", name: "Bachelor of Science in Electronics Engineering" }
-        ],
-
-        "Bachelor of Science in Industrial Engineering": [
-            { code: "BSIE", name: "Bachelor of Science in Industrial Engineering" }
-        ],
-
-        "Bachelor of Science in Mechanical Engineering": [
-            { code: "BSME", name: "Bachelor of Science in Mechanical Engineering" }
-        ],
-
-        "Bachelor of Science in Hospitality Management": [
-            { code: "BSHM", name: "Bachelor of Science in Hospitality Management" }
-        ],
-
-        "Bachelor of Science in Tourism Management": [
-            { code: "BSTM", name: "Bachelor of Science in Tourism Management" }
-        ],
-
-        "Bachelor of Arts in Communication": [
-            { code: "CAP", name: "Creative and Performing Arts" },
-            { code: "NMT", name: "New Media Track" }
-        ],
-
-        "Bachelor of Science in Midwifery": [
-            { code: "BSM", name: "Bachelor of Science in Midwifery" }
-        ],
-
-        "Bachelor of Science in Nursing": [
-            { code: "BSN", name: "Bachelor of Science in Nursing" }
-        ],
-
-        "Bachelor of Science in Public Health": [
-            { code: "PH", name: "Population Health" }
-        ],
-
-        "Bachelor of Science in Radiologic Technology": [
-            { code: "BSRT", name: "Bachelor of Science in Radiologic Technology" }
-        ],
-
-        "Bachelor of Science in Industrial Technology": [
-            { code: "AFT", name: "Apparel and Fashion Technology" },
-            { code: "ADT", name: "Architectural Drafting Technology" },
-            { code: "AT", name: "Automotive Technology" },
-            { code: "CT", name: "Culinary Technology" },
-            { code: "ET", name: "Electrical Technology" },
-            { code: "ELT", name: "Electronics Technology" },
-            { code: "FST", name: "Food and Service Technology" },
-            { code: "HVACT", name: "Heating, Ventilating and Air Conditioning Technology" },
-            { code: "MT", name: "Mechanical Technology" },
-            { code: "WFT", name: "Welding and Fabrication Technology" }
-        ],
-
-        "Bachelor of Technical-Vocational Teacher Education": [
-            { code: "ANIM", name: "Animation" },
-            { code: "CCT", name: "Civil and Construction Technology" },
-            { code: "DT", name: "Drafting Technology" },
-            { code: "ET", name: "Electrical Technology" },
-            { code: "ELT", name: "Electronics Technology" },
-            { code: "FSM", name: "Food and Service Management" },
-            { code: "GFD", name: "Garments, Fashion and Design" },
-            { code: "HVACT", name: "Heating, Ventilating and Air Conditioning Technology" },
-            { code: "HRS", name: "Hotel and Restaurant Services" },
-            { code: "MT", name: "Mechanical Technology" },
-            { code: "WFT", name: "Welding and Fabrication Technology" }
-        ]
-    };
-
-    /* =========================================
-       NORMALIZE SAVED VALUES
-       Supports full names, abbreviations, and
-       older saved records.
-    ========================================= */
-
-    function clean(value) {
-        return String(value ?? "").trim();
-    }
-
-    function isMissingMajor(value) {
-        const text = clean(value).toLowerCase();
-
-        return (
-            text === "" ||
-            text === "n/a" ||
-            text === "na" ||
-            text === "none" ||
-            text === "null" ||
-            text === "select major" ||
-            text === "select program / major"
-        );
-    }
-
-    function normalizeCollege(value) {
-        const text = clean(value).toLowerCase();
-
-        if (!text) return "";
-
-        for (const [code, name] of Object.entries(colleges)) {
-            if (
-                text === code.toLowerCase() ||
-                text === name.toLowerCase() ||
-                text === `${name} (${code})`.toLowerCase() ||
-                text === `${code} - ${name}`.toLowerCase()
-            ) {
-                return code;
-            }
+        if (
+            !text ||
+            ["n/a", "na", "none", "null", "undefined"].includes(text.toLowerCase())
+        ) {
+            return "";
         }
 
-        return "";
+        return text;
     }
 
-    function getAllCourses() {
-        return Object.values(coursesByCollege).flat();
-    }
+    function findCourse(collegeCode, courseCode) {
+        const list = coursesByCollege[collegeCode] || [];
 
-    function getCourseObject(value) {
-        const text = clean(value).toLowerCase();
-
-        if (!text) return null;
-
-        return getAllCourses().find(course => {
-            return (
-                text === course.name.toLowerCase() ||
-                text === course.code.toLowerCase() ||
-                text === `${course.code} - ${course.name}`.toLowerCase() ||
-                text === `${course.name} (${course.code})`.toLowerCase()
-            );
+        return list.find(function (item) {
+            return item.code === courseCode;
+        }) || list.find(function (item) {
+            return item.name === courseCode;
         }) || null;
     }
 
-    function getCourseName(value) {
-        const course = getCourseObject(value);
-        return course ? course.name : clean(value);
-    }
+    function setProgramOptions(courseItem, savedProgram, readOnly) {
+        program.replaceChildren();
 
-    function getMajorObject(value, courseName) {
-        const text = clean(value).toLowerCase();
-
-        if (isMissingMajor(text)) return null;
-
-        const majors = majorsByCourse[courseName] || [];
-
-        return majors.find(major => {
-            return (
-                text === major.name.toLowerCase() ||
-                text === major.code.toLowerCase() ||
-                text === `${major.code} - ${major.name}`.toLowerCase()
-            );
-        }) || null;
-    }
-
-    /* =========================================
-       DROPDOWN HELPERS
-    ========================================= */
-
-    function fillDropdown(select, options, placeholder, selectedValue = "") {
-        select.replaceChildren();
-
-        const first = document.createElement("option");
-        first.value = "";
-        first.textContent = placeholder;
-        select.appendChild(first);
-
-        options.forEach(item => {
-            const option = document.createElement("option");
-
-            option.value = item.name;
-            option.textContent = `${item.code} - ${item.name}`;
-
-            select.appendChild(option);
-        });
-
-        const selected = clean(selectedValue);
-
-        if (!selected || isMissingMajor(selected)) {
-            select.value = "";
+        if (!courseItem) {
+            const option = new Option("Select Course First", "");
+            program.add(option);
+            program.disabled = true;
             return;
         }
 
-        const match = Array.from(select.options).find(option => {
-            return (
-                option.value.toLowerCase() === selected.toLowerCase() ||
-                option.textContent.toLowerCase() === selected.toLowerCase()
-            );
-        });
+        const majors = courseItem.majors || [];
+        const saved = cleanValue(savedProgram);
 
-        if (match) {
-            select.value = match.value;
-        } else {
-            // Preserve an older value that is not in the current mapping.
-            const oldOption = document.createElement("option");
-            oldOption.value = selected;
-            oldOption.textContent = selected;
-            select.appendChild(oldOption);
-            select.value = selected;
-        }
-    }
-
-    function updateCourseOptions(selectedCourse = "") {
-        const collegeCode = normalizeCollege(collegeInput.value);
-        const courses = coursesByCollege[collegeCode] || [];
-
-        fillDropdown(courseInput, courses, "Select Course", selectedCourse);
-
-        updateProgramOptions(currentStudent?.program || "");
-    }
-
-    function updateProgramOptions(selectedProgram = "") {
-        const courseName = getCourseName(courseInput.value);
-        const majors = majorsByCourse[courseName] || [];
-
-        programInput.replaceChildren();
-
-        if (!courseName || majors.length === 0) {
-            const option = document.createElement("option");
-            option.value = "";
-            option.textContent = "No major options available";
-            programInput.appendChild(option);
-            programInput.value = "";
+        if (majors.length === 0) {
+            program.add(new Option("N/A", "N/A", true, true));
+            program.disabled = true;
             return;
         }
 
-        // For courses with exactly one major, select it automatically.
-        // This also fixes older records where the saved value was "N/A".
         if (majors.length === 1) {
-            const major = majors[0];
-            const option = document.createElement("option");
-
-            option.value = major.name;
-            option.textContent = `${major.code} - ${major.name}`;
-            programInput.appendChild(option);
-            programInput.value = major.name;
+            program.add(new Option(majors[0], majors[0], true, true));
+            program.disabled = true;
             return;
         }
 
-        // Courses with multiple majors require a real choice.
-        const placeholder = document.createElement("option");
-        placeholder.value = "";
-        placeholder.textContent = "Select Major";
-        programInput.appendChild(placeholder);
-
-        majors.forEach(major => {
-            const option = document.createElement("option");
-            option.value = major.name;
-            option.textContent = `${major.code} - ${major.name}`;
-            programInput.appendChild(option);
+        const validSavedMajor = majors.find(function (item) {
+            return item.toLowerCase() === saved.toLowerCase();
         });
 
-        const selected = getMajorObject(selectedProgram, courseName);
+        if (readOnly) {
+            if (validSavedMajor) {
+                majors.forEach(function (item) {
+                    program.add(new Option(item, item, false, item === validSavedMajor));
+                });
+            } else {
+                program.add(new Option("Major not selected", "", true, true));
+            }
 
-        if (selected) {
-            programInput.value = selected.name;
+            program.disabled = true;
+            return;
+        }
+
+        program.add(new Option("Select Major", "", true, !validSavedMajor));
+
+        majors.forEach(function (item) {
+            program.add(new Option(item, item, false, item === validSavedMajor));
+        });
+
+        program.disabled = false;
+    }
+
+    function updateCourseOptions(savedCourse, savedProgram) {
+        course.replaceChildren();
+
+        const collegeCode = college.value;
+        const list = coursesByCollege[collegeCode] || [];
+
+        course.add(new Option("Select Course", "", true, !savedCourse));
+
+        list.forEach(function (item) {
+            const option = new Option(
+                item.code + " - " + item.name,
+                item.code,
+                false,
+                item.code === savedCourse || item.name === savedCourse
+            );
+
+            course.add(option);
+        });
+
+        course.disabled = isAdmin;
+
+        selectedCourse = findCourse(collegeCode, savedCourse);
+
+        if (selectedCourse) {
+            course.value = selectedCourse.code;
+            setProgramOptions(selectedCourse, savedProgram, isAdmin);
         } else {
-            // Never show the literal "N/A" as a major.
-            programInput.value = "";
+            setProgramOptions(null, "", isAdmin);
         }
     }
 
-    collegeInput.addEventListener("change", function () {
-        courseInput.value = "";
-        programInput.value = "";
-        updateCourseOptions("");
-    });
-
-    courseInput.addEventListener("change", function () {
-        updateProgramOptions("");
-    });
-
-    /* =========================================
-       LOCAL STORAGE HELPERS
-    ========================================= */
-
-    function getRegisteredStudents() {
+    function loadStudents() {
         try {
             const students = JSON.parse(
                 localStorage.getItem("registeredStudents") || "[]"
             );
 
-            return Array.isArray(students) ? students : [];
+            if (!Array.isArray(students)) return [];
+
+            return students;
         } catch (error) {
-            console.error("Could not read registered students:", error);
+            console.error("Could not load registered students:", error);
             return [];
         }
     }
 
-    function saveRegisteredStudents(students) {
-        localStorage.setItem("registeredStudents", JSON.stringify(students));
+    function getStudentID(student) {
+        return String(student.studentID || student.id || "").trim();
     }
-
-    function sameStudentID(a, b) {
-        return clean(a).toLowerCase() === clean(b).toLowerCase();
-    }
-
-    function getNameParts(student) {
-        const last = clean(student.lastName);
-        const first = clean(student.firstName);
-        const middle = clean(student.middleName);
-
-        if (last || first || middle) {
-            return { last, first, middle };
-        }
-
-        const oldName = clean(student.name);
-        if (!oldName) return { last: "", first: "", middle: "" };
-
-        const parts = oldName.split(",").map(part => part.trim());
-
-        if (parts.length >= 2) {
-            return {
-                last: parts[0] || "",
-                first: parts[1] || "",
-                middle: parts.slice(2).join(", ").trim()
-            };
-        }
-
-        return { last: oldName, first: "", middle: "" };
-    }
-
-    function joinNameParts(last, first, middle) {
-        return [last, first, middle]
-            .map(clean)
-            .filter(Boolean)
-            .join(", ");
-    }
-
-    /* =========================================
-       BIRTHDAY AND AGE
-    ========================================= */
-
-    function parseBirthday(value) {
-        const text = clean(value);
-        if (!text) return null;
-
-        let year, month, day;
-
-        if (/^\d{4}-\d{2}-\d{2}$/.test(text)) {
-            [year, month, day] = text.split("-").map(Number);
-        } else if (/^\d{2}[/-]\d{2}[/-]\d{4}$/.test(text)) {
-            [month, day, year] = text.split(/[/-]/).map(Number);
-        } else {
-            return null;
-        }
-
-        const date = new Date(year, month - 1, day);
-
-        if (
-            date.getFullYear() !== year ||
-            date.getMonth() !== month - 1 ||
-            date.getDate() !== day
-        ) {
-            return null;
-        }
-
-        return { year, month, day };
-    }
-
-    function formatBirthdayForDisplay(value) {
-        const date = parseBirthday(value);
-        if (!date) return clean(value);
-
-        return (
-            `${String(date.month).padStart(2, "0")}/` +
-            `${String(date.day).padStart(2, "0")}/${date.year}`
-        );
-    }
-
-    function formatBirthdayForStorage(value) {
-        const date = parseBirthday(value);
-        if (!date) return clean(value);
-
-        return (
-            `${date.year}-` +
-            `${String(date.month).padStart(2, "0")}-` +
-            `${String(date.day).padStart(2, "0")}`
-        );
-    }
-
-    function calculateAge(value) {
-        const date = parseBirthday(value);
-        if (!date) return "";
-
-        const today = new Date();
-        let age = today.getFullYear() - date.year;
-
-        if (
-            today.getMonth() + 1 < date.month ||
-            (
-                today.getMonth() + 1 === date.month &&
-                today.getDate() < date.day
-            )
-        ) {
-            age--;
-        }
-
-        return age >= 0 ? age : "";
-    }
-
-    /* =========================================
-       EDITING MODE
-    ========================================= */
-
-    let currentStudent = null;
-
-    function setEditing(editing) {
-        const canEdit = profileMode !== "admin";
-
-        [lastNameInput, firstNameInput, middleNameInput].forEach(input => {
-            if (input) input.disabled = !editing || !canEdit;
-        });
-
-        [
-            studentIDInput,
-            genderInput,
-            birthdayInput,
-            ageInput,
-            campusInput
-        ].forEach(input => {
-            if (input) input.disabled = true;
-        });
-
-        collegeInput.disabled = !editing || !canEdit;
-        courseInput.disabled = !editing || !canEdit;
-        programInput.disabled = !editing || !canEdit;
-
-        if (editButton) editButton.hidden = !canEdit || editing;
-        if (saveButton) saveButton.hidden = !canEdit || !editing;
-
-        if (editing && canEdit && currentStudent) {
-            // Reload the saved college/course/major while editing.
-            const collegeCode = normalizeCollege(
-                currentStudent.college || currentStudent.collegeCode
-            );
-
-            collegeInput.value = collegeCode;
-            updateCourseOptions(currentStudent.course || "");
-
-            collegeInput.disabled = false;
-            courseInput.disabled = false;
-            programInput.disabled = false;
-        }
-    }
-
-    /* =========================================
-       LOAD PROFILE
-    ========================================= */
 
     function loadProfile() {
-        const students = getRegisteredStudents();
+        const students = loadStudents();
 
-        currentStudent = students.find(student =>
-            sameStudentID(student.studentID || student.id, studentID)
-        );
+        if (!studentID) {
+            alert(isAdmin
+                ? "No student was selected."
+                : "Please log in first.");
+
+            if (!isAdmin) {
+                window.location.href = "student-login.html";
+            }
+
+            return;
+        }
+
+        currentStudent = students.find(function (student) {
+            return getStudentID(student) === String(studentID).trim();
+        });
 
         if (!currentStudent) {
-            alert(
-                profileMode === "admin"
-                    ? "Student profile not found."
-                    : "Your profile could not be found. Please log in again."
-            );
-
-            window.location.href =
-                profileMode === "admin"
-                    ? "registered-students.html"
-                    : "student-login.html";
-
+            alert("Student record not found.");
             return;
         }
 
-        const nameParts = getNameParts(currentStudent);
+        document.getElementById("profileLastName").value =
+            currentStudent.lastName || "";
 
-        lastNameInput.value = nameParts.last;
-        firstNameInput.value = nameParts.first;
-        middleNameInput.value = nameParts.middle;
+        document.getElementById("profileFirstName").value =
+            currentStudent.firstName || "";
 
-        studentIDInput.value =
-            currentStudent.studentID || currentStudent.id || "";
+        document.getElementById("profileMiddleName").value =
+            currentStudent.middleName || "";
 
-        genderInput.value = currentStudent.gender || "";
-        birthdayInput.value = formatBirthdayForDisplay(currentStudent.birthday);
+        document.getElementById("profileStudentID").value =
+            getStudentID(currentStudent);
 
-        ageInput.value =
-            currentStudent.age ?? calculateAge(currentStudent.birthday);
+        document.getElementById("profileGender").value =
+            currentStudent.gender || "";
 
-        campusInput.value = currentStudent.campus || "Main Campus";
+        document.getElementById("profileBirthday").value =
+            currentStudent.birthday || "";
 
-        const collegeCode = normalizeCollege(
-            currentStudent.college || currentStudent.collegeCode
+        document.getElementById("profileAge").value =
+            currentStudent.age ?? "";
+
+        document.getElementById("profileCampus").value =
+            currentStudent.campus || "";
+
+        college.value = currentStudent.college || "";
+
+        updateCourseOptions(
+            currentStudent.course || "",
+            currentStudent.program || ""
         );
 
-        collegeInput.value = collegeCode;
+        document.getElementById("profilePageTitle").textContent =
+            isAdmin ? "Student Profile" : "My Profile";
 
-        // Match course abbreviations and full course names.
-        updateCourseOptions(currentStudent.course || "");
+        document.getElementById("editProfileButton").hidden = isAdmin;
+        document.getElementById("saveProfileButton").hidden = true;
+        document.getElementById("queueButton").hidden = isAdmin;
 
-        // Reload the major after the course dropdown has been populated.
-        updateProgramOptions(currentStudent.program || "");
-
-        if (profileMode === "admin") {
-            if (pageTitle) pageTitle.textContent = "Student Profile";
-            if (buttonsContainer) buttonsContainer.hidden = true;
-            setEditing(false);
-        } else {
-            if (pageTitle) pageTitle.textContent = "My Profile";
-            if (buttonsContainer) buttonsContainer.hidden = false;
-            if (queueButton) queueButton.hidden = false;
-            setEditing(false);
-        }
-    }
-
-    if (editButton) {
-        editButton.addEventListener("click", function () {
-            if (profileMode !== "admin") {
-                setEditing(true);
-            }
+        form.querySelectorAll("input, select").forEach(function (field) {
+            field.disabled = true;
         });
+
+        // The course and major controls are already configured above.
+        course.disabled = true;
+        program.disabled = true;
     }
 
-    /* =========================================
-       SAVE PROFILE
-    ========================================= */
+    function setEditing(editing) {
+        const fields = form.querySelectorAll("input, select");
 
-    profileForm.addEventListener("submit", function (event) {
-        event.preventDefault();
+        fields.forEach(function (field) {
+            field.disabled = !editing;
+        });
 
-        if (profileMode === "admin" || !currentStudent) return;
+        document.getElementById("profileStudentID").disabled = true;
+        document.getElementById("profileAge").disabled = true;
+        document.getElementById("profileCampus").disabled = true;
 
-        const last = lastNameInput.value.trim();
-        const first = firstNameInput.value.trim();
-        const middle = middleNameInput.value.trim();
+        college.disabled = true;
 
-        if (!last || !first) {
-            alert("Please enter your last name and first name.");
-            return;
-        }
+        const selected = findCourse(college.value, course.value);
 
-        const college = collegeInput.value;
-        const course = getCourseName(courseInput.value);
-        const program = programInput.value;
+        course.disabled = true;
 
-        if (!college || !course || !program || isMissingMajor(program)) {
-            alert("Please select your college, course, and major.");
-            return;
-        }
-
-        const students = getRegisteredStudents();
-
-        const index = students.findIndex(student =>
-            sameStudentID(student.studentID || student.id, studentID)
+        setProgramOptions(
+            selected,
+            currentStudent ? currentStudent.program : "",
+            !editing
         );
+
+        document.getElementById("editProfileButton").hidden = editing;
+        document.getElementById("saveProfileButton").hidden = !editing;
+        document.getElementById("queueButton").hidden = editing || isAdmin;
+    }
+
+    document.getElementById("editProfileButton").addEventListener("click", function () {
+        if (isAdmin) return;
+
+        setEditing(true);
+    });
+
+    document.getElementById("saveProfileButton").addEventListener("click", function () {
+        if (!form.reportValidity()) return;
+
+        const selected = findCourse(college.value, course.value);
+
+        if (!selected) {
+            alert("Please select a valid course.");
+            return;
+        }
+
+        const majors = selected.majors || [];
+        let savedProgram = "N/A";
+
+        if (majors.length === 1) {
+            savedProgram = majors[0];
+        } else if (majors.length > 1) {
+            if (!program.value || !majors.includes(program.value)) {
+                alert("Please select your major before saving your profile.");
+                return;
+            }
+
+            savedProgram = program.value;
+        }
+
+        const students = loadStudents();
+        const index = students.findIndex(function (student) {
+            return getStudentID(student) === getStudentID(currentStudent);
+        });
 
         if (index === -1) {
             alert("Student record not found. Your changes were not saved.");
             return;
         }
 
-        const updatedStudent = {
+        students[index] = {
             ...students[index],
-            lastName: last,
-            firstName: first,
-            middleName: middle,
-            name: joinNameParts(last, first, middle),
-            college: college,
-            course: course,
-            program: program
+            lastName: document.getElementById("profileLastName").value.trim(),
+            firstName: document.getElementById("profileFirstName").value.trim(),
+            middleName: document.getElementById("profileMiddleName").value.trim(),
+            gender: document.getElementById("profileGender").value,
+            birthday: document.getElementById("profileBirthday").value,
+            age: document.getElementById("profileAge").value,
+            campus: document.getElementById("profileCampus").value,
+            college: college.value,
+            course: selected.code,
+            program: savedProgram
         };
 
-        students[index] = updatedStudent;
-        saveRegisteredStudents(students);
+        try {
+            localStorage.setItem("registeredStudents", JSON.stringify(students));
 
-        currentStudent = updatedStudent;
+            currentStudent = students[index];
 
-        localStorage.setItem("loggedInStudent", JSON.stringify(updatedStudent));
+            const loggedInStudent = JSON.parse(
+                localStorage.getItem("loggedInStudent") || "null"
+            );
 
-        loadProfile();
-        setEditing(false);
+            if (
+                loggedInStudent &&
+                getStudentID(loggedInStudent) === getStudentID(currentStudent)
+            ) {
+                localStorage.setItem(
+                    "loggedInStudent",
+                    JSON.stringify(currentStudent)
+                );
+            }
 
-        if (savePopup) {
-            savePopup.classList.add("show");
+            loadProfile();
+            const popup = document.getElementById("savePopup");
+
+            if (popup) popup.hidden = false;
+        } catch (error) {
+            console.error("Could not save profile:", error);
+            alert("Unable to save your profile. Please try again.");
         }
     });
 
-    if (closeSavePopup && savePopup) {
+    const closeSavePopup = document.getElementById("closeSavePopup");
+
+    if (closeSavePopup) {
         closeSavePopup.addEventListener("click", function () {
-            savePopup.classList.remove("show");
+            document.getElementById("savePopup").hidden = true;
         });
     }
 
-    /* =========================================
-       QUEUE APPOINTMENT
-    ========================================= */
+    // Recalculate age when birthday changes during editing.
+    document.getElementById("profileBirthday").addEventListener("change", function () {
+        if (!this.value) return;
 
-    function getLocalISODate(date) {
-        return (
-            `${date.getFullYear()}-` +
-            `${String(date.getMonth() + 1).padStart(2, "0")}-` +
-            `${String(date.getDate()).padStart(2, "0")}`
-        );
-    }
+        const birth = new Date(this.value + "T00:00:00");
+        const today = new Date();
+        let age = today.getFullYear() - birth.getFullYear();
 
-    function formatQueueDate(dateISO) {
-        const date = new Date(`${dateISO}T00:00:00`);
-
-        if (Number.isNaN(date.getTime())) return dateISO;
-
-        return date.toLocaleDateString("en-US", {
-            month: "long",
-            day: "numeric",
-            year: "numeric"
-        });
-    }
-
-    function getQueueList() {
-        try {
-            const queues = JSON.parse(localStorage.getItem("queueList") || "[]");
-            return Array.isArray(queues) ? queues : [];
-        } catch (error) {
-            console.error("Could not read queue list:", error);
-            return [];
-        }
-    }
-
-    function getNextWeekday(date) {
-        const next = new Date(date);
-        next.setDate(next.getDate() + 1);
-
-        while (next.getDay() === 0 || next.getDay() === 6) {
-            next.setDate(next.getDate() + 1);
+        if (
+            today.getMonth() < birth.getMonth() ||
+            (
+                today.getMonth() === birth.getMonth() &&
+                today.getDate() < birth.getDate()
+            )
+        ) {
+            age--;
         }
 
-        return next;
-    }
+        document.getElementById("profileAge").value = age;
+    });
 
-    function createAppointment() {
-        if (!currentStudent || profileMode === "admin") return;
+    college.addEventListener("change", function () {
+        updateCourseOptions("", "");
+    });
 
-        const queues = getQueueList();
-        const todayISO = getLocalISODate(new Date());
-
-        const existing = queues.find(queue =>
-            sameStudentID(
-                queue.studentID,
-                currentStudent.studentID || currentStudent.id
-            ) &&
-            queue.appointmentDate &&
-            queue.appointmentDate >= todayISO
-        );
-
-        if (existing) {
-            localStorage.setItem("currentQueue", JSON.stringify(existing));
-            window.location.href = "student-queue.html";
-            return;
-        }
-
-        let appointmentDay = getNextWeekday(new Date());
-        let appointmentDate = getLocalISODate(appointmentDay);
-        let attempts = 0;
-
-        while (attempts < 365) {
-            const countForDay = queues.filter(queue =>
-                queue.appointmentDate === appointmentDate
-            ).length;
-
-            if (countForDay < 16) break;
-
-            appointmentDay = getNextWeekday(appointmentDay);
-            appointmentDate = getLocalISODate(appointmentDay);
-            attempts++;
-        }
-
-        if (attempts >= 365) {
-            alert("No appointment dates are currently available. Please try again later.");
-            return;
-        }
-
-        const dayQueues = queues.filter(queue =>
-            queue.appointmentDate === appointmentDate
-        );
-
-        const queueNumber = `Q${String(dayQueues.length + 1).padStart(3, "0")}`;
-
-        const totalMinutes = 8 * 60 + dayQueues.length * 30;
-        const hour24 = Math.floor(totalMinutes / 60);
-        const minute = totalMinutes % 60;
-        const period = hour24 >= 12 ? "PM" : "AM";
-        const hour12 = hour24 % 12 || 12;
-
-        const appointmentTime =
-            `${hour12}:${String(minute).padStart(2, "0")} ${period}`;
-
-        const queue = {
-            queueNumber,
-            studentID: currentStudent.studentID || currentStudent.id,
-            name: joinNameParts(
-                currentStudent.lastName,
-                currentStudent.firstName,
-                currentStudent.middleName
-            ) || currentStudent.name || "",
-            appointmentDate,
-            formattedDate: formatQueueDate(appointmentDate),
-            appointmentTime,
-            status: "Waiting"
-        };
-
-        queues.push(queue);
-
-        localStorage.setItem("queueList", JSON.stringify(queues));
-        localStorage.setItem("currentQueue", JSON.stringify(queue));
-
-        window.location.href = "student-queue.html";
-    }
-
-    if (queueButton) {
-        queueButton.addEventListener("click", function () {
-            if (profileMode !== "admin" && currentStudent) {
-                createAppointment();
-            }
-        });
-    }
-
-    /* =========================================
-       START
-    ========================================= */
+    course.addEventListener("change", function () {
+        selectedCourse = findCourse(college.value, course.value);
+        setProgramOptions(selectedCourse, "", false);
+    });
 
     loadProfile();
 });
