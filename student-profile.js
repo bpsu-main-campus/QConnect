@@ -3,10 +3,20 @@ document.addEventListener("DOMContentLoaded", function () {
     "use strict";
 
     /* =========================================
-       ELEMENTS AND PROFILE MODE
+       ELEMENTS
     ========================================= */
 
     const form = document.getElementById("profileForm");
+
+    const lastNameInput = document.getElementById("profileLastName");
+    const firstNameInput = document.getElementById("profileFirstName");
+    const middleNameInput = document.getElementById("profileMiddleName");
+    const studentIDInput = document.getElementById("profileStudentID");
+    const genderInput = document.getElementById("profileGender");
+    const birthdayInput = document.getElementById("profileBirthday");
+    const ageInput = document.getElementById("profileAge");
+    const campusInput = document.getElementById("profileCampus");
+
     const collegeInput = document.getElementById("profileCollege");
     const courseInput = document.getElementById("profileCourse");
     const programInput = document.getElementById("profileProgram");
@@ -19,10 +29,32 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeSavePopup = document.getElementById("closeSavePopup");
     const pageTitle = document.getElementById("profilePageTitle");
 
-    if (!form || !collegeInput || !courseInput || !programInput) {
-        console.error("Profile form elements are missing. Check student-profile.html.");
+    if (
+        !form ||
+        !lastNameInput ||
+        !firstNameInput ||
+        !studentIDInput ||
+        !collegeInput ||
+        !courseInput ||
+        !programInput
+    ) {
+        console.error(
+            "Profile elements are missing. Check the IDs in student-profile.html."
+        );
         return;
     }
+
+    // Prevent the form from refreshing the page when buttons are clicked.
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+    });
+
+    // Prevent profile buttons from acting as submit buttons.
+    [editButton, saveButton, queueButton, closeSavePopup].forEach(function (button) {
+        if (button) {
+            button.type = "button";
+        }
+    });
 
     const profileMode = localStorage.getItem("profileMode") || "student";
     const isAdmin = profileMode === "admin";
@@ -32,11 +64,10 @@ document.addEventListener("DOMContentLoaded", function () {
         : localStorage.getItem("loggedInStudentID");
 
     let currentStudent = null;
-    let originalStudent = null;
+    let isEditing = false;
 
     /* =========================================
        COLLEGES AND COURSES
-       Course names must match registration records.
     ========================================= */
 
     const collegeNames = {
@@ -198,14 +229,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function joinNameParts(last, first, middle) {
-        return [last, first, middle]
-            .map(value => String(value || "").trim())
+        const name = [last, first, middle]
+            .map(value => String(value || "").trim());
+
+        return [name[0], name[1], name[2]]
             .filter((value, index) => index < 2 || value !== "")
             .join(", ");
     }
 
     /* =========================================
-       COURSE AND MAJOR HELPERS
+       COLLEGE AND COURSE HELPERS
     ========================================= */
 
     function normalizeCollege(value) {
@@ -213,10 +246,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (coursesByCollege[text]) return text;
 
-        const match = Object.entries(collegeNames).find(([code, name]) =>
-            text.toLowerCase() === name.toLowerCase() ||
-            text.toLowerCase().includes("(" + code.toLowerCase() + ")")
-        );
+        const match = Object.entries(collegeNames).find(([code, name]) => {
+            const normalized = text.toLowerCase();
+
+            return normalized === name.toLowerCase() ||
+                normalized.includes("(" + code.toLowerCase() + ")") ||
+                normalized === code.toLowerCase();
+        });
 
         return match ? match[0] : "";
     }
@@ -232,9 +268,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function findCourse(college, courseName) {
-        const courses = coursesByCollege[college] || [];
-
-        return courses.find(course => course.name === courseName) || null;
+        return (coursesByCollege[college] || [])
+            .find(course => course.name === courseName) || null;
     }
 
     function updateCourseOptions(selectedCourse = "") {
@@ -255,8 +290,11 @@ document.addEventListener("DOMContentLoaded", function () {
             courseInput.appendChild(option);
         });
 
-        // Preserve older records if a saved course is not in the list.
-        if (selectedCourse && !courses.some(course => course.name === selectedCourse)) {
+        // Keep a saved course even if it is not in the list above.
+        if (
+            selectedCourse &&
+            !courses.some(course => course.name === selectedCourse)
+        ) {
             const option = document.createElement("option");
             option.value = selectedCourse;
             option.textContent = selectedCourse;
@@ -267,7 +305,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         updateProgramOptions(
             selectedCourse,
-            currentStudent ? currentStudent.program : ""
+            currentStudent ? currentStudent.program || "" : ""
         );
     }
 
@@ -277,23 +315,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
         programInput.innerHTML = "";
 
-        const placeholder = document.createElement("option");
-        placeholder.value = "";
-        placeholder.textContent = majors.length
-            ? "Select Program / Major"
-            : "N/A";
-        programInput.appendChild(placeholder);
-
         if (majors.length === 0) {
             const option = document.createElement("option");
             option.value = "N/A";
             option.textContent = "N/A";
             programInput.appendChild(option);
             programInput.value = "N/A";
-            programInput.disabled = true;
             programInput.required = false;
+            programInput.disabled = true;
             return;
         }
+
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.textContent = "Select Program / Major";
+        programInput.appendChild(placeholder);
 
         majors.forEach(major => {
             const option = document.createElement("option");
@@ -302,7 +338,7 @@ document.addEventListener("DOMContentLoaded", function () {
             programInput.appendChild(option);
         });
 
-        // Preserve a previously saved value if it differs from the current list.
+        // Preserve older saved major values.
         if (selectedProgram && !majors.includes(selectedProgram)) {
             const option = document.createElement("option");
             option.value = selectedProgram;
@@ -311,16 +347,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         programInput.value = selectedProgram || "";
-        programInput.disabled = isAdmin || !isEditing;
         programInput.required = true;
+        programInput.disabled = isAdmin || !isEditing;
     }
 
     /* =========================================
        EDITING STATE
-       Only name, college, course and major editable.
     ========================================= */
-
-    let isEditing = false;
 
     function setEditing(editing) {
         if (isAdmin) return;
@@ -328,12 +361,11 @@ document.addEventListener("DOMContentLoaded", function () {
         isEditing = editing;
 
         [
-            "profileLastName",
-            "profileFirstName",
-            "profileMiddleName"
-        ].forEach(id => {
-            const field = document.getElementById(id);
-            if (field) field.disabled = !editing;
+            lastNameInput,
+            firstNameInput,
+            middleNameInput
+        ].forEach(field => {
+            field.disabled = !editing;
         });
 
         collegeInput.disabled = !editing;
@@ -341,36 +373,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
         updateProgramOptions(
             courseInput.value,
-            currentStudent ? currentStudent.program : ""
+            currentStudent ? currentStudent.program || "" : ""
         );
 
-        programInput.disabled =
-            !editing || programInput.value === "N/A";
+        if (programInput.value !== "N/A") {
+            programInput.disabled = !editing;
+        }
+
+        [
+            studentIDInput,
+            genderInput,
+            birthdayInput,
+            ageInput,
+            campusInput
+        ].forEach(field => {
+            if (field) field.disabled = true;
+        });
 
         if (editButton) editButton.hidden = editing;
         if (saveButton) saveButton.hidden = !editing;
         if (queueButton) queueButton.hidden = editing;
-
-        // Keep personal and identifying details read-only.
-        [
-            "profileStudentID",
-            "profileGender",
-            "profileBirthday",
-            "profileAge",
-            "profileCampus"
-        ].forEach(id => {
-            const field = document.getElementById(id);
-            if (field) field.disabled = true;
-        });
     }
 
     /* =========================================
-       DISPLAY PROFILE
+       LOAD PROFILE
     ========================================= */
 
     function loadProfile() {
-        const students = loadStudents();
-
         if (!studentID) {
             alert(isAdmin
                 ? "No student was selected."
@@ -382,6 +411,8 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        const students = loadStudents();
+
         currentStudent = students.find(student =>
             sameStudentID(getStudentID(student), studentID)
         );
@@ -391,28 +422,17 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        originalStudent = { ...currentStudent };
-
         const names = getStudentNames(currentStudent);
 
-        document.getElementById("profileLastName").value = names.last;
-        document.getElementById("profileFirstName").value = names.first;
-        document.getElementById("profileMiddleName").value = names.middle;
+        lastNameInput.value = names.last;
+        firstNameInput.value = names.first;
+        middleNameInput.value = names.middle;
 
-        document.getElementById("profileStudentID").value =
-            getStudentID(currentStudent);
-
-        document.getElementById("profileGender").value =
-            currentStudent.gender || "";
-
-        document.getElementById("profileBirthday").value =
-            currentStudent.birthday || "";
-
-        document.getElementById("profileAge").value =
-            currentStudent.age ?? "";
-
-        document.getElementById("profileCampus").value =
-            currentStudent.campus || "";
+        studentIDInput.value = getStudentID(currentStudent);
+        if (genderInput) genderInput.value = currentStudent.gender || "";
+        if (birthdayInput) birthdayInput.value = currentStudent.birthday || "";
+        if (ageInput) ageInput.value = currentStudent.age ?? "";
+        if (campusInput) campusInput.value = currentStudent.campus || "";
 
         let college = normalizeCollege(currentStudent.college);
 
@@ -421,18 +441,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         collegeInput.value = college;
-
         updateCourseOptions(currentStudent.course || "");
 
-        // Fix N/A for courses with exactly one possible major.
         const selectedCourse = findCourse(college, currentStudent.course);
+
         if (
             selectedCourse &&
             selectedCourse.majors.length === 1 &&
-            (
-                !currentStudent.program ||
-                currentStudent.program === "N/A"
-            )
+            (!currentStudent.program || currentStudent.program === "N/A")
         ) {
             programInput.value = selectedCourse.majors[0];
         }
@@ -445,54 +461,56 @@ document.addEventListener("DOMContentLoaded", function () {
         if (saveButton) saveButton.hidden = true;
         if (queueButton) queueButton.hidden = isAdmin;
 
-        // All fields start read-only.
+        isEditing = false;
+
         form.querySelectorAll("input, select").forEach(field => {
             field.disabled = true;
         });
-
-        isEditing = false;
     }
 
     /* =========================================
-       COLLEGE / COURSE CHANGE EVENTS
+       COLLEGE AND COURSE EVENTS
     ========================================= */
 
     collegeInput.addEventListener("change", function () {
         if (!isEditing || isAdmin) return;
-
         updateCourseOptions("");
     });
 
     courseInput.addEventListener("change", function () {
         if (!isEditing || isAdmin) return;
-
         updateProgramOptions(courseInput.value, "");
     });
 
     /* =========================================
-       EDIT BUTTON
+       EDIT PROFILE
     ========================================= */
 
     if (editButton) {
-        editButton.addEventListener("click", function () {
-            if (isAdmin) return;
+        editButton.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            if (isAdmin || !currentStudent) return;
+
             setEditing(true);
         });
     }
 
     /* =========================================
-       SAVE BUTTON
+       SAVE PROFILE
     ========================================= */
 
     if (saveButton) {
-        saveButton.addEventListener("click", function () {
+        saveButton.addEventListener("click", function (event) {
+            event.preventDefault();
+
             if (isAdmin || !currentStudent || !isEditing) return;
 
             if (!form.reportValidity()) return;
 
-            const last = document.getElementById("profileLastName").value.trim();
-            const first = document.getElementById("profileFirstName").value.trim();
-            const middle = document.getElementById("profileMiddleName").value.trim();
+            const last = lastNameInput.value.trim();
+            const first = firstNameInput.value.trim();
+            const middle = middleNameInput ? middleNameInput.value.trim() : "";
 
             const college = collegeInput.value;
             const courseName = courseInput.value;
@@ -525,6 +543,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             const students = loadStudents();
+
             const index = students.findIndex(student =>
                 sameStudentID(getStudentID(student), studentID)
             );
@@ -540,7 +559,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 firstName: first,
                 middleName: middle,
                 name: joinNameParts(last, first, middle),
-                college: college,
+                college: collegeNames[college] || college,
+                collegeCode: college,
                 course: courseName,
                 program: savedProgram
             };
@@ -549,7 +569,11 @@ document.addEventListener("DOMContentLoaded", function () {
             saveStudents(students);
 
             currentStudent = updatedStudent;
-            localStorage.setItem("loggedInStudent", JSON.stringify(updatedStudent));
+
+            localStorage.setItem(
+                "loggedInStudent",
+                JSON.stringify(updatedStudent)
+            );
 
             loadProfile();
 
@@ -566,15 +590,16 @@ document.addEventListener("DOMContentLoaded", function () {
     ========================================= */
 
     if (closeSavePopup && savePopup) {
-        closeSavePopup.addEventListener("click", function () {
+        closeSavePopup.addEventListener("click", function (event) {
+            event.preventDefault();
             savePopup.classList.remove("show");
         });
     }
 
     /* =========================================
-       APPOINTMENT / QUEUE
-       Weekdays only, 16 appointments per day,
-       30-minute slots starting at 8:00 AM.
+       APPOINTMENT QUEUE HELPERS
+       Weekdays only, maximum 16 appointments/day.
+       Starts at 8:00 AM, with 30-minute intervals.
     ========================================= */
 
     function getLocalISODate(date) {
@@ -628,7 +653,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const todayISO = getLocalISODate(new Date());
         const currentID = getStudentID(currentStudent);
 
-        // Reuse this student's existing future appointment.
+        // Reuse an existing future appointment for this student.
         const existing = queues.find(queue =>
             sameStudentID(queue.studentID, currentID) &&
             queue.appointmentDate &&
@@ -698,15 +723,22 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "student-queue.html";
     }
 
+    /* =========================================
+       GET QUEUE BUTTON
+    ========================================= */
+
     if (queueButton) {
-        queueButton.addEventListener("click", function () {
+        queueButton.addEventListener("click", function (event) {
+            event.preventDefault();
+
             if (isAdmin || !currentStudent) return;
+
             createAppointment();
         });
     }
 
     /* =========================================
-       START
+       INITIALIZE
     ========================================= */
 
     loadProfile();
