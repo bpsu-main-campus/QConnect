@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,25 +48,14 @@
 
             <label>Name</label>
             <div class="name-inputs">
-                <input
-                    type="text"
-                    id="lastName"
-                    placeholder="Last Name"
-                    required
-                >
+                <input type="text" id="lastName"
+                    placeholder="Last Name" required>
 
-                <input
-                    type="text"
-                    id="firstName"
-                    placeholder="First Name"
-                    required
-                >
+                <input type="text" id="firstName"
+                    placeholder="First Name" required>
 
-                <input
-                    type="text"
-                    id="middleName"
-                    placeholder="Middle Name"
-                >
+                <input type="text" id="middleName"
+                    placeholder="Middle Name">
             </div>
 
             <label for="gender">Gender</label>
@@ -78,29 +68,17 @@
             <label for="birthday">Birthday</label>
             <input type="date" id="birthday" required>
 
+            <label for="college">College</label>
+            <select id="college" name="college" required>
+                <option value="" disabled selected>Select College</option>
+                <option value="CCST">College of Computer Studies and Technology (CCST)</option>
+                <option value="CEA">College of Engineering and Architecture (CEA)</option>
+                <option value="Other">Other College</option>
+            </select>
+
             <label for="course">Course</label>
-            <select id="course" required>
-                <option value="" disabled selected>Select Course</option>
-                <option value="Bachelor of Science in Midwifery">Bachelor of Science in Midwifery</option>
-                <option value="Bachelor of Science in Nursing">Bachelor of Science in Nursing</option>
-                <option value="Bachelor of Science in Public Health">Bachelor of Science in Public Health</option>
-                <option value="Bachelor of Science in Radiologic Technology">Bachelor of Science in Radiologic Technology</option>
-                <option value="Bachelor of Arts in Communication">Bachelor of Arts in Communication</option>
-                <option value="Bachelor of Science in Hospitality Management">Bachelor of Science in Hospitality Management</option>
-                <option value="Bachelor of Science in Tourism Management">Bachelor of Science in Tourism Management</option>
-                <option value="Bachelor of Science in Architecture">Bachelor of Science in Architecture</option>
-                <option value="Bachelor of Science in Civil Engineering">Bachelor of Science in Civil Engineering</option>
-                <option value="Bachelor of Science in Computer Engineering">Bachelor of Science in Computer Engineering</option>
-                <option value="Bachelor of Science in Electrical Engineering">Bachelor of Science in Electrical Engineering</option>
-                <option value="Bachelor of Science in Electronics Engineering">Bachelor of Science in Electronics Engineering</option>
-                <option value="Bachelor of Science in Industrial Engineering">Bachelor of Science in Industrial Engineering</option>
-                <option value="Bachelor of Science in Mechanical Engineering">Bachelor of Science in Mechanical Engineering</option>
-                <option value="Bachelor of Science in Computer Science">Bachelor of Science in Computer Science</option>
-                <option value="Bachelor of Science in Data Science">Bachelor of Science in Data Science</option>
-                <option value="Bachelor of Science in Entertainment and Multimedia Computing">Bachelor of Science in Entertainment and Multimedia Computing</option>
-                <option value="Bachelor of Science in Information Technology">Bachelor of Science in Information Technology</option>
-                <option value="Bachelor of Science in Industrial Technology">Bachelor of Science in Industrial Technology</option>
-                <option value="Bachelor of Technical-Vocational Teacher Education">Bachelor of Technical-Vocational Teacher Education</option>
+            <select id="course" name="course" required disabled>
+                <option value="">Select College First</option>
             </select>
 
             <div class="program-field">
@@ -110,12 +88,9 @@
                 </select>
             </div>
 
-            <!-- REPRESENTATIVE FIELD -->
             <label for="representative">Are you a representative?</label>
             <select id="representative" name="representative" required>
-                <option value="" disabled selected>
-                    Select an option
-                </option>
+                <option value="" disabled selected>Select an option</option>
                 <option value="N/A (Student)">N/A (Student)</option>
                 <option value="Representative (PWD)">Representative (PWD)</option>
             </select>
@@ -131,16 +106,14 @@
             <div class="contact-box">
                 <a class="contact-icon"
                     href="https://www.facebook.com/share/1C3uCueqKy/"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    target="_blank" rel="noopener noreferrer"
                     aria-label="BPSU Facebook Page">
                     <span class="facebook-f">f</span>
                 </a>
 
                 <a class="contact-label"
                     href="https://www.facebook.com/share/1C3uCueqKy/"
-                    target="_blank"
-                    rel="noopener noreferrer">FB Page</a>
+                    target="_blank" rel="noopener noreferrer">FB Page</a>
 
                 <a class="contact-icon email-link"
                     href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=mcregistrarhelpdesk%40bpsu.edu.ph"
@@ -160,6 +133,7 @@
         </div>
     </footer>
 
-    <script src="student-registration.js?v=2"></script>
+    <script src="student-registration.js?v=3"></script>
 </body>
 </html>
+```
