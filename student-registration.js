@@ -1,4 +1,4 @@
-```javascript
+
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("registrationForm");
     const studentID = document.getElementById("studentID");
@@ -8,8 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const program = document.getElementById("program");
 
     /*
-      PROPOSED COLLEGE AND COURSE GROUPINGS.
-      Verify these against your instructor's official list.
+      Proposed college-to-course groupings.
+      Confirm these assignments with your group or instructor.
     */
     const coursesByCollege = {
         CCST: [
@@ -29,22 +29,31 @@ document.addEventListener("DOMContentLoaded", function () {
             "Bachelor of Science in Mechanical Engineering"
         ],
 
-        Other: [
+        CBA: [
+            "Bachelor of Science in Hospitality Management",
+            "Bachelor of Science in Tourism Management"
+        ],
+
+        COAS: [
+            "Bachelor of Arts in Communication"
+        ],
+
+        CAHS: [
             "Bachelor of Science in Midwifery",
             "Bachelor of Science in Nursing",
             "Bachelor of Science in Public Health",
-            "Bachelor of Science in Radiologic Technology",
-            "Bachelor of Arts in Communication",
-            "Bachelor of Science in Hospitality Management",
-            "Bachelor of Science in Tourism Management",
+            "Bachelor of Science in Radiologic Technology"
+        ],
+
+        CTECH: [
             "Bachelor of Science in Industrial Technology",
             "Bachelor of Technical-Vocational Teacher Education"
         ]
     };
 
     /*
-      PROGRAM / MAJOR OPTIONS.
-      Courses with no separate major use their course name.
+      Programs / majors for each course.
+      Where no separate major is listed, the course name is used.
     */
     const programsByCourse = {
         "Bachelor of Science in Midwifery": [
@@ -149,15 +158,17 @@ document.addEventListener("DOMContentLoaded", function () {
         ]
     };
 
-    function fillDropdown(dropdown, placeholder, options) {
+    // Populate a dropdown and reset its selected value.
+    function populateDropdown(dropdown, placeholder, options) {
         dropdown.replaceChildren();
 
-        const firstOption = document.createElement("option");
-        firstOption.value = "";
-        firstOption.textContent = placeholder;
-        firstOption.disabled = true;
-        firstOption.selected = true;
-        dropdown.appendChild(firstOption);
+        const placeholderOption = document.createElement("option");
+        placeholderOption.value = "";
+        placeholderOption.textContent = placeholder;
+        placeholderOption.disabled = true;
+        placeholderOption.selected = true;
+
+        dropdown.appendChild(placeholderOption);
 
         options.forEach(function (item) {
             const option = document.createElement("option");
@@ -169,31 +180,46 @@ document.addEventListener("DOMContentLoaded", function () {
         dropdown.disabled = options.length === 0;
     }
 
-    // Update courses after the college is selected.
+    // STEP 1: Select a college to unlock its courses.
     college.addEventListener("change", function () {
         const availableCourses = coursesByCollege[college.value] || [];
 
-        fillDropdown(course, "Select Course", availableCourses);
-        fillDropdown(program, "Select Course First", []);
+        populateDropdown(
+            course,
+            availableCourses.length ? "Select Course" : "No courses listed",
+            availableCourses
+        );
+
+        // Reset the program whenever the college changes.
+        populateDropdown(
+            program,
+            "Select Course First",
+            []
+        );
     });
 
-    // Update programs after the course is selected.
+    // STEP 2: Select a course to unlock its programs / majors.
     course.addEventListener("change", function () {
         const availablePrograms = programsByCourse[course.value] || [
             course.value
         ];
 
-        fillDropdown(program, "Select Program / Major", availablePrograms);
+        populateDropdown(
+            program,
+            "Select Program / Major",
+            availablePrograms
+        );
     });
 
-    // Student ID must follow the format 00-00000.
+    // Set today's date as the latest allowed birthday.
+    birthday.max = new Date().toLocaleDateString("en-CA");
+
+    // Clear any previous custom ID error while typing.
     studentID.addEventListener("input", function () {
         studentID.setCustomValidity("");
     });
 
-    // Prevent birthdays in the future.
-    birthday.max = new Date().toISOString().split("T")[0];
-
+    // STEP 3: Validate and save the registration.
     form.addEventListener("submit", function (event) {
         event.preventDefault();
 
@@ -201,11 +227,11 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const idPattern = /^[0-9]{2}-[0-9]{5}$/;
+        const normalizedID = studentID.value.trim();
 
-        if (!idPattern.test(studentID.value.trim())) {
+        if (!/^[0-9]{2}-[0-9]{5}$/.test(normalizedID)) {
             studentID.setCustomValidity(
-                "Please use the Student ID format 00-00000."
+                "Student ID must follow the format 00-00000."
             );
             studentID.reportValidity();
             return;
@@ -215,35 +241,61 @@ document.addEventListener("DOMContentLoaded", function () {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        if (birthDate > today) {
-            alert("Birthday cannot be in the future.");
+        if (
+            Number.isNaN(birthDate.getTime()) ||
+            birthDate > today
+        ) {
+            alert("Please enter a valid birthday that is not in the future.");
             return;
         }
 
         let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDifference = today.getMonth() - birthDate.getMonth();
+
+        const monthDifference =
+            today.getMonth() - birthDate.getMonth();
 
         if (
             monthDifference < 0 ||
-            (monthDifference === 0 && today.getDate() < birthDate.getDate())
+            (
+                monthDifference === 0 &&
+                today.getDate() < birthDate.getDate()
+            )
         ) {
             age--;
         }
 
-        const registeredStudents = JSON.parse(
-            localStorage.getItem("registeredStudents") || "[]"
-        );
+        let registeredStudents = [];
 
-        const normalizedID = studentID.value.trim();
+        try {
+            registeredStudents = JSON.parse(
+                localStorage.getItem("registeredStudents") || "[]"
+            );
 
-        const duplicateStudent = registeredStudents.some(function (student) {
-            return String(student.studentID || student.id || "").trim() === normalizedID;
+            if (!Array.isArray(registeredStudents)) {
+                registeredStudents = [];
+            }
+        } catch (error) {
+            alert("Unable to read saved registrations. Please try again.");
+            return;
+        }
+
+        // Prevent duplicate student IDs.
+        const duplicate = registeredStudents.some(function (student) {
+            return String(
+                student.studentID || student.id || ""
+            ).trim() === normalizedID;
         });
 
-        if (duplicateStudent) {
+        if (duplicate) {
             alert("This Student ID is already registered.");
             return;
         }
+
+        // Keep the birthday-based default password format.
+        const month = String(birthDate.getMonth() + 1).padStart(2, "0");
+        const day = String(birthDate.getDate()).padStart(2, "0");
+        const year = birthDate.getFullYear();
+        const defaultPassword = month + "-" + day + "-" + year;
 
         const student = {
             studentID: normalizedID,
@@ -258,33 +310,23 @@ document.addEventListener("DOMContentLoaded", function () {
             program: program.value,
             representative: document.getElementById("representative").value,
             campus: "Main Campus",
+            defaultPassword: defaultPassword,
             registeredAt: new Date().toISOString()
         };
 
         registeredStudents.push(student);
 
-        localStorage.setItem(
-            "registeredStudents",
-            JSON.stringify(registeredStudents)
-        );
-
-        // Keep the selected student's credentials available to the
-        // existing login page if it uses these localStorage fields.
-        // The birthday password format is MM-DD-YYYY.
-        const month = String(birthDate.getMonth() + 1).padStart(2, "0");
-        const day = String(birthDate.getDate()).padStart(2, "0");
-        const year = birthDate.getFullYear();
-
-        student.defaultPassword = month + "-" + day + "-" + year;
-
-        // Update the stored record with the default password.
-        localStorage.setItem(
-            "registeredStudents",
-            JSON.stringify(registeredStudents)
-        );
+        try {
+            localStorage.setItem(
+                "registeredStudents",
+                JSON.stringify(registeredStudents)
+            );
+        } catch (error) {
+            alert("Unable to save registration on this browser.");
+            return;
+        }
 
         alert("Student registered successfully!");
         window.location.href = "student-login.html";
     });
 });
-```
