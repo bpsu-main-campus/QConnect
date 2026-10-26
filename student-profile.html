@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>My Profile - QConnect</title>
+
     <link rel="stylesheet" href="style.css">
 
     <style>
@@ -109,7 +111,8 @@
             align-items: center;
             justify-content: center;
             padding: 15px;
-            z-index: 999;
+            box-sizing: border-box;
+            z-index: 9999;
         }
 
         #savePopup.show {
@@ -119,11 +122,16 @@
         .save-popup-box {
             width: min(100%, 300px);
             padding: 25px;
+            box-sizing: border-box;
             background: #fff8f0;
             border: 3px solid #651515;
             border-radius: 15px;
             text-align: center;
             color: #651515;
+        }
+
+        .save-popup-box h3 {
+            margin-top: 0;
         }
 
         .save-popup-box button {
@@ -134,6 +142,10 @@
             border: none;
             border-radius: 7px;
             cursor: pointer;
+        }
+
+        .save-popup-box button:hover {
+            background: #4d1010;
         }
 
         @media (max-width: 480px) {
@@ -150,8 +162,11 @@
 </head>
 
 <body>
+
+    <!-- HEADER -->
     <header class="top-header">
         <div class="header-left">
+
             <div class="logo-placeholder">
                 <img src="images/bpsu-logo.png" alt="BPSU Logo">
             </div>
@@ -161,146 +176,289 @@
                 <h1>BATAAN PENINSULA STATE UNIVERSITY</h1>
                 <span>CITY OF BALANGA, BATAAN 2100</span>
             </div>
+
         </div>
 
-        <button class="login-button" type="button"
-                onclick="window.location.href='index.html'">
+        <button
+            class="login-button"
+            type="button"
+            onclick="window.location.href='index.html'">
             Menu
         </button>
     </header>
 
+    <!-- PROFILE CONTENT -->
     <main class="profile-page">
-        <h2 class="profile-title" id="profilePageTitle">My Profile</h2>
+
+        <h2 class="profile-title" id="profilePageTitle">
+            My Profile
+        </h2>
 
         <form class="profile-box" id="profileForm">
+
+            <!-- NAME -->
             <div class="profile-field">
+
                 <label>Name</label>
 
                 <div class="name-fields">
+
                     <div>
                         <label for="profileLastName">Last Name</label>
-                        <input id="profileLastName" type="text"
-                               autocomplete="family-name" disabled required>
+                        <input
+                            id="profileLastName"
+                            name="lastName"
+                            type="text"
+                            autocomplete="family-name"
+                            disabled
+                            required>
                     </div>
 
                     <div>
                         <label for="profileFirstName">First Name</label>
-                        <input id="profileFirstName" type="text"
-                               autocomplete="given-name" disabled required>
+                        <input
+                            id="profileFirstName"
+                            name="firstName"
+                            type="text"
+                            autocomplete="given-name"
+                            disabled
+                            required>
                     </div>
 
                     <div>
                         <label for="profileMiddleName">Middle Name</label>
-                        <input id="profileMiddleName" type="text"
-                               autocomplete="additional-name" disabled>
+                        <input
+                            id="profileMiddleName"
+                            name="middleName"
+                            type="text"
+                            autocomplete="additional-name"
+                            disabled>
                     </div>
+
                 </div>
             </div>
 
+            <!-- STUDENT ID -->
             <div class="profile-field">
                 <label for="profileStudentID">Student ID</label>
-                <input id="profileStudentID" type="text" disabled>
+                <input
+                    id="profileStudentID"
+                    name="studentID"
+                    type="text"
+                    disabled>
             </div>
 
+            <!-- GENDER -->
             <div class="profile-field">
                 <label for="profileGender">Gender</label>
-                <input id="profileGender" type="text" disabled>
+                <input
+                    id="profileGender"
+                    name="gender"
+                    type="text"
+                    disabled>
             </div>
 
+            <!-- BIRTHDAY -->
             <div class="profile-field">
                 <label for="profileBirthday">Birthday (MM/DD/YYYY)</label>
-                <input id="profileBirthday" type="text"
-                       placeholder="MM/DD/YYYY" disabled>
+                <input
+                    id="profileBirthday"
+                    name="birthday"
+                    type="text"
+                    placeholder="MM/DD/YYYY"
+                    disabled>
             </div>
 
+            <!-- AGE -->
             <div class="profile-field">
                 <label for="profileAge">Age</label>
-                <input id="profileAge" type="text" disabled>
+                <input
+                    id="profileAge"
+                    name="age"
+                    type="text"
+                    disabled>
             </div>
 
+            <!-- CAMPUS -->
             <div class="profile-field">
                 <label for="profileCampus">Campus</label>
-                <input id="profileCampus" type="text" disabled>
+                <input
+                    id="profileCampus"
+                    name="campus"
+                    type="text"
+                    disabled>
             </div>
 
+            <!-- COLLEGE -->
             <div class="profile-field">
                 <label for="profileCollege">College</label>
-                <select id="profileCollege" disabled required>
+
+                <select
+                    id="profileCollege"
+                    name="college"
+                    disabled
+                    required>
+
                     <option value="">Select College</option>
-                    <option value="CCST">College of Computer Studies and Technology (CCST)</option>
-                    <option value="CEA">College of Engineering and Architecture (CEA)</option>
-                    <option value="CBA">College of Business and Accountancy (CBA)</option>
-                    <option value="COAS">College of Arts and Sciences (COAS)</option>
-                    <option value="CAHS">College of Allied Health Sciences (CAHS)</option>
-                    <option value="CTECH">College of Technology (CTECH)</option>
+
+                    <option value="CCST">
+                        College of Computer Studies and Technology (CCST)
+                    </option>
+
+                    <option value="CEA">
+                        College of Engineering and Architecture (CEA)
+                    </option>
+
+                    <option value="CBA">
+                        College of Business and Accountancy (CBA)
+                    </option>
+
+                    <option value="COAS">
+                        College of Arts and Sciences (COAS)
+                    </option>
+
+                    <option value="CAHS">
+                        College of Allied Health Sciences (CAHS)
+                    </option>
+
+                    <option value="CTECH">
+                        College of Technology (CTECH)
+                    </option>
+
                 </select>
             </div>
 
+            <!-- COURSE -->
             <div class="profile-field">
                 <label for="profileCourse">Course</label>
-                <select id="profileCourse" disabled required>
+
+                <select
+                    id="profileCourse"
+                    name="course"
+                    disabled
+                    required>
+
                     <option value="">Select Course</option>
+
                 </select>
             </div>
 
+            <!-- PROGRAM / MAJOR -->
             <div class="profile-field">
                 <label for="profileProgram">Program / Major</label>
-                <select id="profileProgram" disabled required>
+
+                <select
+                    id="profileProgram"
+                    name="program"
+                    disabled>
+
                     <option value="">Select Program / Major</option>
+
                 </select>
             </div>
 
+            <!-- PROFILE BUTTONS -->
             <div class="profile-buttons" id="profileButtons">
-                <button type="button" id="editProfileButton">Edit Profile</button>
-                <button type="submit" id="saveProfileButton" hidden>Save Changes</button>
-                <button type="button" id="queueButton">Get Queue</button>
+
+                <button
+                    type="button"
+                    id="editProfileButton">
+                    Edit Profile
+                </button>
+
+                <button
+                    type="button"
+                    id="saveProfileButton"
+                    hidden>
+                    Save Changes
+                </button>
+
+                <button
+                    type="button"
+                    id="queueButton">
+                    Get Queue
+                </button>
+
             </div>
+
         </form>
+
     </main>
 
+    <!-- FOOTER -->
     <footer class="site-footer">
+
         <div class="contact-section">
+
             <div class="contact-box">
-                <a class="contact-icon"
-                   href="https://www.facebook.com/share/1C3uCueqKy/"
-                   target="_blank" rel="noopener noreferrer"
-                   aria-label="BPSU Facebook Page">
+
+                <a
+                    class="contact-icon"
+                    href="https://www.facebook.com/share/1C3uCueqKy/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="BPSU Facebook Page">
+
                     <span class="facebook-f">f</span>
                 </a>
 
-                <a class="contact-label"
-                   href="https://www.facebook.com/share/1C3uCueqKy/"
-                   target="_blank" rel="noopener noreferrer">FB Page</a>
+                <a
+                    class="contact-label"
+                    href="https://www.facebook.com/share/1C3uCueqKy/"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    FB Page
+                </a>
 
-                <a class="contact-icon email-link"
-                   href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=mcregistrarhelpdesk%40bpsu.edu.ph"
-                   aria-label="Email the Registrar">
+                <a
+                    class="contact-icon email-link"
+                    href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=mcregistrarhelpdesk%40bpsu.edu.ph"
+                    aria-label="Email the Registrar">
+
                     <span class="email-symbol">✉</span>
                 </a>
 
-                <a class="contact-label email-link"
-                   href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=mcregistrarhelpdesk%40bpsu.edu.ph">
+                <a
+                    class="contact-label email-link"
+                    href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=mcregistrarhelpdesk%40bpsu.edu.ph">
                     Email us
                 </a>
+
             </div>
+
         </div>
 
         <div class="footer-logo">
             <img src="images/bpsu-logo.png" alt="BPSU Logo">
         </div>
+
     </footer>
 
-    <div id="savePopup" role="dialog" aria-modal="true"
-         aria-labelledby="savePopupTitle">
+    <!-- PROFILE SAVED POPUP -->
+    <div
+        id="savePopup"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="savePopupTitle">
+
         <div class="save-popup-box">
+
             <h3 id="savePopupTitle">Profile Saved!</h3>
+
             <p>Your profile has been updated successfully.</p>
-            <button id="editProfileButton" type="button">Edit Profile</button>
-<button id="saveProfileButton" type="button" hidden>Save</button>
-<button id="queueButton" type="button">Get Queue</button>
+
+            <button
+                id="closeSavePopup"
+                type="button">
+                Close
+            </button>
+
         </div>
+
     </div>
 
-    <script src="student-profile.js?v=7"></script>
+    <!-- JAVASCRIPT -->
+    <script src="student-profile.js?v=8"></script>
+
 </body>
 </html>
