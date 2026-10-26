@@ -8,129 +8,74 @@ document.addEventListener("DOMContentLoaded", function () {
     const program = document.getElementById("program");
 
     /*
-      Proposed college-to-course groupings.
-      Confirm these assignments with your group or instructor.
+      Course codes are displayed separately from majors.
+      Confirm the official course/major combinations with your group.
     */
     const coursesByCollege = {
         CCST: [
-            "Bachelor of Science in Computer Science",
-            "Bachelor of Science in Data Science",
-            "Bachelor of Science in Information Technology",
-            "Bachelor of Science in Entertainment and Multimedia Computing"
+            "BSCS",
+            "BSDS",
+            "BSIT",
+            "BSEMC"
         ],
-
         CEA: [
-            "Bachelor of Science in Architecture",
-            "Bachelor of Science in Civil Engineering",
-            "Bachelor of Science in Computer Engineering",
-            "Bachelor of Science in Electrical Engineering",
-            "Bachelor of Science in Electronics Engineering",
-            "Bachelor of Science in Industrial Engineering",
-            "Bachelor of Science in Mechanical Engineering"
+            "BS Architecture",
+            "BS Civil Engineering",
+            "BS Computer Engineering",
+            "BS Electrical Engineering",
+            "BS Electronics Engineering",
+            "BS Industrial Engineering",
+            "BS Mechanical Engineering"
         ],
-
         CBA: [
-            "Bachelor of Science in Hospitality Management",
-            "Bachelor of Science in Tourism Management"
+            "BS Hospitality Management",
+            "BS Tourism Management"
         ],
-
         COAS: [
-            "Bachelor of Arts in Communication"
+            "BA Communication"
         ],
-
         CAHS: [
-            "Bachelor of Science in Midwifery",
-            "Bachelor of Science in Nursing",
-            "Bachelor of Science in Public Health",
-            "Bachelor of Science in Radiologic Technology"
+            "BS Midwifery",
+            "BS Nursing",
+            "BS Public Health",
+            "BS Radiologic Technology"
         ],
-
         CTECH: [
-            "Bachelor of Science in Industrial Technology",
+            "BS Industrial Technology",
             "Bachelor of Technical-Vocational Teacher Education"
         ]
     };
 
     /*
-      Programs / majors for each course.
-      Where no separate major is listed, the course name is used.
+      Major choices are separate from course names.
+      DAT is included as requested by your friend.
     */
-    const programsByCourse = {
-        "Bachelor of Science in Midwifery": [
-            "Bachelor of Science in Midwifery"
-        ],
-
-        "Bachelor of Science in Nursing": [
-            "Bachelor of Science in Nursing"
-        ],
-
-        "Bachelor of Science in Public Health": [
-            "Population Health"
-        ],
-
-        "Bachelor of Science in Radiologic Technology": [
-            "Bachelor of Science in Radiologic Technology"
-        ],
-
-        "Bachelor of Arts in Communication": [
-            "Creative and Performing Arts",
-            "New Media Track"
-        ],
-
-        "Bachelor of Science in Hospitality Management": [
-            "Bachelor of Science in Hospitality Management"
-        ],
-
-        "Bachelor of Science in Tourism Management": [
-            "Bachelor of Science in Tourism Management"
-        ],
-
-        "Bachelor of Science in Architecture": [
-            "Bachelor of Science in Architecture"
-        ],
-
-        "Bachelor of Science in Civil Engineering": [
-            "Bachelor of Science in Civil Engineering"
-        ],
-
-        "Bachelor of Science in Computer Engineering": [
-            "Bachelor of Science in Computer Engineering"
-        ],
-
-        "Bachelor of Science in Electrical Engineering": [
-            "Bachelor of Science in Electrical Engineering"
-        ],
-
-        "Bachelor of Science in Electronics Engineering": [
-            "Bachelor of Science in Electronics Engineering"
-        ],
-
-        "Bachelor of Science in Industrial Engineering": [
-            "Bachelor of Science in Industrial Engineering"
-        ],
-
-        "Bachelor of Science in Mechanical Engineering": [
-            "Bachelor of Science in Mechanical Engineering"
-        ],
-
-        "Bachelor of Science in Computer Science": [
-            "Bachelor of Science in Computer Science"
-        ],
-
-        "Bachelor of Science in Data Science": [
-            "Bachelor of Science in Data Science"
-        ],
-
-        "Bachelor of Science in Information Technology": [
-            "Bachelor of Science in Information Technology"
-        ],
-
-        "Bachelor of Science in Entertainment and Multimedia Computing": [
+    const majorsByCourse = {
+        "BSCS": ["No separate major"],
+        "BSDS": ["No separate major"],
+        "BSIT": ["DAT - Digital Animation Technology"],
+        "BSEMC": [
             "Game Development",
             "Digital Animation Technology"
         ],
-
-        "Bachelor of Science in Industrial Technology": [
+        "BS Architecture": ["No separate major"],
+        "BS Civil Engineering": ["No separate major"],
+        "BS Computer Engineering": ["No separate major"],
+        "BS Electrical Engineering": ["No separate major"],
+        "BS Electronics Engineering": ["No separate major"],
+        "BS Industrial Engineering": ["No separate major"],
+        "BS Mechanical Engineering": ["No separate major"],
+        "BS Hospitality Management": ["No separate major"],
+        "BS Tourism Management": ["No separate major"],
+        "BA Communication": [
+            "Creative and Performing Arts",
+            "New Media Track"
+        ],
+        "BS Midwifery": ["No separate major"],
+        "BS Nursing": ["No separate major"],
+        "BS Public Health": ["Population Health"],
+        "BS Radiologic Technology": ["No separate major"],
+        "BS Industrial Technology": [
             "Apparel and Fashion Technology",
             "Architectural Drafting Technology",
             "Automotive Technology",
@@ -142,7 +87,6 @@ document.addEventListener("DOMContentLoaded", function () {
             "Mechanical Technology",
             "Welding and Fabrication Technology"
         ],
-
         "Bachelor of Technical-Vocational Teacher Education": [
             "Animation",
             "Civil and Construction Technology",
@@ -158,74 +102,60 @@ document.addEventListener("DOMContentLoaded", function () {
         ]
     };
 
-    // Populate a dropdown and reset its selected value.
-    function populateDropdown(dropdown, placeholder, options) {
-        dropdown.replaceChildren();
+    function fillDropdown(select, placeholder, options) {
+        select.replaceChildren();
 
-        const placeholderOption = document.createElement("option");
-        placeholderOption.value = "";
-        placeholderOption.textContent = placeholder;
-        placeholderOption.disabled = true;
-        placeholderOption.selected = true;
+        const first = document.createElement("option");
+        first.value = "";
+        first.textContent = placeholder;
+        first.disabled = true;
+        first.selected = true;
+        select.appendChild(first);
 
-        dropdown.appendChild(placeholderOption);
-
-        options.forEach(function (item) {
+        options.forEach(function (value) {
             const option = document.createElement("option");
-            option.value = item;
-            option.textContent = item;
-            dropdown.appendChild(option);
+            option.value = value;
+            option.textContent = value;
+            select.appendChild(option);
         });
 
-        dropdown.disabled = options.length === 0;
+        select.disabled = options.length === 0;
     }
 
-    // STEP 1: Select a college to unlock its courses.
     college.addEventListener("change", function () {
-        const availableCourses = coursesByCollege[college.value] || [];
-
-        populateDropdown(
+        fillDropdown(
             course,
-            availableCourses.length ? "Select Course" : "No courses listed",
-            availableCourses
+            "Select Course",
+            coursesByCollege[college.value] || []
         );
 
-        // Reset the program whenever the college changes.
-        populateDropdown(
-            program,
-            "Select Course First",
-            []
-        );
+        fillDropdown(program, "Select Major", []);
     });
 
-    // STEP 2: Select a course to unlock its programs / majors.
     course.addEventListener("change", function () {
-        const availablePrograms = programsByCourse[course.value] || [
-            course.value
-        ];
-
-        populateDropdown(
+        fillDropdown(
             program,
-            "Select Program / Major",
-            availablePrograms
+            "Select Major",
+            majorsByCourse[course.value] || ["No separate major"]
         );
     });
 
-    // Set today's date as the latest allowed birthday.
-    birthday.max = new Date().toLocaleDateString("en-CA");
+    // Prevent selecting a future birthday.
+    const today = new Date();
+    birthday.max = [
+        today.getFullYear(),
+        String(today.getMonth() + 1).padStart(2, "0"),
+        String(today.getDate()).padStart(2, "0")
+    ].join("-");
 
-    // Clear any previous custom ID error while typing.
     studentID.addEventListener("input", function () {
         studentID.setCustomValidity("");
     });
 
-    // STEP 3: Validate and save the registration.
     form.addEventListener("submit", function (event) {
         event.preventDefault();
 
-        if (!form.reportValidity()) {
-            return;
-        }
+        if (!form.reportValidity()) return;
 
         const normalizedID = studentID.value.trim();
 
@@ -238,52 +168,42 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         const birthDate = new Date(birthday.value + "T00:00:00");
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
 
-        if (
-            Number.isNaN(birthDate.getTime()) ||
-            birthDate > today
-        ) {
+        if (Number.isNaN(birthDate.getTime()) || birthDate > currentDate) {
             alert("Please enter a valid birthday that is not in the future.");
             return;
         }
 
-        let age = today.getFullYear() - birthDate.getFullYear();
-
-        const monthDifference =
-            today.getMonth() - birthDate.getMonth();
+        let age = currentDate.getFullYear() - birthDate.getFullYear();
 
         if (
-            monthDifference < 0 ||
+            currentDate.getMonth() < birthDate.getMonth() ||
             (
-                monthDifference === 0 &&
-                today.getDate() < birthDate.getDate()
+                currentDate.getMonth() === birthDate.getMonth() &&
+                currentDate.getDate() < birthDate.getDate()
             )
         ) {
             age--;
         }
 
-        let registeredStudents = [];
+        let students;
 
         try {
-            registeredStudents = JSON.parse(
+            students = JSON.parse(
                 localStorage.getItem("registeredStudents") || "[]"
             );
 
-            if (!Array.isArray(registeredStudents)) {
-                registeredStudents = [];
-            }
+            if (!Array.isArray(students)) students = [];
         } catch (error) {
-            alert("Unable to read saved registrations. Please try again.");
+            alert("Could not read saved registrations. Please try again.");
             return;
         }
 
-        // Prevent duplicate student IDs.
-        const duplicate = registeredStudents.some(function (student) {
-            return String(
-                student.studentID || student.id || ""
-            ).trim() === normalizedID;
+        const duplicate = students.some(function (student) {
+            return String(student.studentID || student.id || "").trim()
+                === normalizedID;
         });
 
         if (duplicate) {
@@ -291,13 +211,11 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Keep the birthday-based default password format.
         const month = String(birthDate.getMonth() + 1).padStart(2, "0");
         const day = String(birthDate.getDate()).padStart(2, "0");
-        const year = birthDate.getFullYear();
-        const defaultPassword = month + "-" + day + "-" + year;
+        const defaultPassword = `${month}-${day}-${birthDate.getFullYear()}`;
 
-        const student = {
+        const newStudent = {
             studentID: normalizedID,
             lastName: document.getElementById("lastName").value.trim(),
             firstName: document.getElementById("firstName").value.trim(),
@@ -305,24 +223,21 @@ document.addEventListener("DOMContentLoaded", function () {
             gender: document.getElementById("gender").value,
             birthday: birthday.value,
             age: age,
+            campus: document.getElementById("campus").value,
             college: college.value,
             course: course.value,
             program: program.value,
             representative: document.getElementById("representative").value,
-            campus: "Main Campus",
             defaultPassword: defaultPassword,
             registeredAt: new Date().toISOString()
         };
 
-        registeredStudents.push(student);
+        students.push(newStudent);
 
         try {
-            localStorage.setItem(
-                "registeredStudents",
-                JSON.stringify(registeredStudents)
-            );
+            localStorage.setItem("registeredStudents", JSON.stringify(students));
         } catch (error) {
-            alert("Unable to save registration on this browser.");
+            alert("Unable to save registration in this browser.");
             return;
         }
 
