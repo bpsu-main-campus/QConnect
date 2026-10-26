@@ -14,11 +14,14 @@ const profileForm = document.getElementById("profileForm");
 const lastNameInput = document.getElementById("profileLastName");
 const firstNameInput = document.getElementById("profileFirstName");
 const middleNameInput = document.getElementById("profileMiddleName");
+
 const studentIDInput = document.getElementById("profileStudentID");
 const genderInput = document.getElementById("profileGender");
 const birthdayInput = document.getElementById("profileBirthday");
 const ageInput = document.getElementById("profileAge");
 const campusInput = document.getElementById("profileCampus");
+
+const collegeInput = document.getElementById("profileCollege");
 const courseInput = document.getElementById("profileCourse");
 const programInput = document.getElementById("profileProgram");
 
@@ -27,14 +30,64 @@ const saveButton = document.getElementById("saveProfileButton");
 const queueButton = document.getElementById("queueButton");
 const buttonsContainer = document.getElementById("profileButtons");
 const pageTitle = document.getElementById("profilePageTitle");
+
 const savePopup = document.getElementById("savePopup");
 const closeSavePopup = document.getElementById("closeSavePopup");
 
+
 /* =========================================
-   COURSE AND PROGRAM CHOICES
-   Keep these choices consistent with registration.
+   COLLEGE AND COURSE CHOICES
+   Keep these consistent with registration.
 ========================================= */
 
+const coursesByCollege = {
+    CCST: [
+        "Bachelor of Science in Computer Science",
+        "Bachelor of Science in Data Science",
+        "Bachelor of Science in Information Technology",
+        "Bachelor of Science in Entertainment and Multimedia Computing"
+    ],
+
+    CEA: [
+        "Bachelor of Science in Architecture",
+        "Bachelor of Science in Civil Engineering",
+        "Bachelor of Science in Computer Engineering",
+        "Bachelor of Science in Electrical Engineering",
+        "Bachelor of Science in Electronics Engineering",
+        "Bachelor of Science in Industrial Engineering",
+        "Bachelor of Science in Mechanical Engineering"
+    ],
+
+    CBA: [
+        "Bachelor of Science in Hospitality Management",
+        "Bachelor of Science in Tourism Management"
+    ],
+
+    COAS: [
+        "Bachelor of Arts in Communication"
+    ],
+
+    CAHS: [
+        "Bachelor of Science in Midwifery",
+        "Bachelor of Science in Nursing",
+        "Bachelor of Science in Public Health",
+        "Bachelor of Science in Radiologic Technology"
+    ],
+
+    CTECH: [
+        "Bachelor of Science in Industrial Technology",
+        "Bachelor of Technical-Vocational Teacher Education"
+    ]
+};
+
+const collegeNames = {
+    CCST: "College of Computer Studies and Technology (CCST)",
+    CEA: "College of Engineering and Architecture (CEA)",
+    CBA: "College of Business and Accountancy (CBA)",
+    COAS: "College of Arts and Sciences (COAS)",
+    CAHS: "College of Allied Health Sciences (CAHS)",
+    CTECH: "College of Technology (CTECH)"
+};
 
 const programsByCourse = {
     "Bachelor of Science in Midwifery": [
@@ -141,7 +194,7 @@ const programsByCourse = {
 
 
 /* =========================================
-   SAFE STORAGE HELPERS
+   STORAGE HELPERS
 ========================================= */
 
 function getRegisteredStudents() {
@@ -149,6 +202,7 @@ function getRegisteredStudents() {
         const students = JSON.parse(
             localStorage.getItem("registeredStudents") || "[]"
         );
+
         return Array.isArray(students) ? students : [];
     } catch (error) {
         console.error("Unable to read registered students:", error);
@@ -165,11 +219,12 @@ function sameStudentID(a, b) {
            String(b || "").trim().toLowerCase();
 }
 
+
 /* =========================================
    NAME HELPERS
-
-   Registration saves names as:
-   Last, First, Middle
+   Supports both:
+   1. Separate lastName/firstName/middleName
+   2. Older name: "Last, First, Middle"
 ========================================= */
 
 function splitStoredName(name) {
@@ -182,21 +237,119 @@ function splitStoredName(name) {
     };
 }
 
-function joinNameParts(last, first, middle) {
-    const cleanLast = String(last || "").trim();
-    const cleanFirst = String(first || "").trim();
-    const cleanMiddle = String(middle || "").trim();
+function getStudentNames(student) {
+    const oldName = splitStoredName(student.name);
 
-    if (cleanMiddle) {
-        return `${cleanLast}, ${cleanFirst}, ${cleanMiddle}`;
+    return {
+        last: String(student.lastName ?? oldName.last).trim(),
+        first: String(student.firstName ?? oldName.first).trim(),
+        middle: String(student.middleName ?? oldName.middle).trim()
+    };
+}
+
+function joinNameParts(last, first, middle) {
+    return [last, first, middle]
+        .map(value => String(value || "").trim())
+        .filter((value, index) => index < 2 || value !== "")
+        .join(", ");
+}
+
+
+/* =========================================
+   COLLEGE HELPERS
+========================================= */
+
+function normalizeCollege(value) {
+    const text = String(value || "").trim();
+
+    if (collegeNames[text]) {
+        return text;
     }
 
-    return `${cleanLast}, ${cleanFirst}`;
+    const match = Object.entries(collegeNames).find(([code, name]) =>
+        text.toLowerCase() === name.toLowerCase() ||
+        text.toLowerCase().includes(`(${code.toLowerCase()})`)
+    );
+
+    if (match) {
+        return match[0];
+    }
+
+    return "";
 }
+
+function findCollegeForCourse(course) {
+    for (const [college, courses] of Object.entries(coursesByCollege)) {
+        if (courses.includes(course)) {
+            return college;
+        }
+    }
+
+    return "";
+}
+
+function updateCourseOptions(selectedCourse = "") {
+    const college = collegeInput.value;
+    const courses = coursesByCollege[college] || [];
+
+    courseInput.innerHTML = "";
+
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "Select Course";
+    courseInput.appendChild(placeholder);
+
+    courses.forEach(course => {
+        const option = document.createElement("option");
+        option.value = course;
+        option.textContent = course;
+        courseInput.appendChild(option);
+    });
+
+    // Keep an older saved course visible even if it is not in the current list.
+    if (selectedCourse && !courses.includes(selectedCourse)) {
+        const option = document.createElement("option");
+        option.value = selectedCourse;
+        option.textContent = selectedCourse;
+        courseInput.appendChild(option);
+    }
+
+    courseInput.value = selectedCourse || "";
+    updateProgramOptions();
+}
+
+function updateProgramOptions(selectedProgram = "") {
+    const course = courseInput.value;
+    const programs = programsByCourse[course] || [];
+
+    programInput.innerHTML = "";
+
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "Select Program / Major";
+    programInput.appendChild(placeholder);
+
+    programs.forEach(program => {
+        const option = document.createElement("option");
+        option.value = program;
+        option.textContent = program;
+        programInput.appendChild(option);
+    });
+
+    // Preserve a saved program if it isn't in the current choices.
+    if (selectedProgram && !programs.includes(selectedProgram)) {
+        const option = document.createElement("option");
+        option.value = selectedProgram;
+        option.textContent = selectedProgram;
+        programInput.appendChild(option);
+    }
+
+    programInput.value = selectedProgram || "";
+}
+
 
 /* =========================================
    DATE HELPERS
-
    Stored format: YYYY-MM-DD
    Display format: MM/DD/YYYY
 ========================================= */
@@ -234,11 +387,7 @@ function formatBirthdayForDisplay(value) {
     const date = parseBirthday(value);
     if (!date) return String(value || "");
 
-    const month = String(date.month).padStart(2, "0");
-    const day = String(date.day).padStart(2, "0");
-    const year = String(date.year);
-
-    return `${month}/${day}/${year}`;
+    return `${String(date.month).padStart(2, "0")}/${String(date.day).padStart(2, "0")}/${date.year}`;
 }
 
 function formatBirthdayForStorage(value) {
@@ -257,55 +406,16 @@ function calculateAge(value) {
 
     const birthdayHasNotPassed =
         today.getMonth() + 1 < date.month ||
-        (today.getMonth() + 1 === date.month && today.getDate() < date.day);
-
-    if (birthdayHasNotPassed) age--;
-
-    return age >= 0 ? age : "";
-}
-
-/* =========================================
-   PROGRAM DROPDOWN
-========================================= */
-
-function updateProgramOptions(selectedProgram = "") {
-    const course = courseInput.value;
-    const programs = programsByCourse[course] || [];
-
-    programInput.innerHTML = "";
-
-    const placeholder = document.createElement("option");
-    placeholder.value = "";
-    placeholder.textContent = "Select Program / Major";
-    programInput.appendChild(placeholder);
-
-    programs.forEach(program => {
-        const option = document.createElement("option");
-        option.value = program;
-        option.textContent = program;
-        programInput.appendChild(option);
-    });
-
-    // Restore the program saved during registration.
-    const savedProgram = String(selectedProgram || "").trim();
-
-    if (savedProgram) {
-        let matchingOption = Array.from(programInput.options).find(
-            option => option.value.trim() === savedProgram
+        (
+            today.getMonth() + 1 === date.month &&
+            today.getDate() < date.day
         );
 
-        // Preserve a saved program even if it isn't in the current choices.
-        if (!matchingOption) {
-            matchingOption = document.createElement("option");
-            matchingOption.value = savedProgram;
-            matchingOption.textContent = savedProgram;
-            programInput.appendChild(matchingOption);
-        }
-
-        programInput.value = savedProgram;
+    if (birthdayHasNotPassed) {
+        age--;
     }
 
-    programInput.disabled = courseInput.disabled;
+    return age >= 0 ? age : "";
 }
 
 
@@ -319,7 +429,7 @@ function loadProfile() {
     const students = getRegisteredStudents();
 
     currentStudent = students.find(student =>
-        sameStudentID(student.studentID, studentID)
+        sameStudentID(student.studentID || student.id, studentID)
     );
 
     if (!currentStudent) {
@@ -332,29 +442,42 @@ function loadProfile() {
         if (profileMode !== "admin") {
             window.location.href = "student-login.html";
         } else {
-            window.location.href = "Registered-students.html";
+            window.location.href = "registered-students.html";
         }
 
         return;
     }
 
-    const nameParts = splitStoredName(currentStudent.name);
+    const names = getStudentNames(currentStudent);
 
-    lastNameInput.value = nameParts.last;
-    firstNameInput.value = nameParts.first;
-    middleNameInput.value = nameParts.middle;
+    lastNameInput.value = names.last;
+    firstNameInput.value = names.first;
+    middleNameInput.value = names.middle;
 
-    studentIDInput.value = currentStudent.studentID || "";
+    studentIDInput.value =
+        currentStudent.studentID || currentStudent.id || "";
+
     genderInput.value = currentStudent.gender || "";
 
-    birthdayInput.value = formatBirthdayForDisplay(currentStudent.birthday);
-    ageInput.value = currentStudent.age ?? calculateAge(currentStudent.birthday);
+    birthdayInput.value =
+        formatBirthdayForDisplay(currentStudent.birthday);
+
+    ageInput.value =
+        currentStudent.age ?? calculateAge(currentStudent.birthday);
+
     campusInput.value = currentStudent.campus || "Main Campus";
 
-    courseInput.value = currentStudent.course || "";
+    // Use the saved college, or infer it from the course for older records.
+    const savedCourse = currentStudent.course || "";
+    const college =
+        normalizeCollege(currentStudent.college) ||
+        findCollegeForCourse(savedCourse);
+
+    collegeInput.value = college;
+
+    updateCourseOptions(savedCourse);
     updateProgramOptions(currentStudent.program || "");
 
-    /* Admin can view, but not edit, student information. */
     if (profileMode === "admin") {
         pageTitle.textContent = "Student Profile";
         buttonsContainer.hidden = true;
@@ -362,10 +485,13 @@ function loadProfile() {
     } else {
         pageTitle.textContent = "My Profile";
         buttonsContainer.hidden = false;
+        editButton.hidden = false;
+        saveButton.hidden = true;
         queueButton.hidden = false;
         setEditing(false);
     }
 }
+
 
 /* =========================================
    EDIT MODE
@@ -376,29 +502,41 @@ function setEditing(editing) {
     firstNameInput.disabled = !editing;
     middleNameInput.disabled = !editing;
 
-    /* These fields remain locked. */
+    // These personal information fields stay locked.
     studentIDInput.disabled = true;
     genderInput.disabled = true;
     birthdayInput.disabled = true;
     ageInput.disabled = true;
     campusInput.disabled = true;
 
+    collegeInput.disabled = !editing;
     courseInput.disabled = !editing;
     programInput.disabled = !editing;
-
-    if (editing) {
-        updateProgramOptions(currentStudent?.program || "");
-    }
 
     editButton.hidden = editing;
     saveButton.hidden = !editing;
 }
 
-editButton.addEventListener("click", () => {
-    if (profileMode !== "admin") {
-        setEditing(true);
-    }
-});
+if (collegeInput) {
+    collegeInput.addEventListener("change", () => {
+        updateCourseOptions("");
+    });
+}
+
+if (courseInput) {
+    courseInput.addEventListener("change", () => {
+        updateProgramOptions("");
+    });
+}
+
+if (editButton) {
+    editButton.addEventListener("click", () => {
+        if (profileMode === "student" && currentStudent) {
+            setEditing(true);
+        }
+    });
+}
+
 
 /* =========================================
    SAVE PROFILE
@@ -407,7 +545,9 @@ editButton.addEventListener("click", () => {
 profileForm.addEventListener("submit", event => {
     event.preventDefault();
 
-    if (profileMode === "admin" || !currentStudent) return;
+    if (profileMode === "admin" || !currentStudent) {
+        return;
+    }
 
     const last = lastNameInput.value.trim();
     const first = firstNameInput.value.trim();
@@ -418,17 +558,19 @@ profileForm.addEventListener("submit", event => {
         return;
     }
 
+    const college = collegeInput.value;
     const course = courseInput.value;
     const program = programInput.value;
 
-    if (!course || !program) {
-        alert("Please select both your course and program/major.");
+    if (!college || !course || !program) {
+        alert("Please select your college, course, and program/major.");
         return;
     }
 
     const students = getRegisteredStudents();
+
     const index = students.findIndex(student =>
-        sameStudentID(student.studentID, studentID)
+        sameStudentID(student.studentID || student.id, studentID)
     );
 
     if (index === -1) {
@@ -438,35 +580,48 @@ profileForm.addEventListener("submit", event => {
 
     const updatedStudent = {
         ...students[index],
+
+        // Save separate fields so the profile and other pages can use them.
+        lastName: last,
+        firstName: first,
+        middleName: middle,
+
+        // Keep the combined name too for older pages that still use it.
         name: joinNameParts(last, first, middle),
-        course,
-        program
+
+        college: college,
+        course: course,
+        program: program
     };
 
     students[index] = updatedStudent;
     saveRegisteredStudents(students);
 
     currentStudent = updatedStudent;
-    localStorage.setItem("loggedInStudent", JSON.stringify(updatedStudent));
+
+    localStorage.setItem(
+        "loggedInStudent",
+        JSON.stringify(updatedStudent)
+    );
 
     loadProfile();
     setEditing(false);
 
-    if (savePopup) savePopup.classList.add("show");
+    if (savePopup) {
+        savePopup.classList.add("show");
+    }
 });
 
-if (closeSavePopup) {
+if (closeSavePopup && savePopup) {
     closeSavePopup.addEventListener("click", () => {
         savePopup.classList.remove("show");
     });
 }
 
+
 /* =========================================
    QUEUE APPOINTMENT
-
-   Reuse an existing future queue for this student.
-   Otherwise create a new appointment for the next
-   available weekday, with 30-minute time slots.
+   Reuse an existing future appointment.
 ========================================= */
 
 function getLocalISODate(date) {
@@ -479,7 +634,10 @@ function getLocalISODate(date) {
 
 function formatQueueDate(dateISO) {
     const date = new Date(`${dateISO}T00:00:00`);
-    if (Number.isNaN(date.getTime())) return dateISO;
+
+    if (Number.isNaN(date.getTime())) {
+        return dateISO;
+    }
 
     return date.toLocaleDateString("en-US", {
         month: "long",
@@ -490,9 +648,12 @@ function formatQueueDate(dateISO) {
 
 function getQueueList() {
     try {
-        const queues = JSON.parse(localStorage.getItem("queueList") || "[]");
+        const queues = JSON.parse(
+            localStorage.getItem("queueList") || "[]"
+        );
+
         return Array.isArray(queues) ? queues : [];
-    } catch {
+    } catch (error) {
         return [];
     }
 }
@@ -509,12 +670,14 @@ function getNextWeekday(date) {
 }
 
 function createAppointment() {
+    if (!currentStudent) return;
+
     const queues = getQueueList();
     const todayISO = getLocalISODate(new Date());
 
-    /* Reuse this student's existing appointment if it has not passed. */
+    // Reuse an existing appointment that has not passed.
     const existing = queues.find(queue =>
-        sameStudentID(queue.studentID, currentStudent.studentID) &&
+        sameStudentID(queue.studentID, currentStudent.studentID || currentStudent.id) &&
         queue.appointmentDate &&
         queue.appointmentDate >= todayISO
     );
@@ -527,10 +690,9 @@ function createAppointment() {
 
     let appointmentDay = getNextWeekday(new Date());
     let appointmentDate = getLocalISODate(appointmentDay);
-
-    /* Find a date with fewer than 16 appointments. */
     let attempts = 0;
 
+    // Limit each day to 16 appointments.
     while (attempts < 365) {
         const countForDay = queues.filter(queue =>
             queue.appointmentDate === appointmentDate
@@ -554,19 +716,24 @@ function createAppointment() {
 
     const queueNumber = `Q${String(dayQueues.length + 1).padStart(3, "0")}`;
 
-    /* Appointments begin at 8:00 AM, with 30-minute slots. */
+    // Appointments begin at 8:00 AM, with 30-minute slots.
     const totalMinutes = 8 * 60 + dayQueues.length * 30;
     const hour24 = Math.floor(totalMinutes / 60);
     const minute = totalMinutes % 60;
     const period = hour24 >= 12 ? "PM" : "AM";
     const hour12 = hour24 % 12 || 12;
+
     const appointmentTime =
         `${hour12}:${String(minute).padStart(2, "0")} ${period}`;
 
     const queue = {
         queueNumber,
-        studentID: currentStudent.studentID,
-        name: currentStudent.name,
+        studentID: currentStudent.studentID || currentStudent.id,
+        name: joinNameParts(
+            getStudentNames(currentStudent).last,
+            getStudentNames(currentStudent).first,
+            getStudentNames(currentStudent).middle
+        ),
         appointmentDate,
         formattedDate: formatQueueDate(appointmentDate),
         appointmentTime,
@@ -590,5 +757,8 @@ if (queueButton) {
 }
 
 
+/* =========================================
+   START
+========================================= */
 
 loadProfile();
